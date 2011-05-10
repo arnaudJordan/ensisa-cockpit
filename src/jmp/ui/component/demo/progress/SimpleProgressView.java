@@ -19,7 +19,7 @@ public class SimpleProgressView extends View
 		super(setupModel());
 		this.orientation = orientation;
 	}
-		
+			
 	protected static DefaultModelComposit setupModel()
 	{
 		DefaultModelComposit model = new DefaultModelComposit();
