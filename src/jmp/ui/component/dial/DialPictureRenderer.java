@@ -20,10 +20,6 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		super(view);
 		this.getView().setBorder(new EmptyBorder(DEFAULT_INSETS));
 	}
-	private DialView dialView()
-	{
-		return (DialView) this.getView();
-	}
 	
 	public void renderView(Graphics2D g)
 	{
@@ -33,11 +29,11 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		if (rm == null || vm == null) return;
 		
 		this.renderBackground(g);
-		this.renderNeedles(g, rm, vm);
+		this.renderNeedle(g, rm, vm);
 		
 	}
 	
-	private void renderNeedles(Graphics2D g, DialRenderingModel rm, BoundedModel vm)
+	public void renderNeedle(Graphics2D g, DialRenderingModel rm, BoundedModel vm)
 	{
 		AffineTransform trans = new AffineTransform();
 		

@@ -13,7 +13,6 @@ public class DialPictureRenderingModel extends DialRenderingModel {
 	private BufferedImage needle;
 	
 	public DialPictureRenderingModel() {
-		super();
 		try
 		{
 			this.setBackground(ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + DEFAULT_BACKGROUND_PATH)));

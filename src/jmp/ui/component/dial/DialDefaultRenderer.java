@@ -13,7 +13,10 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		super(view);
 		// TODO Auto-generated constructor stub
 	}
-
+	protected DialView dialView()
+	{
+		return (DialView) this.getView();
+	}
 	@Override
 	public void renderTick(Graphics2D g) {
 		// TODO Auto-generated method stub
