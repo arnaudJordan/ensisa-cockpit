@@ -67,6 +67,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 
 	@Override
 	public void renderDial(Graphics2D g) {
+		System.out.println("On se drawwwwww dklsrghjrsmk, lkwsdghkjsdhgkjdshgkhwdgfjkhsdkfj");
 		this.renderBackground(g);
 		this.renderTrack(g);
 		this.renderTicks(g);

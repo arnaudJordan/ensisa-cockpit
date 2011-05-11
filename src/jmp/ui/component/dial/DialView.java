@@ -29,9 +29,9 @@ public class DialView extends View {
 		return (DialRenderingModel) ((ModelComposit)this.getModel()).getModel(RENDERING_MODEL);
 	}
 
-	protected DialPictureRenderer dialViewRenderer()
+	protected DialDefaultRenderer dialViewRenderer()
 	{
-		return (DialPictureRenderer) this.renderer();
+		return (DialDefaultRenderer) this.renderer();
 	}
 	
 	protected Renderer defaultRenderer(View view)
