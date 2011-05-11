@@ -15,11 +15,12 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	private static final Color SKY_COLOR = new Color(0, 204, 255);
 	private static final Color GROUND_COLOR = new Color(153, 102, 51);
 	private static final Color GRADUATION_COLOR = Color.WHITE;
+	private static final Color BORDER_COLOR = Color.GRAY;
 	private static final Dimension SIZE = new Dimension(150, 150);
 	
 	private static final double MAJOR_GRADUTION_RATIO = 0.25;
 	private static final int LABEL_SPACE = 2;
-	private static final int BORDER_SIZE = 0;
+	private static final int BORDER_SIZE = 2;
 
 	private static final double MINOR_GRADUTION_RATIO = MAJOR_GRADUTION_RATIO * 1.5;
 	private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(0.5f);
@@ -45,6 +46,7 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	private BufferedImage horizonImage;
 	private BufferedImage planeImage;
 	private int backgroundMultiplier;
+	private Color borderColor;
 
 	public DialHorizonRenderingModel()
 	{
@@ -61,6 +63,7 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 		this.setMajorTickSpacing(MAJOR_TICK_SPACING);
 		this.setMinorTickSpacing(MINOR_TICK_SPACING);
 		this.setBackgroundMultiplier(BACKGROUND_MULTIPLIER);
+		this.setBorderColor(BORDER_COLOR);
 		this.setHorizonImage(new BufferedImage((int) Size.getWidth() * getBackgroundMultiplier(), (int) Size.getHeight() * getBackgroundMultiplier(), BufferedImage.TYPE_INT_RGB));
 		try
 		{
@@ -71,6 +74,7 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 			e.printStackTrace();
 		}
 	}
+
 
 	public void setSkyColor(Color skyColor) 
 	{
@@ -197,5 +201,12 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 
 	public int getBackgroundMultiplier() {
 		return backgroundMultiplier;
+	}
+
+	public Color getBorderColor() {
+		return borderColor;
+	}
+	private void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
 	}
 }

@@ -1,5 +1,6 @@
 package jmp.ui.component.dial;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -9,7 +10,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
-import jmp.ui.model.BoundedModel;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultRangeModel;
 import jmp.ui.model.DefaultModelComposit;
@@ -98,7 +98,7 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		Dimension size = renderingModel.getSize();
 		int deltaPitchTranslation = (int) (value*size.getHeight()/(max-min));
 		int pitchTranslation = (int) (size.getHeight() /renderingModel.getBackgroundMultiplier());
-
+		
 		AffineTransform planeTransform = new AffineTransform();
 		double tx = (size.getWidth()-renderingModel.getPlaneImage().getWidth())/2;
 		double ty = (size.getHeight()-renderingModel.getPlaneImage().getHeight())/2;
@@ -122,21 +122,38 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		Dimension d = size;
 		//g.setPaint(new GradientPaint(d.width/2, d.height/2, Color.gray,d.width, d.height, Color.black));
 		g.setColor(Color.DARK_GRAY);
-		g.fillOval(0,0,(int)d.getWidth(), (int)d.getHeight());
+		g.fillOval(renderingModel.getBorderSize()/2,renderingModel.getBorderSize()/2,(int)d.getWidth(), (int)d.getHeight());
 		//g.setColor(Color.DARK_GRAY);
 		//g.drawOval(0,0,(int)d.getWidth(), (int)d.getHeight());
 
 		Shape clip = new Ellipse2D.Double(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2, d.getWidth(), d.getHeight());
 		//Shape clip = new Ellipse2D.Double(100, 100, 100, 100);
+		
+		Shape oldClipt = g.getClip();
 		g.clip(clip);
 		//g.draw(clip);
 		
 		g.drawImage(renderingModel.getHorizonImage(), horizonTransform, null);
 		g.drawImage(renderingModel.getPlaneImage(), planeTransform, null);
+		
+		g.setClip(oldClipt);
+		
+		renderBorder(g);
+	}
+	
+	public void renderBorder(Graphics2D g) {
+		DialHorizonRenderingModel renderingModel = ((DialHorizonRenderingModel) this.dialView().renderingModel());
+		if(renderingModel.getBorderSize()==0) return;
+		g.setColor(renderingModel.getBorderColor());
+		g.setStroke(new BasicStroke(renderingModel.getBorderSize()));
+		Shape border = new Ellipse2D.Double(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2,renderingModel.getSize().width, renderingModel.getSize().height);
+		g.draw(border);
 	}
 	public Dimension getPreferredSize()
 	{
-		return ((DialHorizonRenderingModel) this.dialView().renderingModel()).getSize();
+		DialHorizonRenderingModel model = ((DialHorizonRenderingModel) this.dialView().renderingModel());
+		
+		return new Dimension(model.getSize().width + model.getBorderSize()*2, model.getSize().height + model.getBorderSize()*2);
 	}
 
 	public Dimension getMinimumSize()
