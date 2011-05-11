@@ -23,11 +23,6 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 	}
 	public void renderView(Graphics2D g)
 	{
-		//DialRenderingModel rm = this.dialView().renderingModel();
-		//BoundedModel vm = this.dialView().valueModel();
-		
-		//if (rm == null || vm == null) return;
-		
 		this.renderBackground(g);
 		this.renderDial(g);
 	}
@@ -45,7 +40,6 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		g2.fillRect(0, HorizonImage.getHeight() / 2, HorizonImage.getWidth(), HorizonImage.getHeight() /2);
 		
 		this.renderTicks(g2);
-
 		g2.dispose();
 	}
 	public void renderTicks(Graphics2D g2)
@@ -127,11 +121,9 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		//g.drawOval(0,0,(int)d.getWidth(), (int)d.getHeight());
 
 		Shape clip = new Ellipse2D.Double(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2, d.getWidth(), d.getHeight());
-		//Shape clip = new Ellipse2D.Double(100, 100, 100, 100);
 		
 		Shape oldClipt = g.getClip();
 		g.clip(clip);
-		//g.draw(clip);
 		
 		g.drawImage(renderingModel.getHorizonImage(), horizonTransform, null);
 		g.drawImage(renderingModel.getPlaneImage(), planeTransform, null);
@@ -152,7 +144,6 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 	public Dimension getPreferredSize()
 	{
 		DialHorizonRenderingModel model = ((DialHorizonRenderingModel) this.dialView().renderingModel());
-		
 		return new Dimension(model.getSize().width + model.getBorderSize()*2, model.getSize().height + model.getBorderSize()*2);
 	}
 

@@ -11,29 +11,14 @@ import jmp.ui.model.BoundedModel;
 import jmp.ui.mvc.View;
 
 public class DialPictureRenderer extends DialDefaultRenderer {
-	private final static int DEFAULT_LENGTH = 250;
-	private final static int DEFAULT_WIDTH = 21;
 	private final static Insets DEFAULT_INSETS = new Insets(5,5,5,5);
 
-	
 	public DialPictureRenderer(View view) {
 		super(view);
 		this.getView().setBorder(new EmptyBorder(DEFAULT_INSETS));
 	}
 	
-	public void renderView(Graphics2D g)
-	{
-		DialRenderingModel rm = this.dialView().renderingModel();
-		BoundedModel vm = this.dialView().valueModel();
-		
-		if (rm == null || vm == null) return;
-		
-		this.renderBackground(g);
-		this.renderNeedle(g, rm, vm);
-		
-	}
-	
-	public void renderNeedle(Graphics2D g, DialRenderingModel rm, BoundedModel vm)
+	public void renderNeedle(Graphics2D g)
 	{
 		AffineTransform trans = new AffineTransform();
 		
