@@ -37,7 +37,8 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		g2.fillRect(0, 0, HorizonImage.getWidth(), HorizonImage.getHeight() / 2);
 		// drawing ground
 		g2.setColor(renderingModel.getGroundColor());
-		g2.fillRect(0, HorizonImage.getHeight() / 2, HorizonImage.getWidth(), HorizonImage.getHeight() /2);
+		g2.fillRect(0, HorizonImage.getWidth()/2, HorizonImage.getWidth(), HorizonImage.getHeight() /2);
+
 		
 		this.renderTicks(g2);
 		g2.dispose();
@@ -63,22 +64,21 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		for (int i = 0; i < nbValues; i++)
 		{
 			g2.setStroke(renderingModel.getMinorGradutionStroke());
-			g2.drawLine(minorLineXStart, (int) (i * graduationsInterval), minorLineXEnd, (int) (i * graduationsInterval));
+			g2.drawLine(minorLineXStart + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2), minorLineXEnd + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2));
 		}
 
 		nbValues = (max-min)/majorTickSpacing;
 		graduationsInterval = size.getHeight() / nbValues;
 
-		for (int i = 0, value = max; i < nbValues; i++, value-=majorTickSpacing)
+		for (int i = 0, value = max; i <= nbValues; i++, value-=majorTickSpacing)
 		{
 			g2.setStroke(renderingModel.getMajorGradutionStroke());
-			g2.drawLine(majorLineXStart, (int) (i * graduationsInterval), majorLineXEnd, (int) (i * graduationsInterval));
+			g2.drawLine(majorLineXStart + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2), majorLineXEnd + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2));
 			
 			final String vString = String.valueOf(value);
 			final int strWidth = g2.getFontMetrics().stringWidth(vString);
-			g2.drawString(vString, majorLineXStart - strWidth - renderingModel.getLabelSpace(), (int) (i * graduationsInterval));
-			g2.drawString(vString, majorLineXEnd + renderingModel.getLabelSpace(), (int) (i * graduationsInterval));
-
+			g2.drawString(vString, majorLineXStart + (int)size.getWidth()/2 - strWidth - renderingModel.getLabelSpace(), (int) (i * graduationsInterval + size.getHeight()/2));
+			g2.drawString(vString, majorLineXEnd + (int)size.getWidth()/2 + renderingModel.getLabelSpace(), (int) (i * graduationsInterval + size.getHeight()/2));
 		}
  	}
 	public void renderDial(Graphics2D g)
@@ -107,6 +107,7 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		horizonTransform.rotate(Math.toRadians(((DefaultBoundedModel) model.getModel("value_rot")).getValue()));
 		horizonTransform.translate(-size.getWidth()/2, -(pitchTranslation)/2);
 
+		horizonTransform.translate(-size.getWidth()/2, 0);
 		horizonTransform.translate(0, -pitchTranslation + deltaPitchTranslation);
 	
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
@@ -122,13 +123,13 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 
 		Shape clip = new Ellipse2D.Double(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2, d.getWidth(), d.getHeight());
 		
-		Shape oldClipt = g.getClip();
+		Shape oldClip = g.getClip();
 		g.clip(clip);
 		
 		g.drawImage(renderingModel.getHorizonImage(), horizonTransform, null);
 		g.drawImage(renderingModel.getPlaneImage(), planeTransform, null);
 		
-		g.setClip(oldClipt);
+		g.setClip(oldClip);
 		
 		renderBorder(g);
 	}

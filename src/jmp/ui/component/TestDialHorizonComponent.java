@@ -55,7 +55,7 @@ public class TestDialHorizonComponent extends JFrame
 		
 		
 		
-		this.progressSliderX = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		this.progressSliderX = new JSlider(JSlider.HORIZONTAL,-100,100,0);
 		this.progressSliderX.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
@@ -100,7 +100,7 @@ public class TestDialHorizonComponent extends JFrame
 		this.dialView.setRenderer(new DialHorizonRenderer(this.dialView));
 		DefaultModelComposit model = new DefaultModelComposit();
 		model.addModel("rendering", new DialHorizonRenderingModel());
-		model.addModel("value_x", new DefaultBoundedModel(0,100,0));
+		model.addModel("value_x", new DefaultBoundedModel(-100,100,0));
 		model.addModel("value_rot", new DefaultBoundedModel(-100,100,0));
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);
