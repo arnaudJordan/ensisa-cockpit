@@ -32,7 +32,10 @@ public class ColoredRanges
 		}
 		return null;
 	}
-	
+	public Set<ColoredRange> getRanges()
+	{
+		return ranges;
+	}
 	public Set<ColoredRange> getRanges(int v)
 	{
 		HashSet<ColoredRange> res = new HashSet<ColoredRange>();
