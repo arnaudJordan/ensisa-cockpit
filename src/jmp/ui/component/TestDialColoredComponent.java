@@ -57,7 +57,7 @@ public class TestDialColoredComponent extends JFrame
 		this.slidersPane = new JPanel();
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
-		this.progressSlider = new JSlider(JSlider.HORIZONTAL,-90,0,0);
+		this.progressSlider = new JSlider(JSlider.HORIZONTAL,-10,90,0);
 		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
@@ -90,7 +90,7 @@ public class TestDialColoredComponent extends JFrame
 		colorRanges.addRange(new ColoredRange(60, 90, Color.RED));
 		colorModel.setColorRanges(colorRanges);
 		model.addModel("rendering", colorModel);
-		model.addModel("value", new DefaultBoundedModel(-90,0,0));
+		model.addModel("value", new DefaultBoundedModel(-10,90,0));
 		
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);

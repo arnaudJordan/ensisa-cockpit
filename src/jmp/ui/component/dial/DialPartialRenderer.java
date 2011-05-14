@@ -71,6 +71,10 @@ public class DialPartialRenderer extends DialPictureRenderer {
 	}
 	private int extendAngle(int startAngle, int endAngle)
 	{
+		if(startAngle < 0)
+			startAngle += 360;
+		if(endAngle < 0)
+			endAngle += 360;
 		int extend = endAngle - startAngle;
 		if(startAngle > endAngle)
 			extend += 360;

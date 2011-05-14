@@ -9,7 +9,7 @@ public class DialPartialRenderingModel extends DialPictureRenderingModel{
 	private final static String DEFAULT_BACKGROUND_PATH = "pictures/dial/partial_background.png";
 	private final static String DEFAULT_NEEDLE_PATH = "pictures/dial/partial_needle.png";
 	private final static int DEFAULT_START_ANGLE = 0;
-	private final static int DEFAULT_END_ANGLE = 305;
+	private final static int DEFAULT_END_ANGLE = 180;
 	private int startAngle, endAngle;
 	
 	public DialPartialRenderingModel() {
@@ -28,8 +28,6 @@ public class DialPartialRenderingModel extends DialPictureRenderingModel{
 	}
 	
 	public void setStartAngle(Integer startAngle) {
-		if(startAngle < 0)
-			startAngle += 360;
 		this.startAngle = startAngle;
 	}
 
@@ -38,8 +36,6 @@ public class DialPartialRenderingModel extends DialPictureRenderingModel{
 	}
 
 	public void setEndAngle(Integer endAngle) {
-		if(endAngle < 0)
-			endAngle += 360;
 		this.endAngle = endAngle;
 	}
 
