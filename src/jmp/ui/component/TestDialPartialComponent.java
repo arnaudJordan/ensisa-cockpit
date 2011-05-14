@@ -51,7 +51,9 @@ public class TestDialPartialComponent extends JFrame
 		this.slidersPane = new JPanel();
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
-		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,360,0);
+		DialPartialRenderingModel renderingModel = new DialPartialRenderingModel();
+		//this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,360,0);
+		this.progressSlider = new JSlider(JSlider.HORIZONTAL,renderingModel.getStartAngle(),renderingModel.getEndAngle(),renderingModel.getEndAngle());
 		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
@@ -76,9 +78,11 @@ public class TestDialPartialComponent extends JFrame
 				
 		this.dialView = new DialView();
 		this.dialView.setRenderer(new DialPartialRenderer(this.dialView));
+		DialPartialRenderingModel renderingModel = new DialPartialRenderingModel();
 		DefaultModelComposit model = new DefaultModelComposit();
-		model.addModel("rendering", new DialPartialRenderingModel());
-		model.addModel("value", new DefaultBoundedModel(0,360,0));
+		model.addModel("rendering", renderingModel);
+		//model.addModel("value", new DefaultBoundedModel(0,360,0));
+		model.addModel("value", new DefaultBoundedModel(renderingModel.getStartAngle(),renderingModel.getEndAngle(),renderingModel.getEndAngle()));
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);
 		

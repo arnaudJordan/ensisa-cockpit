@@ -9,17 +9,17 @@ public class DialPartialRenderingModel extends DialPictureRenderingModel{
 	private final static String DEFAULT_BACKGROUND_PATH = "pictures/dial/partial_background.png";
 	private final static String DEFAULT_NEEDLE_PATH = "pictures/dial/partial_needle.png";
 	private final static int DEFAULT_START_ANGLE = 0;
-	private final static int DEFAULT_END_ANGLE = 180;
+	private final static int DEFAULT_END_ANGLE = 305;
 	private int startAngle, endAngle;
 	
 	public DialPartialRenderingModel() {
 		super();
-		this.startAngle = DEFAULT_START_ANGLE;
-		this.endAngle = DEFAULT_END_ANGLE;
+		setStartAngle(DEFAULT_START_ANGLE);
+		setEndAngle(DEFAULT_END_ANGLE);
 		try
 		{
-			this.setBackground(ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + DEFAULT_BACKGROUND_PATH)));
-			this.setNeedle(ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + DEFAULT_NEEDLE_PATH)));
+			setBackground(ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + DEFAULT_BACKGROUND_PATH)));
+			setNeedle(ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + DEFAULT_NEEDLE_PATH)));
 		}
 		catch (IOException e)
 		{
@@ -28,6 +28,8 @@ public class DialPartialRenderingModel extends DialPictureRenderingModel{
 	}
 	
 	public void setStartAngle(Integer startAngle) {
+		if(startAngle < 0)
+			startAngle += 360;
 		this.startAngle = startAngle;
 	}
 
@@ -36,6 +38,8 @@ public class DialPartialRenderingModel extends DialPictureRenderingModel{
 	}
 
 	public void setEndAngle(Integer endAngle) {
+		if(endAngle < 0)
+			endAngle += 360;
 		this.endAngle = endAngle;
 	}
 

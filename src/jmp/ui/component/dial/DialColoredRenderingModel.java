@@ -3,8 +3,6 @@ package jmp.ui.component.dial;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
-
 import jmp.ui.utilities.ColoredRange;
 import jmp.ui.utilities.ColoredRanges;
 
@@ -23,22 +21,16 @@ public class DialColoredRenderingModel extends DialPartialRenderingModel{
 		Graphics2D g = getBackground().createGraphics();
 		g.setStroke(new BasicStroke(60,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
 		
-		Iterator<ColoredRange> it = getColorRanges().getRanges().iterator();
 		int min=0;
 		int max=0;
-		while(it.hasNext())
+		for(ColoredRange range : getColorRanges().getRanges())
 		{
-			ColoredRange range = it.next();
 			g.setColor(range.color);
 			g.drawArc(0, 0, getBackground().getWidth(), getBackground().getHeight(), range.range.min, range.range.max - range.range.min);
-			if(range.range.min<min)
-			{
+			if(range.range.min < min)
 				min=range.range.min;
-			}
-			if(range.range.max>max)
-			{
+			if(range.range.max > max)
 				max=range.range.max;
-			}
 		}
 		setStartAngle(min);
 		setEndAngle(max);
