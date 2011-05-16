@@ -55,7 +55,7 @@ public class TestDialHorizonComponent extends JFrame
 		
 		
 		
-		this.progressSliderX = new JSlider(JSlider.HORIZONTAL,-100,100,0);
+		this.progressSliderX = new JSlider(JSlider.HORIZONTAL,-180,180,0);
 		this.progressSliderX.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
@@ -64,7 +64,7 @@ public class TestDialHorizonComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("value_x")).setValue(progressSliderX.getValue());
+					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("pitch")).setValue(progressSliderX.getValue());
 				}
 			}
 		});
@@ -82,7 +82,7 @@ public class TestDialHorizonComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("value_rot")).setValue(progressSliderRot.getValue());
+					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("roll")).setValue(progressSliderRot.getValue());
 				}
 			}
 		});
@@ -100,8 +100,8 @@ public class TestDialHorizonComponent extends JFrame
 		this.dialView.setRenderer(new DialHorizonRenderer(this.dialView));
 		DefaultModelComposit model = new DefaultModelComposit();
 		model.addModel("rendering", new DialHorizonRenderingModel());
-		model.addModel("value_x", new DefaultBoundedModel(-100,100,0));
-		model.addModel("value_rot", new DefaultBoundedModel(-100,100,0));
+		model.addModel("pitch", new DefaultBoundedModel(-180,180,0));
+		model.addModel("roll", new DefaultBoundedModel(-100,100,0));
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);

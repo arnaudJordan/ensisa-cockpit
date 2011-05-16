@@ -2,6 +2,7 @@ package jmp.ui.component.dial;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import jmp.ui.mvc.DefaultRenderer;
 import jmp.ui.mvc.View;
@@ -49,6 +50,9 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		this.renderBorder(g);
 	}
 	public void renderView(Graphics2D g) {
+		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
+		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
+		g.setRenderingHints(rh);	
 		this.renderDial(g);
 	}
 

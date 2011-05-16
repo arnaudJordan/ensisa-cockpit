@@ -21,6 +21,7 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 	{
 		super(view);
 	}
+	
 	public void renderView(Graphics2D g)
 	{
 		this.renderBackground(g);
@@ -48,50 +49,74 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		DialHorizonRenderingModel renderingModel = ((DialHorizonRenderingModel) this.dialView().renderingModel());
 		g2.setColor(renderingModel.getGraduationColor());
 		DefaultModelComposit model = ((DefaultModelComposit) this.dialView().getModel());
-		final int max = ((DefaultRangeModel) model.getModel("value_x")).getMaximum();
-		final int min = ((DefaultRangeModel) model.getModel("value_x")).getMinimum();
+		BufferedImage horizonImage = renderingModel.getHorizonImage();
+		final int max = ((DefaultRangeModel) model.getModel("pitch")).getMaximum();
+		final int min = ((DefaultRangeModel) model.getModel("pitch")).getMinimum();
 		final int majorTickSpacing = (int) renderingModel.getMajorTickSpacing();
 		final int minorTickSpacing = (int) renderingModel.getMinorTickSpacing();
-		Dimension size = renderingModel.getSize();
-		final int majorLineXStart = (int) (size.getWidth() * renderingModel.getMajorGradutionRatio());
-		final int majorLineXEnd = (int) (size.getWidth() - majorLineXStart);
-		final int minorLineXStart = (int) (size.getWidth() * renderingModel.getMinorGradutionRatio());
-		final int minorLineXEnd = (int) (size.getWidth() - minorLineXStart);
-		
+		//final int majorLineXStart = (int) (renderingModel.getSize().getWidth() * renderingModel.getMajorGradutionRatio());
+		final int majorLineXStart = (int) (renderingModel.getSize().getWidth() * renderingModel.getMajorGradutionRatio());
+		final int majorLineXEnd = (int) (renderingModel.getSize().getWidth() - majorLineXStart);
+		final int minorLineXStart = (int) (renderingModel.getSize().getWidth() * renderingModel.getMinorGradutionRatio());
+		final int minorLineXEnd = (int) (renderingModel.getSize().getWidth() - minorLineXStart);
+		System.out.println(horizonImage.getWidth());
+		System.out.println(renderingModel.getPlaneImage().getWidth());
+		System.out.println(renderingModel.getSize().getWidth());
 		int nbValues = (max-min)/minorTickSpacing;
-		double graduationsInterval = size.getHeight() / nbValues;
-
-		for (int i = 0; i < nbValues; i++)
+		int pitchInterval = (int) (renderingModel.getSize().getHeight() / (renderingModel.getPitchInterval()/minorTickSpacing));
+		double graduationsInterval = horizonImage.getHeight() / nbValues;
+		
+		for (int i = 0; i < nbValues/2; i++)
 		{
 			g2.setStroke(renderingModel.getMinorGradutionStroke());
-			g2.drawLine(minorLineXStart + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2), minorLineXEnd + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2));
+			g2.drawLine(minorLineXStart, (int) (i * pitchInterval)+horizonImage.getHeight()/2, minorLineXEnd, (int) (i * pitchInterval)+horizonImage.getHeight()/2);
 		}
-
+		
+		for (int i = 0; i < nbValues/2; i++)
+		{
+			g2.setStroke(renderingModel.getMinorGradutionStroke());
+			g2.drawLine(renderingModel.getHorizonImage().getHeight()/2-minorLineXStart, (int) -(i * pitchInterval)+horizonImage.getHeight()/2, renderingModel.getHorizonImage().getHeight()/2 + minorLineXEnd, (int) -(i * pitchInterval)+horizonImage.getHeight()/2);
+		}
 		nbValues = (max-min)/majorTickSpacing;
-		graduationsInterval = size.getHeight() / nbValues;
+		pitchInterval = (int) (renderingModel.getSize().getHeight() / (renderingModel.getPitchInterval()/majorTickSpacing));
+		graduationsInterval = horizonImage.getHeight() / nbValues;
 
-		for (int i = 0, value = max; i <= nbValues; i++, value-=majorTickSpacing)
+		for (int i = 0, value = 0; i <= nbValues/2; i++, value-=majorTickSpacing)
 		{
 			g2.setStroke(renderingModel.getMajorGradutionStroke());
-			g2.drawLine(majorLineXStart + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2), majorLineXEnd + (int)size.getWidth()/2, (int) (i * graduationsInterval + size.getHeight()/2));
+			g2.drawLine(majorLineXStart, (int) (i * pitchInterval)+horizonImage.getHeight()/2, majorLineXEnd, (int) (i * pitchInterval)+horizonImage.getHeight()/2);
 			
 			final String vString = String.valueOf(value);
 			final int strWidth = g2.getFontMetrics().stringWidth(vString);
-			g2.drawString(vString, majorLineXStart + (int)size.getWidth()/2 - strWidth - renderingModel.getLabelSpace(), (int) (i * graduationsInterval + size.getHeight()/2));
-			g2.drawString(vString, majorLineXEnd + (int)size.getWidth()/2 + renderingModel.getLabelSpace(), (int) (i * graduationsInterval + size.getHeight()/2));
+			g2.drawString(vString, majorLineXStart - strWidth - renderingModel.getLabelSpace(), (int) (i * pitchInterval)+horizonImage.getHeight()/2);
+			g2.drawString(vString, majorLineXEnd + renderingModel.getLabelSpace(), (int) (i * pitchInterval)+horizonImage.getHeight()/2);
+		}
+		for (int i = 0, value = 0; i <= nbValues/2; i++, value+=majorTickSpacing)
+		{
+			g2.setStroke(renderingModel.getMajorGradutionStroke());
+			g2.drawLine(majorLineXStart, (int) -(i * pitchInterval)+horizonImage.getHeight()/2, majorLineXEnd, (int) -(i * pitchInterval)+horizonImage.getHeight()/2);
+			System.out.println(value);
+			System.out.println(-(i * pitchInterval)+horizonImage.getHeight()/2);
+			final String vString = String.valueOf(value);
+			final int strWidth = g2.getFontMetrics().stringWidth(vString);
+			g2.drawString(vString, majorLineXStart - strWidth - renderingModel.getLabelSpace(), (int) -(i * pitchInterval)+horizonImage.getHeight()/2);
+			g2.drawString(vString, majorLineXEnd + renderingModel.getLabelSpace(), (int) -(i * pitchInterval)+horizonImage.getHeight()/2);
 		}
  	}
 	public void renderDial(Graphics2D g)
 	{
+		
 		DialHorizonRenderingModel renderingModel = ((DialHorizonRenderingModel) this.dialView().renderingModel());
 		DefaultModelComposit model = ((DefaultModelComposit) this.dialView().getModel());
-		final int max = ((DefaultRangeModel) model.getModel("value_x")).getMaximum();
-		final int min = ((DefaultRangeModel) model.getModel("value_x")).getMinimum();
-		final int value = ((DefaultBoundedModel) model.getModel("value_x")).getValue();
+		
+		if (renderingModel.getHorizonImage() == null || renderingModel.getPlaneImage()==null) return;
+		final int max = ((DefaultRangeModel) model.getModel("pitch")).getMaximum();
+		final int min = ((DefaultRangeModel) model.getModel("pitch")).getMinimum();
+		final int value = ((DefaultBoundedModel) model.getModel("pitch")).getValue();
 
 		Dimension size = renderingModel.getSize();
-		int deltaPitchTranslation = (int) (value*size.getHeight()/(max-min));
-		int pitchTranslation = (int) (size.getHeight() /renderingModel.getBackgroundMultiplier());
+		int deltaPitchTranslation = (int) (value*renderingModel.getHorizonImage().getHeight()/(max-min));
+		int pitchTranslation = (int) (renderingModel.getHorizonImage().getHeight() /renderingModel.getBackgroundMultiplier());
 		
 		AffineTransform planeTransform = new AffineTransform();
 		double tx = (size.getWidth()-renderingModel.getPlaneImage().getWidth())/2;
@@ -99,20 +124,23 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		planeTransform.setToTranslation(tx,ty);
 		
 		AffineTransform horizonTransform = new AffineTransform();
+		
 		horizonTransform.setToIdentity();
 		
-		horizonTransform.translate(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2);
+		horizonTransform.translate(size.getWidth()/2, size.getHeight()/2);
+		//horizonTransform.translate(renderingModel.getHorizonImage().getWidth()/2, -renderingModel.getHorizonImage().getHeight()/2);
+		horizonTransform.rotate(Math.toRadians(((DefaultBoundedModel) model.getModel("roll")).getValue()));
+		
+		horizonTransform.translate(-renderingModel.getHorizonImage().getWidth()/2, -(pitchTranslation)/2);
 
-		horizonTransform.translate(size.getWidth()/2, (pitchTranslation )/2);
-		horizonTransform.rotate(Math.toRadians(((DefaultBoundedModel) model.getModel("value_rot")).getValue()));
-		horizonTransform.translate(-size.getWidth()/2, -(pitchTranslation)/2);
-
-		horizonTransform.translate(-size.getWidth()/2, 0);
+		horizonTransform.translate(size.getWidth()/2, 0);
+		horizonTransform.translate(-renderingModel.getHorizonImage().getWidth()/4, -renderingModel.getHorizonImage().getHeight()/2);
+		
 		horizonTransform.translate(0, -pitchTranslation + deltaPitchTranslation);
-	
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
 		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
 		g.setRenderingHints(rh);	
+		
 		
 		Dimension d = size;
 		//g.setPaint(new GradientPaint(d.width/2, d.height/2, Color.gray,d.width, d.height, Color.black));
@@ -128,7 +156,6 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		
 		g.drawImage(renderingModel.getHorizonImage(), horizonTransform, null);
 		g.drawImage(renderingModel.getPlaneImage(), planeTransform, null);
-		
 		g.setClip(oldClip);
 		
 		renderBorder(g);

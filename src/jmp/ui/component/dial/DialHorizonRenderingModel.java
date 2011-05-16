@@ -25,11 +25,12 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	private static final double MINOR_GRADUTION_RATIO = MAJOR_GRADUTION_RATIO * 1.5;
 	private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(0.5f);
 	private static final Stroke MAJOR_GRADUTION_STROKE = new BasicStroke(2f);
-	private static final int MAJOR_TICK_SPACING = 20;
+	private static final int MAJOR_TICK_SPACING = 10;
 	private static final int MINOR_TICK_SPACING = 5;
+	private static final int PITCH_INTERVAL = 60;
 	private final static String PLANE_IMAGE_PATH = "pictures/dial/horizon_plane.png";
 	
-	private static final int BACKGROUND_MULTIPLIER = 2;
+	private static final int BACKGROUND_MULTIPLIER = 4;
 	
 	private Color skyColor;
 	private Color groundColor;
@@ -43,6 +44,7 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	private Stroke MinorGradutionStroke;
 	private double MajorTickSpacing;
 	private double MinorTickSpacing;
+	private int pitchInterval; 
 	private BufferedImage horizonImage;
 	private BufferedImage planeImage;
 	private int backgroundMultiplier;
@@ -62,6 +64,7 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 		this.setMinorGradutionStroke(MINOR_GRADUTION_STROKE);
 		this.setMajorTickSpacing(MAJOR_TICK_SPACING);
 		this.setMinorTickSpacing(MINOR_TICK_SPACING);
+		this.setPitchInterval(PITCH_INTERVAL);
 		this.setBackgroundMultiplier(BACKGROUND_MULTIPLIER);
 		this.setBorderColor(BORDER_COLOR);
 		this.setHorizonImage(new BufferedImage((int) Size.getWidth() * getBackgroundMultiplier(), (int) Size.getHeight() * getBackgroundMultiplier(), BufferedImage.TYPE_INT_RGB));
@@ -178,6 +181,16 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	public double getMinorTickSpacing() {
 		return MinorTickSpacing;
 	}
+
+	public void setPitchInterval(int pitchInterval) {
+		this.pitchInterval = pitchInterval;
+	}
+
+
+	public int getPitchInterval() {
+		return pitchInterval;
+	}
+
 
 	public void setHorizonImage(BufferedImage horizonImage) {
 		this.horizonImage = horizonImage;
