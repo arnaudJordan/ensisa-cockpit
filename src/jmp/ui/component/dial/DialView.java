@@ -16,6 +16,10 @@ public class DialView extends View {
 	{
 		super(setupModel());
 	}
+	public DialView(Model model)
+	{
+		super(model);
+	}
 
 	protected static Model setupModel() 
 	{
