@@ -12,6 +12,8 @@ import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.dial.DialPartialRenderer;
 import jmp.ui.component.dial.DialPartialRenderingModel;
+import jmp.ui.component.dial.DialPictureRenderer;
+import jmp.ui.component.dial.DialPictureRenderingModel;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
@@ -77,15 +79,17 @@ public class TestDialPartialComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 				
 		this.dialView = new DialView();
+		
+		DefaultModelComposit model = new DefaultModelComposit();
 		this.dialView.setRenderer(new DialPartialRenderer(this.dialView));
 		DialPartialRenderingModel renderingModel = new DialPartialRenderingModel();
-		DefaultModelComposit model = new DefaultModelComposit();
 		model.addModel("rendering", renderingModel);
+		model.addModel("picture", new DialPictureRenderingModel());
 		//model.addModel("value", new DefaultBoundedModel(0,360,0));
 		model.addModel("value", new DefaultBoundedModel(renderingModel.getStartAngle(),renderingModel.getEndAngle(),renderingModel.getEndAngle()));
 		this.dialView.setModel(model);
-		this.componentsPane.add(this.dialView);
 		
+		this.componentsPane.add(this.dialView);
 		
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}

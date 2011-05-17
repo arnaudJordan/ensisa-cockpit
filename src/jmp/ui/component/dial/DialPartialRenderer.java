@@ -2,29 +2,33 @@ package jmp.ui.component.dial;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Shape;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.image.BufferedImage;
 
 import jmp.ui.model.BoundedModel;
+import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
+import jmp.ui.utilities.JMSwingUtilities;
 
 /**
  * @author cockpit
  *
  */
-public class DialPartialRenderer extends DialPictureRenderer {
+public class DialPartialRenderer extends DialDefaultRenderer {
 
 	private Arc2D.Double clip;
 	public DialPartialRenderer(View view) {
 		super(view);
 	}
+
 	public void renderNeedle(Graphics2D g)
 	{
-		DialPartialRenderingModel model = (DialPartialRenderingModel)this.dialView().renderingModel();
-		BufferedImage background = model.getBackground();
-		BufferedImage needle = model.getNeedle();
+		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
+		DialPartialRenderingModel partialModel = (DialPartialRenderingModel) dialView().renderingModel();
+		BufferedImage background = pictureModel.getBackground();
+		BufferedImage needle = pictureModel.getNeedle();
 		BoundedModel valueModel = this.dialView().valueModel();
 		if (needle == null || background == null) return;
 		
@@ -32,27 +36,26 @@ public class DialPartialRenderer extends DialPictureRenderer {
 		trans.setToIdentity();
 		trans.translate(background.getWidth()/2, background.getHeight()/2);
 		trans.translate(-clip.getBounds2D().getMinX(), -clip.getBounds2D().getMinY());
-		if(valueModel.getValue() > model.getEndAngle())
-			valueModel.setValue(model.getEndAngle());
-		if(valueModel.getValue() < model.getStartAngle())
-			valueModel.setValue(model.getStartAngle());
+		if(valueModel.getValue() > partialModel.getEndAngle())
+			valueModel.setValue(partialModel.getEndAngle());
+		if(valueModel.getValue() < partialModel.getStartAngle())
+			valueModel.setValue(partialModel.getStartAngle());
 		trans.rotate(Math.toRadians(-this.dialView().valueModel().getValue()));
 		trans.translate(-needle.getWidth()/2,-needle.getHeight()/2);
-		
+
 		g.drawImage(needle,trans,null);
 	}
 	public void renderBackground(Graphics2D g)
 	{
-		DialPartialRenderingModel model = (DialPartialRenderingModel)this.dialView().renderingModel();
-		BufferedImage background = model.getBackground();
-		BufferedImage needle = model.getNeedle();
+		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
+		DialPartialRenderingModel partialModel = (DialPartialRenderingModel) dialView().renderingModel();
+		BufferedImage background = pictureModel.getBackground();
 		if (background == null) return;
 		
 		AffineTransform oldTrans = g.getTransform();
 		AffineTransform trans = new AffineTransform();		
-		Shape oldClip = g.getClip();
 		
-		clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), model.getStartAngle(), extendAngle(model.getStartAngle(), model.getEndAngle()),Arc2D.PIE);
+		clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
 		trans.setToIdentity();
 		trans.translate(-clip.getBounds2D().getMinX(), -clip.getBounds2D().getMinY());
 		//trans.translate(getPreferredSize().getWidth()-clip.getBounds2D().getHeight(), getPreferredSize().getHeight() -clip.getBounds2D().getWidth()));
@@ -61,16 +64,19 @@ public class DialPartialRenderer extends DialPictureRenderer {
 		g.drawImage(background,null,null);
 		g.setClip(null);
 		g.setTransform(oldTrans);
+		
 	}
 	public Dimension getPreferredSize()
 	{
-		DialPartialRenderingModel model = (DialPartialRenderingModel)this.dialView().renderingModel();
-		BufferedImage background = model.getBackground();
-		BufferedImage needle = model.getNeedle();
-		clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), model.getStartAngle(), extendAngle(model.getStartAngle(), model.getEndAngle()),Arc2D.PIE);
+		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
+		DialPartialRenderingModel partialModel = (DialPartialRenderingModel)this.dialView().renderingModel();
+		BufferedImage background = pictureModel.getBackground();
+		BufferedImage needle = pictureModel.getNeedle();
+		clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
 		int transX = 0;
 		int transY = 0;
-        System.out.println("----------------");
+		
+		System.out.println("----------------");
         System.out.println("bg Height : " +background.getHeight());
         System.out.println("bg Width : " +background.getWidth());
         System.out.println("maxX : " + clip.getMaxX());
@@ -88,35 +94,24 @@ public class DialPartialRenderer extends DialPictureRenderer {
 
         if(clip.getBounds2D().getMaxX() < clip.getCenterX() + needle.getHeight())
         {
-        	transX = needle.getHeight();
         	System.out.println(1);
+        	transX = needle.getHeight();
         }
         if(clip.getBounds2D().getMaxY() < clip.getCenterY() + needle.getHeight())
         {
-        	transY = needle.getHeight();
         	System.out.println(2);
+        	transY = needle.getHeight();
         }
         if(clip.getBounds2D().getMinX() > clip.getCenterX() - needle.getHeight())
         {
-        	transX = needle.getHeight();
         	System.out.println(3);
+        	transX = needle.getHeight();
         }
         if(clip.getBounds2D().getMinY() > clip.getCenterY() -  needle.getHeight())
         {
-        	transY = needle.getHeight();
         	System.out.println(4);
+        	transY = needle.getHeight();
         }
         return new Dimension((int)clip.getBounds2D().getWidth() + transX, (int)clip.getBounds2D().getHeight() + transY);
-	}
-	private int extendAngle(int startAngle, int endAngle)
-	{
-		if(startAngle < 0)
-			startAngle += 360;
-		if(endAngle < 0)
-			endAngle += 360;
-		int extend = endAngle - startAngle;
-		if(startAngle > endAngle)
-			extend += 360;
-		return java.lang.Math.abs(extend);
 	}
 }

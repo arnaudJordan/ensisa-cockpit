@@ -43,14 +43,4 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 	{
 		return new Dimension(((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground().getHeight(),((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground().getWidth());
 	}
-
-	public Dimension getMinimumSize()
-	{
-		return this.getPreferredSize();
-	}
-	
-	public Dimension getMaximumSize()
-	{
-		return this.getPreferredSize();
-	}
 }

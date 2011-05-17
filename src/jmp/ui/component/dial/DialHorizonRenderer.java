@@ -164,14 +164,4 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		DialHorizonRenderingModel model = ((DialHorizonRenderingModel) this.dialView().renderingModel());
 		return new Dimension(model.getSize().width + model.getBorderSize()*2, model.getSize().height + model.getBorderSize()*2);
 	}
-
-	public Dimension getMinimumSize()
-	{
-		return this.getPreferredSize();
-	}
-	
-	public Dimension getMaximumSize()
-	{
-		return this.getPreferredSize();
-	}
 }

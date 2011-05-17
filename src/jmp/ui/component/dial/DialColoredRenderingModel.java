@@ -1,9 +1,5 @@
 package jmp.ui.component.dial;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import jmp.ui.utilities.ColoredRange;
 import jmp.ui.utilities.ColoredRanges;
 
 

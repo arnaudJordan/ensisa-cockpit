@@ -52,7 +52,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	public void renderView(Graphics2D g) {
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
 		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
-		g.setRenderingHints(rh);	
+		g.setRenderingHints(rh);
 		this.renderDial(g);
 	}
 
@@ -60,15 +60,15 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	}
 
 	public Dimension getPreferredSize() {
-		return new Dimension();
+		return getPreferredSize();
 	}
 
 	public Dimension getMinimumSize() {
-		return new Dimension();
+		return getPreferredSize();
 	}
 	
 	public Dimension getMaximumSize() {
-		return new Dimension();
+		return getPreferredSize();
 	}
 
 }
