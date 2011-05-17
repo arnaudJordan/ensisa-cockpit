@@ -15,7 +15,6 @@ public class DialPictureRenderingModel extends DialRenderingModel {
 	
 	public DialPictureRenderingModel() {
 		setupDialPictureRenderingModel(DEFAULT_BACKGROUND_PATH, DEFAULT_NEEDLE_PATH);
-		System.out.println("Bonjour je suis un picture model");
 	}
 	
 	public DialPictureRenderingModel(String backgroundPath, String needlePath) {

@@ -9,7 +9,6 @@ public class DialPartialRenderingModel extends DialRenderingModel{
 	public DialPartialRenderingModel() {
 		super();
 		setStartAngle(DEFAULT_START_ANGLE);
-		setEndAngle(DEFAULT_END_ANGLE);System.out.println("Bonjour je suis un partialModel");
 	}
 	
 	public void setStartAngle(Integer startAngle) {
