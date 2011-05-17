@@ -26,11 +26,11 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(0.5f);
 	private static final Stroke MAJOR_GRADUTION_STROKE = new BasicStroke(2f);
 	private static final int MAJOR_TICK_SPACING = 10;
-	private static final int MINOR_TICK_SPACING = 5;
+	private static final int MINOR_TICK_SPACING = 2;
 	private static final int PITCH_INTERVAL = 60;
 	private final static String PLANE_IMAGE_PATH = "pictures/dial/horizon_plane.png";
 	
-	private static final int BACKGROUND_MULTIPLIER = 4;
+	private static final int BACKGROUND_MULTIPLIER = 8;
 	
 	private Color skyColor;
 	private Color groundColor;
