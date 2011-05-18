@@ -5,22 +5,27 @@ import java.awt.Color;
 import java.awt.Stroke;
 
 public class DialTicksRenderingModel extends DialRenderingModel {
-	private static final Color GRADUATION_COLOR = Color.RED;
+	private static final Color MINOR_GRADUATION_COLOR = Color.PINK;
+	private static final Color MAJOR_GRADUATION_COLOR = Color.RED;
+	private static final Color LABEL_COLOR = Color.BLACK;
 	
 	private static final double MAJOR_GRADUTION_RATIO = 0.25;
 	private static final int LABEL_SPACE = 2;
+	
 
 	private static final double MINOR_GRADUTION_RATIO = MAJOR_GRADUTION_RATIO * 1.5;
 	private static final float MINOR_GRADUTION_WIDTH = 2f;
 	private static final float MAJOR_GRADUTION_WIDTH = 2f;
 	private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(MINOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
 	private static final Stroke MAJOR_GRADUTION_STROKE = new BasicStroke(MAJOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
-	private static final int MAJOR_TICK_SPACING = 20;
+	private static final int MAJOR_TICK_SPACING = 10;
 	private static final int MINOR_TICK_SPACING = 5;
 	private static final int MINOR_TICK_SIZE = 20;
 	private static final int MAJOR_TICK_SIZE = 2 * MINOR_TICK_SIZE;
 	
-	private Color graduationColor;
+	private Color MinorGraduationColor;
+	private Color MajorGraduationColor;
+	private Color LabelColor;
 	private int LabelSpace;
 	private float MinorGraduationWidth;
 	private float MajorGraduationWidth;
@@ -35,7 +40,9 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	
 	public DialTicksRenderingModel()
 	{
-		this.setGraduationColor(GRADUATION_COLOR);
+		this.setMinorGraduationColor(MINOR_GRADUATION_COLOR);
+		this.setMajorGraduationColor(MAJOR_GRADUATION_COLOR);
+		this.setLabelColor(LABEL_COLOR);
 		this.setLabelSpace(LABEL_SPACE);
 		this.setMinorGraduationWidth(MINOR_GRADUTION_WIDTH);
 		this.setMajorGraduationWidth(MAJOR_GRADUTION_WIDTH);
@@ -47,12 +54,28 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 		this.setMajorTickSize(MAJOR_TICK_SIZE);
 	}
 
-	public Color getGraduationColor() {
-		return graduationColor;
+	public Color getMinorGraduationColor() {
+		return MinorGraduationColor;
 	}
 
-	public void setGraduationColor(Color graduationColor) {
-		this.graduationColor = graduationColor;
+	public void setMinorGraduationColor(Color minorGraduationColor) {
+		MinorGraduationColor = minorGraduationColor;
+	}
+
+	public Color getMajorGraduationColor() {
+		return MajorGraduationColor;
+	}
+
+	public void setMajorGraduationColor(Color majorGraduationColor) {
+		MajorGraduationColor = majorGraduationColor;
+	}
+
+	public Color getLabelColor() {
+		return LabelColor;
+	}
+
+	public void setLabelColor(Color labelColor) {
+		LabelColor = labelColor;
 	}
 
 	public int getLabelSpace() {

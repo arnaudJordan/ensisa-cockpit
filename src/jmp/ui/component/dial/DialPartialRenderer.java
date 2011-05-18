@@ -34,6 +34,10 @@ public class DialPartialRenderer extends DialDefaultRenderer {
 		BufferedImage needle = pictureModel.getNeedle();
 		BoundedModel valueModel = this.dialView().valueModel();
 		if (needle == null || background == null) return;
+		int Angle=0;
+		if(valueModel.getValue() != 0)
+			Angle = valueModel.getValue()*(partialModel.getEndAngle()-partialModel.getStartAngle())/(valueModel.getMaximum()-valueModel.getMinimum());
+		
 		AffineTransform trans = new AffineTransform();
 		trans.setToIdentity();
 		trans.translate(background.getWidth()/2, background.getHeight()/2);
@@ -49,7 +53,8 @@ public class DialPartialRenderer extends DialDefaultRenderer {
 			valueModel.setValue(partialModel.getEndAngle());
 		if(valueModel.getValue() < partialModel.getStartAngle())
 			valueModel.setValue(partialModel.getStartAngle());
-		trans.rotate(Math.toRadians(-this.dialView().valueModel().getValue()));
+		//trans.rotate(Math.toRadians(-this.dialView().valueModel().getValue()));
+		trans.rotate(Math.toRadians(-Angle));
 		trans.translate(-needle.getWidth()/2,-needle.getHeight()/2);
 
 		g.drawImage(needle,trans,null);

@@ -10,6 +10,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import javax.swing.border.EmptyBorder;
 
+import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
 
@@ -25,12 +26,16 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 	{
 		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
 		BufferedImage needle = ((DialPictureRenderingModel) this.dialView().renderingModel()).getNeedle();
+		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if (needle == null || background == null) return;
-		
+		int Angle=0;
+		if(valueModel.getValue() != 0)
+			Angle = valueModel.getValue()*360/(valueModel.getMaximum()-valueModel.getMinimum());
 		AffineTransform trans = new AffineTransform();
 		trans.setToIdentity();
 		trans.translate(background.getWidth()/2, background.getHeight()/2);
-		trans.rotate(Math.toRadians(this.dialView().valueModel().getValue()));
+		//trans.rotate(Math.toRadians(valueModel.getValue()));
+		trans.rotate(Math.toRadians(Angle));
 		trans.translate(-needle.getWidth()/2,-needle.getHeight()/2);
 
 		g.drawImage(needle,trans,null);
@@ -56,8 +61,8 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 	{
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
+		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if(ticksModel==null) return;
-		g.setColor(ticksModel.getGraduationColor());
 		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
 		final int minorTickSpacing = (int) ticksModel.getMinorTickSpacing();
 		final int majorTickSize = (int) ticksModel.getMajorTickSize();
@@ -66,34 +71,39 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		final int majorLineXEnd = (int) (background.getWidth()-ticksModel.getMajorGraduationWidth());
 		final int minorLineXStart = (int) (background.getWidth() - minorTickSize);
 		final int minorLineXEnd = (int) (background.getWidth()-ticksModel.getMinorGraduationWidth());
-		int nbValues = 360/minorTickSpacing;
-		
+		int nbValues = (valueModel.getMaximum()-valueModel.getMinimum())/minorTickSpacing;
+		//int nbValues = 360/minorTickSpacing;
+		int minorTickAngleSpacing = 360 / nbValues;
 		AffineTransform oldTrans = g.getTransform();
-		
 		
 		for(int i = 0; i < nbValues; i++)
 		{
 			AffineTransform trans = new AffineTransform();
 			trans.translate(background.getWidth()/2 +background.getMinX(), background.getHeight()/2+background.getMinY());
-			trans.rotate(Math.toRadians(i*minorTickSpacing));
+			//trans.rotate(Math.toRadians(i*minorTickSpacing));
+			trans.rotate(Math.toRadians(i*minorTickAngleSpacing));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
 			g.transform(trans);
-			g.setColor(ticksModel.getGraduationColor());
+			g.setColor(ticksModel.getMinorGraduationColor());
 			g.setStroke(ticksModel.getMinorGradutionStroke());
 			g.drawLine(minorLineXStart, background.getHeight()/2, minorLineXEnd, background.getHeight()/2);
 			g.setTransform(oldTrans);
 		}
+		nbValues = (valueModel.getMaximum()-valueModel.getMinimum())/majorTickSpacing;
+		//nbValues = 360/majorTickSpacing;
 		
-		nbValues = 360/majorTickSpacing;
+		int majorTickAngleSpacing = 360 / nbValues;
+		
 		for(int i = 0; i < nbValues; i++)
 		{
 			AffineTransform trans = new AffineTransform();
 			trans.setToIdentity();
 			trans.translate(background.getWidth()/2, background.getHeight()/2);
-			trans.rotate(-Math.toRadians(i*majorTickSpacing));
+			//trans.rotate(-Math.toRadians(i*majorTickSpacing));
+			trans.rotate(-Math.toRadians(i*majorTickAngleSpacing));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
 			g.transform(trans);
-			g.setColor(ticksModel.getGraduationColor());
+			g.setColor(ticksModel.getMajorGraduationColor());
 			g.setStroke(ticksModel.getMinorGradutionStroke());
 			g.drawLine(majorLineXStart, background.getHeight()/2, majorLineXEnd, background.getHeight()/2);
 			g.setTransform(oldTrans);
@@ -101,13 +111,19 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 	}
 	public void renderLabels(Graphics2D g)
 	{
+		if(true) return;
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
+		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if(ticksModel==null) return;
-		g.setColor(ticksModel.getGraduationColor());
+		g.setColor(ticksModel.getLabelColor());
 		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
 		final int majorTickSize = (int) ticksModel.getMajorTickSize();
-		int nbValues = 360/majorTickSpacing;
+		
+		int nbValues = (valueModel.getMaximum()-valueModel.getMinimum())/majorTickSpacing;
+		//nbValues = 360/majorTickSpacing;
+		
+		int majorTickAngleSpacing = 360 / nbValues;
 		
 		AffineTransform oldTrans = g.getTransform();
 		for(int i = 0; i < nbValues; i++)
@@ -118,6 +134,7 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			/*trans.rotate(-Math.toRadians(i*majorTickSpacing));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);*/
 			final String vString = String.valueOf(i*majorTickSpacing);
+			//final String vString = String.valueOf(i*majorTickAngleSpacing);
 			final int strWidth = g.getFontMetrics().stringWidth(vString);
 			final int strHeight = g.getFontMetrics().getHeight();
 			g.transform(trans);
@@ -126,9 +143,10 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			//g.setTransform(trans);
 			
 			//g.drawString(vString, background.getHeight() , (background.getHeight()/2));
-			g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickSpacing))),
-					(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickSpacing))));
-			
+			//g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickSpacing))),
+			//		(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickSpacing))));
+			g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing))),
+							(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing))));
 			g.setTransform(oldTrans);
 		}
 	}

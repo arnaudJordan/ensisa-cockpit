@@ -55,7 +55,7 @@ public class TestDialPictureComponent extends JFrame
 		
 		
 		
-		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,360,0);
+		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
 		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
@@ -84,7 +84,7 @@ public class TestDialPictureComponent extends JFrame
 		model.addModel("rendering", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("ticks", new DialTicksRenderingModel());
-		model.addModel("value", new DefaultBoundedModel(0,360,0));
+		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);
 
