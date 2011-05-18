@@ -10,8 +10,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import javax.swing.border.EmptyBorder;
 
-import jmp.ui.model.BoundedModel;
-import jmp.ui.model.DefaultRangeModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
 
@@ -65,42 +63,53 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		final int majorTickSize = (int) ticksModel.getMajorTickSize();
 		final int minorTickSize = (int) ticksModel.getMinorTickSize();
 		final int majorLineXStart = (int) (background.getWidth() - majorTickSize);
-		final int majorLineXEnd = (int) (background.getWidth());
+		final int majorLineXEnd = (int) (background.getWidth()-ticksModel.getMajorGraduationWidth());
 		final int minorLineXStart = (int) (background.getWidth() - minorTickSize);
-		final int minorLineXEnd = (int) (background.getWidth());
+		final int minorLineXEnd = (int) (background.getWidth()-ticksModel.getMinorGraduationWidth());
 		int nbValues = 360/minorTickSpacing;
 		
 		AffineTransform oldTrans = g.getTransform();
+		
+		
 		for(int i = 0; i < nbValues; i++)
 		{
-			System.out.println(nbValues);
 			AffineTransform trans = new AffineTransform();
-			trans.setToIdentity();
-			trans.translate(background.getWidth()/2, background.getHeight()/2);
+			trans.translate(background.getWidth()/2 +background.getMinX(), background.getHeight()/2+background.getMinY());
 			trans.rotate(Math.toRadians(i*minorTickSpacing));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
-			g.setTransform(trans);
+			g.transform(trans);
 			g.setColor(ticksModel.getGraduationColor());
 			g.setStroke(ticksModel.getMinorGradutionStroke());
 			g.drawLine(minorLineXStart, background.getHeight()/2, minorLineXEnd, background.getHeight()/2);
+			g.setTransform(oldTrans);
 		}
-		g.setTransform(oldTrans);
 		
 		nbValues = 360/majorTickSpacing;
 		for(int i = 0; i < nbValues; i++)
 		{
-			System.out.println(nbValues);
 			AffineTransform trans = new AffineTransform();
 			trans.setToIdentity();
 			trans.translate(background.getWidth()/2, background.getHeight()/2);
 			trans.rotate(-Math.toRadians(i*majorTickSpacing));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
-			g.setTransform(trans);
+			g.transform(trans);
 			g.setColor(ticksModel.getGraduationColor());
 			g.setStroke(ticksModel.getMinorGradutionStroke());
 			g.drawLine(majorLineXStart, background.getHeight()/2, majorLineXEnd, background.getHeight()/2);
+			g.setTransform(oldTrans);
 		}
-		g.setTransform(oldTrans);
+	}
+	public void renderLabels(Graphics2D g)
+	{
+		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
+		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
+		if(ticksModel==null) return;
+		g.setColor(ticksModel.getGraduationColor());
+		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
+		final int majorTickSize = (int) ticksModel.getMajorTickSize();
+		int nbValues = 360/majorTickSpacing;
+		
+		AffineTransform oldTrans = g.getTransform();
 		for(int i = 0; i < nbValues; i++)
 		{
 			AffineTransform trans = new AffineTransform();
@@ -111,7 +120,7 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			final String vString = String.valueOf(i*majorTickSpacing);
 			final int strWidth = g.getFontMetrics().stringWidth(vString);
 			final int strHeight = g.getFontMetrics().getHeight();
-			g.setTransform(trans);
+			g.transform(trans);
 		//	trans.translate(0, -strWidth);
 		//	trans.rotate(-Math.toRadians(i*majorTickSpacing));
 			//g.setTransform(trans);
@@ -120,9 +129,8 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickSpacing))),
 					(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickSpacing))));
 			
+			g.setTransform(oldTrans);
 		}
-		g.setTransform(oldTrans);
-	
 	}
 	public Dimension getPreferredSize()
 	{

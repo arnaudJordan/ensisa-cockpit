@@ -11,8 +11,10 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	private static final int LABEL_SPACE = 2;
 
 	private static final double MINOR_GRADUTION_RATIO = MAJOR_GRADUTION_RATIO * 1.5;
-	private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(3f);
-	private static final Stroke MAJOR_GRADUTION_STROKE = new BasicStroke(4f);
+	private static final float MINOR_GRADUTION_WIDTH = 2f;
+	private static final float MAJOR_GRADUTION_WIDTH = 2f;
+	private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(MINOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
+	private static final Stroke MAJOR_GRADUTION_STROKE = new BasicStroke(MAJOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
 	private static final int MAJOR_TICK_SPACING = 20;
 	private static final int MINOR_TICK_SPACING = 5;
 	private static final int MINOR_TICK_SIZE = 20;
@@ -20,6 +22,8 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	
 	private Color graduationColor;
 	private int LabelSpace;
+	private float MinorGraduationWidth;
+	private float MajorGraduationWidth;
 	private double MajorGradutionRatio;
 	private double MinorGradutionRatio;
 	private Stroke MajorGradutionStroke;
@@ -33,10 +37,10 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	{
 		this.setGraduationColor(GRADUATION_COLOR);
 		this.setLabelSpace(LABEL_SPACE);
+		this.setMinorGraduationWidth(MINOR_GRADUTION_WIDTH);
+		this.setMajorGraduationWidth(MAJOR_GRADUTION_WIDTH);
 		this.setMajorGradutionRatio(MAJOR_GRADUTION_RATIO);
 		this.setMinorGradutionRatio(MINOR_GRADUTION_RATIO);
-		this.setMajorGradutionStroke(MAJOR_GRADUTION_STROKE);
-		this.setMinorGradutionStroke(MINOR_GRADUTION_STROKE);
 		this.setMajorTickSpacing(MAJOR_TICK_SPACING);
 		this.setMinorTickSpacing(MINOR_TICK_SPACING);
 		this.setMinorTickSize(MINOR_TICK_SIZE);
@@ -57,6 +61,24 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 
 	public void setLabelSpace(int labelSpace) {
 		LabelSpace = labelSpace;
+	}
+
+	public float getMinorGraduationWidth() {
+		return MinorGraduationWidth;
+	}
+
+	public void setMinorGraduationWidth(float minorGraduationWidth) {
+		MinorGraduationWidth = minorGraduationWidth;
+		setMinorGradutionStroke(new BasicStroke(minorGraduationWidth,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
+	}
+
+	public float getMajorGraduationWidth() {
+		return MajorGraduationWidth;
+	}
+
+	public void setMajorGraduationWidth(float majorGraduationWidth) {
+		MajorGraduationWidth = majorGraduationWidth;
+		setMajorGradutionStroke(new BasicStroke(majorGraduationWidth,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
 	}
 
 	public double getMajorGradutionRatio() {
