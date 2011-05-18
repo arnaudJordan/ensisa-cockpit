@@ -3,8 +3,10 @@ package jmp.ui.component.dial;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Arc2D.Double;
 import java.awt.image.BufferedImage;
 
@@ -52,6 +54,17 @@ public class DialColoredRenderer extends DialDefaultRenderer {
 			if(range.range.max > max)
 				max=range.range.max;
 		}
+	}
+	public void renderBorder(Graphics2D g)
+	{
+		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
+		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
+		BufferedImage background = pictureModel.getBackground();
+		if(borderModel==null || borderModel.getBorderSize()==0) return;
+		g.setColor(borderModel.getBorderColor());
+		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
+		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,background.getWidth()-borderModel.getBorderSize(), background.getHeight()-borderModel.getBorderSize());
+		g.draw(border);
 	}
 	public Dimension getPreferredSize()
 	{

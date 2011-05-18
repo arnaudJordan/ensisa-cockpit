@@ -11,6 +11,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jmp.ui.component.dial.DialBorderRenderingModel;
 import jmp.ui.component.dial.DialColoredRenderer;
 import jmp.ui.component.dial.DialColoredRenderingModel;
 import jmp.ui.component.dial.DialPartialRenderer;
@@ -94,6 +95,7 @@ public class TestDialColoredComponent extends JFrame
 		colorModel.setColorRanges(colorRanges);
 		model.addModel("rendering", colorModel);
 		model.addModel("picture", new DialPictureRenderingModel());
+		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,360,0));
 		this.dialView.setModel(model);
 		
