@@ -11,6 +11,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Arc2D.Double;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.border.EmptyBorder;
 
@@ -142,34 +144,21 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
 		final int majorTickSize = (int) ticksModel.getMajorTickSize();
 		int nbValues = (valueModel.getMaximum()-valueModel.getMinimum())/majorTickSpacing;
-		//nbValues = 360/majorTickSpacing;
 		
 		int majorTickAngleSpacing = 360 / nbValues;
 		AffineTransform oldTrans = g2.getTransform();
-		//AffineTransform oldTrans = g.getTransform();
 		for(int i = 0; i < nbValues; i++)
 		{
 			AffineTransform trans = new AffineTransform();
 			trans.setToIdentity();
 			trans.translate(background.getWidth()/2, background.getHeight()/2);
-			/*trans.rotate(-Math.toRadians(i*majorTickSpacing));
-			trans.translate(-background.getWidth()/2,-background.getHeight()/2);*/
 			final String vString = String.valueOf(i*majorTickSpacing);
-			//final String vString = String.valueOf(i*majorTickAngleSpacing);
 			final int strWidth = g2.getFontMetrics().stringWidth(vString);
 			final int strHeight = g2.getFontMetrics().getHeight();
-			//g.getFontMetrics().getStringBounds(vString, g).getBounds2D().intersectsLine(l);
+			
 			g2.transform(trans);
-		//	trans.translate(0, -strWidth);
-		//	trans.rotate(-Math.toRadians(i*majorTickSpacing));
-			//g.setTransform(trans);
 			
-			//g.drawString(vString, background.getHeight() , (background.getHeight()/2));
-			//g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickSpacing))),
-			//		(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickSpacing))));
-			
-			Double clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), 0, 360,Arc2D.PIE);
-			Point lineEnd, textCorner1, textCorner2 = null, textCorner3 = null, textCorner4 = null;
+			Point lineEnd,lineStart = null, textCorner1, textCorner2 = null, textCorner3 = null, textCorner4 = null;
 			if(renderingModel.getSense() == Rotation.Clockwise)
 			{
 				lineEnd = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle()))),
@@ -183,6 +172,8 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			{
 				lineEnd = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))),
 						(int)((background.getHeight()/2- majorTickSize) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))));
+				lineStart = new Point((int)((background.getHeight()/2) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))),
+						(int)((background.getHeight()/2) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))));
 				textCorner1 = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))),
 						(int)((background.getHeight()/2- majorTickSize) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))));
 				textCorner2 = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))),
@@ -194,33 +185,75 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 				
 			}
 			Ellipse2D point = new Ellipse2D.Double(lineEnd.getX()-1, lineEnd.getY()-1, 2, 2);
+			Ellipse2D point2 = new Ellipse2D.Double(lineStart.getX()-2, lineStart.getY()-2, 4, 4);
 			Ellipse2D textPoint1 = new Ellipse2D.Double(textCorner1.getX()-1, textCorner1.getY()-1, 2, 2);
 			Ellipse2D textPoint2 = new Ellipse2D.Double(textCorner2.getX()-1, textCorner2.getY()-1, 2, 2);
 			Ellipse2D textPoint3 = new Ellipse2D.Double(textCorner3.getX()-1, textCorner3.getY()-1, 2, 2);
 			Ellipse2D textPoint4 = new Ellipse2D.Double(textCorner4.getX()-1, textCorner4.getY()-1, 2, 2);
-			int transX = 0;
-			int transY = 0;
-			g2.draw(point);
-			g2.draw(textPoint1);
-			g2.draw(textPoint2);
-			g2.draw(textPoint3);
-			g2.draw(textPoint4);
+			//g2.draw(point);g2.draw(point2);
+			//g2.draw(textPoint1);
+			//g2.draw(textPoint2);
+			//g2.draw(textPoint3);
+			//g2.draw(textPoint4);
 			
-//			if(clip.getBounds2D().getMinX() > clip.getCenterX() || clip.getBounds2D().getMaxX() < clip.getCenterX())
-//	        	transX = needle.getHeight();
-//	        if(clip.getBounds2D().getMinY() > clip.getCenterY() || clip.getBounds2D().getMaxY() < clip.getCenterY())
-//	        	transY = needle.getHeight();
-			if(renderingModel.getSense() == Rotation.Clockwise)
-				g2.drawString(vString, (int)((background.getHeight()/2 - majorTickSize - strWidth/2) * Math.cos(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))),
-						(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))));
-			else{
-				g2.drawString(vString, (int)((background.getHeight()/2 - majorTickSize) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))),
-						(int)((background.getHeight()/2- majorTickSize) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))));
-				System.out.println("fesfdsfsfdsfds");}
+			AffineTransform trans2 = new AffineTransform();
+			Rectangle2D cadre = g.getFontMetrics().getStringBounds(vString, g).getBounds2D();
+			trans2.translate(textCorner1.getX()-cadre.getCenterX(), textCorner1.getY()-cadre.getCenterY());
+			g2.transform(trans2);
+			
+			//g2.draw(cadre);
+			//g2.transform(trans);
+			
+			int deltaX=0;
+			int deltaY=0;
+			
+			System.out.println("--------------");
+			System.out.println("Valeur : " + vString);
+			System.out.println("transX : " + trans2.getTranslateX());
+			System.out.println("transY : " + trans2.getTranslateY());
+			System.out.println("cadre.getCenterY() : " + cadre.getCenterY());
+			System.out.println("cadre.getCenterX() : " + cadre.getCenterX());
+			System.out.println("cadre.getMinY() : " + cadre.getMinY());
+			System.out.println("cadre.getMinX() : " + cadre.getMinX());
+			System.out.println("cadre.getMaxY() : " + cadre.getMaxY());
+			System.out.println("cadre.getMaxX() : " + cadre.getMaxX());
+			System.out.println("point.getY() : " + point.getY());
+			System.out.println("point.getX() : " + point.getX());
+			System.out.println("fiffY : " + (trans2.getTranslateY()-cadre.getMaxY()));
+			System.out.println("angle : " + i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle());
+			System.out.println("cos : " + Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+			System.out.println("cos : " + Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+			System.out.println("diag : " + Math.sqrt(cadre.getHeight()+cadre.getWidth()));
+			
+			if(trans2.getTranslateY()+cadre.getCenterY()>point2.getY())
+				deltaY=-(int) (trans2.getTranslateY()+cadre.getMinY() - point.getY());
+			if(trans2.getTranslateY()+cadre.getCenterY()<point2.getY())
+				deltaY=-(int) (trans2.getTranslateY()+cadre.getMaxY() - point.getY());
+			
+			if(trans2.getTranslateX()+cadre.getCenterX()>point2.getX())
+				deltaX=(int) (trans2.getTranslateX()+cadre.getMaxX() - point.getX());
+			if(trans2.getTranslateX()+cadre.getCenterX()<point2.getX())
+				deltaX=(int) (trans2.getTranslateX()+cadre.getMinX() - point.getX());
+			
+			deltaX=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+			deltaY=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+			g2.drawString(vString, deltaX, deltaY);
+			AffineTransform trans3 = new AffineTransform();
+			trans3.translate(deltaX, deltaY);
+			g2.transform(trans3);
+			//g2.draw(cadre);
+//			if(renderingModel.getSense() == Rotation.Clockwise)
+//				g2.drawString(vString, (int)((background.getHeight()/2 - majorTickSize - strWidth/2) * Math.cos(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))),
+//						(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))));
+//			else{
+//				g2.drawString(vString, deltaX + (int)((background.getHeight()/2 - majorTickSize) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))),
+//						(int)((background.getHeight()/2- majorTickSize) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))));
+//				System.out.println("fesfdsfsfdsfds");}
 			g2.setTransform(oldTrans);
 		}
 		g2.dispose();
 	}
+	
 	public void renderLabel(Graphics2D g)
 	{
 		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
