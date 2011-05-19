@@ -27,6 +27,7 @@ public class TestDialPartialComponent extends JFrame
 
 	private JPanel componentsPane;
 	private DialView dialView;
+	private DialPartialRenderingModel renderingModel;
 	
 	public TestDialPartialComponent()
 	{
@@ -54,9 +55,14 @@ public class TestDialPartialComponent extends JFrame
 		this.slidersPane = new JPanel();
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
-		DialPartialRenderingModel renderingModel = new DialPartialRenderingModel();
 		//this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,360,0);
 		this.progressSlider = new JSlider(JSlider.HORIZONTAL,renderingModel.getStartAngle(),renderingModel.getEndAngle(),renderingModel.getEndAngle());
+		progressSlider.setMajorTickSpacing(90);
+		progressSlider.setMinorTickSpacing(30);
+		progressSlider.setPaintTicks(true);
+		progressSlider.setPaintLabels(true);
+		progressSlider.setPaintTrack(true);
+		progressSlider.setPaintTicks(true);
 		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
@@ -83,7 +89,7 @@ public class TestDialPartialComponent extends JFrame
 		
 		DefaultModelComposit model = new DefaultModelComposit();
 		this.dialView.setRenderer(new DialPartialRenderer(this.dialView));
-		DialPartialRenderingModel renderingModel = new DialPartialRenderingModel();
+		renderingModel = new DialPartialRenderingModel();
 		model.addModel("rendering", renderingModel);
 		model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());

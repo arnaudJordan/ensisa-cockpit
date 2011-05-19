@@ -56,6 +56,12 @@ public class TestDialPictureComponent extends JFrame
 		
 		
 		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		progressSlider.setMajorTickSpacing(50);
+		progressSlider.setMinorTickSpacing(10);
+		progressSlider.setPaintTicks(true);
+		progressSlider.setPaintLabels(true);
+		progressSlider.setPaintTrack(true);
+		progressSlider.setPaintTicks(true);
 		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)

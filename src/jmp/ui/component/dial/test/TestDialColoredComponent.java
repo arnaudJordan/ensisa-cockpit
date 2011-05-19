@@ -61,6 +61,12 @@ public class TestDialColoredComponent extends JFrame
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
 		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		progressSlider.setMajorTickSpacing(50);
+		progressSlider.setMinorTickSpacing(10);
+		progressSlider.setPaintTicks(true);
+		progressSlider.setPaintLabels(true);
+		progressSlider.setPaintTrack(true);
+		progressSlider.setPaintTicks(true);
 		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
