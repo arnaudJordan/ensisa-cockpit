@@ -10,6 +10,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
+import jmp.ui.component.Rotation;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
@@ -28,15 +29,16 @@ public class DialPartialRenderer extends DialDefaultRenderer {
 
 	public void renderNeedle(Graphics2D g)
 	{
+		
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
-		DialPartialRenderingModel partialModel = (DialPartialRenderingModel) dialView().renderingModel();
+		DialPartialRenderingModel renderingModel = (DialPartialRenderingModel) dialView().renderingModel();
 		BufferedImage background = pictureModel.getBackground();
 		BufferedImage needle = pictureModel.getNeedle();
 		BoundedModel valueModel = this.dialView().valueModel();
 		if (needle == null || background == null) return;
 		int Angle=0;
 		if(valueModel.getValue() != 0)
-			Angle = valueModel.getValue()*(partialModel.getEndAngle()-partialModel.getStartAngle())/(valueModel.getMaximum()-valueModel.getMinimum());
+			Angle = valueModel.getValue()*(renderingModel.getEndAngle()-renderingModel.getStartAngle())/(valueModel.getMaximum()-valueModel.getMinimum());
 		
 		AffineTransform trans = new AffineTransform();
 		trans.setToIdentity();
@@ -49,12 +51,15 @@ public class DialPartialRenderer extends DialDefaultRenderer {
 		if(clip.getBounds2D().getMinY() > clip.getCenterY() - needle.getHeight())
 			transY = needle.getHeight();
 		trans.translate(-clip.getBounds2D().getMinX() + transX, -clip.getBounds2D().getMinY() + transY);
-		if(valueModel.getValue() > partialModel.getEndAngle())
-			valueModel.setValue(partialModel.getEndAngle());
-		if(valueModel.getValue() < partialModel.getStartAngle())
-			valueModel.setValue(partialModel.getStartAngle());
+		if(valueModel.getValue() > renderingModel.getEndAngle())
+			valueModel.setValue(renderingModel.getEndAngle());
+		if(valueModel.getValue() < renderingModel.getStartAngle())
+			valueModel.setValue(renderingModel.getStartAngle());
 		//trans.rotate(Math.toRadians(-this.dialView().valueModel().getValue()));
-		trans.rotate(Math.toRadians(-Angle));
+		if(renderingModel.getSense() == Rotation.Clockwise)
+			trans.rotate(Math.toRadians(Angle - renderingModel.getTicksStartAngle()));
+		else
+			trans.rotate(-Math.toRadians(Angle + renderingModel.getTicksStartAngle()));
 		trans.translate(-needle.getWidth()/2,-needle.getHeight()/2);
 
 		g.drawImage(needle,trans,null);
@@ -132,7 +137,7 @@ public class DialPartialRenderer extends DialDefaultRenderer {
 		double transX = 0;
 		double transY = 0;
 		
-		System.out.println("----------------");
+		/*System.out.println("----------------");
         System.out.println("bg Height : " +background.getHeight());
         System.out.println("bg Width : " +background.getWidth());
         System.out.println("maxX : " + clip.getMaxX());
@@ -146,7 +151,7 @@ public class DialPartialRenderer extends DialDefaultRenderer {
         System.out.println("maxY : " + clip.getBounds2D().getMaxY());
         System.out.println("minX : " + clip.getBounds2D().getMinX());
         System.out.println("minY : " + clip.getBounds2D().getMinY());
-        System.out.println("-------------");
+        System.out.println("-------------");*/
 
         if((clip.getBounds2D().getMinX() > clip.getCenterX() - needle.getHeight()) || (clip.getBounds2D().getMaxX() < clip.getCenterX() + needle.getHeight()))
         	transX = needle.getHeight();

@@ -4,15 +4,20 @@ import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Arc2D.Double;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import javax.swing.border.EmptyBorder;
 
+import jmp.ui.component.Rotation;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
+import jmp.ui.utilities.JMSwingUtilities;
 
 public class DialPictureRenderer extends DialDefaultRenderer {
 	private final static Insets DEFAULT_INSETS = new Insets(5,5,5,5);
@@ -24,20 +29,23 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 	
 	public void renderNeedle(Graphics2D g)
 	{
-		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
-		BufferedImage needle = ((DialPictureRenderingModel) this.dialView().renderingModel()).getNeedle();
+		DialPictureRenderingModel renderingModel = (DialPictureRenderingModel) this.dialView().renderingModel();
+		BufferedImage background = ((DialPictureRenderingModel) renderingModel).getBackground();
+		BufferedImage needle = ((DialPictureRenderingModel) renderingModel).getNeedle();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if (needle == null || background == null) return;
 		int Angle=0;
 		if(valueModel.getValue() != 0)
 			Angle = valueModel.getValue()*360/(valueModel.getMaximum()-valueModel.getMinimum());
+		
 		AffineTransform trans = new AffineTransform();
 		trans.setToIdentity();
 		trans.translate(background.getWidth()/2, background.getHeight()/2);
-		//trans.rotate(Math.toRadians(valueModel.getValue()));
-		trans.rotate(Math.toRadians(Angle));
+		if(renderingModel.getSense() == Rotation.Clockwise)
+			trans.rotate(Math.toRadians(Angle - renderingModel.getTicksStartAngle()));
+		else
+			trans.rotate(-Math.toRadians(Angle + renderingModel.getTicksStartAngle()));
 		trans.translate(-needle.getWidth()/2,-needle.getHeight()/2);
-
 		g.drawImage(needle,trans,null);
 	}
 	public void renderBackground(Graphics2D g)
@@ -59,8 +67,9 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 	}
 	public void renderTicks(Graphics2D g)
 	{
+		DialPictureRenderingModel renderingModel = (DialPictureRenderingModel) this.dialView().renderingModel();
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
-		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
+		BufferedImage background = ((DialPictureRenderingModel) renderingModel).getBackground();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if(ticksModel==null) return;
 		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
@@ -81,7 +90,10 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			AffineTransform trans = new AffineTransform();
 			trans.translate(background.getWidth()/2 +background.getMinX(), background.getHeight()/2+background.getMinY());
 			//trans.rotate(Math.toRadians(i*minorTickSpacing));
-			trans.rotate(Math.toRadians(i*minorTickAngleSpacing));
+			if(renderingModel.getSense() == Rotation.Clockwise)
+				trans.rotate(-Math.toRadians(i*minorTickAngleSpacing + renderingModel.getTicksStartAngle()));
+			else
+				trans.rotate(Math.toRadians(i*minorTickAngleSpacing - renderingModel.getTicksStartAngle()));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
 			g.transform(trans);
 			g.setColor(ticksModel.getMinorGraduationColor());
@@ -100,7 +112,10 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			trans.setToIdentity();
 			trans.translate(background.getWidth()/2, background.getHeight()/2);
 			//trans.rotate(-Math.toRadians(i*majorTickSpacing));
-			trans.rotate(-Math.toRadians(i*majorTickAngleSpacing));
+			if(renderingModel.getSense() == Rotation.Clockwise)
+				trans.rotate(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()));
+			else
+				trans.rotate(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
 			g.transform(trans);
 			g.setColor(ticksModel.getMajorGraduationColor());
@@ -111,9 +126,9 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 	}
 	public void renderLabels(Graphics2D g)
 	{
-		if(true) return;
+		DialPictureRenderingModel renderingModel = (DialPictureRenderingModel) this.dialView().renderingModel();
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
-		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
+		BufferedImage background = ((DialPictureRenderingModel) renderingModel).getBackground();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if(ticksModel==null) return;
 		g.setColor(ticksModel.getLabelColor());
@@ -137,6 +152,7 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			//final String vString = String.valueOf(i*majorTickAngleSpacing);
 			final int strWidth = g.getFontMetrics().stringWidth(vString);
 			final int strHeight = g.getFontMetrics().getHeight();
+			//g.getFontMetrics().getStringBounds(vString, g).getBounds2D().intersectsLine(l);
 			g.transform(trans);
 		//	trans.translate(0, -strWidth);
 		//	trans.rotate(-Math.toRadians(i*majorTickSpacing));
@@ -145,10 +161,35 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			//g.drawString(vString, background.getHeight() , (background.getHeight()/2));
 			//g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickSpacing))),
 			//		(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickSpacing))));
-			g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing))),
-							(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing))));
+			Double clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), 0, 360,Arc2D.PIE);
+			Point lineEnd = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing))),
+					(int)((background.getHeight()/2- majorTickSize) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing))));
+			Ellipse2D point = new Ellipse2D.Double(lineEnd.getX()-5, lineEnd.getY()-5, 10, 10);
+			int transX = 0;
+			int transY = 0;
+			g.draw(point);
+//			if(clip.getBounds2D().getMinX() > clip.getCenterX() || clip.getBounds2D().getMaxX() < clip.getCenterX())
+//	        	transX = needle.getHeight();
+//	        if(clip.getBounds2D().getMinY() > clip.getCenterY() || clip.getBounds2D().getMaxY() < clip.getCenterY())
+//	        	transY = needle.getHeight();
+			if(renderingModel.getSense() == Rotation.Clockwise)
+				g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))),
+						(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))));
+			else
+				g.drawString(vString, -strWidth/2+(int)((background.getHeight()/2- majorTickSize - strWidth/2) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))),
+						(int)((background.getHeight()/2- majorTickSize-strHeight/2) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))));
 			g.setTransform(oldTrans);
 		}
+	}
+	public void renderLabel(Graphics2D g)
+	{
+		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
+		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
+		if(labelModel == null) return;
+		g.setColor(labelModel.getColor());
+		g.setFont(labelModel.getFont());
+		final int strWidth = g.getFontMetrics().stringWidth(labelModel.getLabel());
+		g.drawString(labelModel.getLabel(), background.getWidth()/2 - strWidth/2, background.getHeight()/3);
 	}
 	public Dimension getPreferredSize()
 	{

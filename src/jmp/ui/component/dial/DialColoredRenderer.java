@@ -8,6 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
+import jmp.ui.component.Rotation;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
@@ -21,24 +22,24 @@ public class DialColoredRenderer extends DialDefaultRenderer {
 	}
 	public void renderNeedle(Graphics2D g)
 	{
-		AffineTransform trans = new AffineTransform();
-		
+		DialColoredRenderingModel renderingModel = (DialColoredRenderingModel) this.dialView().renderingModel();
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		BufferedImage background = pictureModel.getBackground();
 		BufferedImage needle = pictureModel.getNeedle();
-
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if (needle == null || background == null) return;
 		int Angle=0;
 		if(valueModel.getValue() != 0)
 			Angle = valueModel.getValue()*360/(valueModel.getMaximum()-valueModel.getMinimum());
 		
+		AffineTransform trans = new AffineTransform();
 		trans.setToIdentity();
 		trans.translate(background.getWidth()/2, background.getHeight()/2);
-		//trans.rotate(Math.toRadians(this.dialView().valueModel().getValue()));
-		trans.rotate(Math.toRadians(Angle));
+		if(renderingModel.getSense() == Rotation.Clockwise)
+			trans.rotate(Math.toRadians(Angle - renderingModel.getTicksStartAngle()));
+		else
+			trans.rotate(-Math.toRadians(Angle + renderingModel.getTicksStartAngle()));
 		trans.translate(-needle.getWidth()/2,-needle.getHeight()/2);
-
 		g.drawImage(needle,trans,null);
 	}
 	public void renderBackground(Graphics2D g)

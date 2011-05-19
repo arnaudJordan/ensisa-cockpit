@@ -10,7 +10,9 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialBorderRenderingModel;
+import jmp.ui.component.dial.DialLabelRenderingModel;
 import jmp.ui.component.dial.DialPictureRenderer;
 import jmp.ui.component.dial.DialPictureRenderingModel;
 import jmp.ui.component.dial.DialTicksRenderingModel;
@@ -87,9 +89,12 @@ public class TestDialPictureComponent extends JFrame
 		this.dialView = new DialView();
 		this.dialView.setRenderer(new DialPictureRenderer(this.dialView));
 		DefaultModelComposit model = new DefaultModelComposit();
-		model.addModel("rendering", new DialPictureRenderingModel());
+		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
+	dialPictureRenderingModel.setSense(Rotation.Anticlockwise);
+		model.addModel("rendering", dialPictureRenderingModel);
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("ticks", new DialTicksRenderingModel());
+		model.addModel("label", new DialLabelRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);

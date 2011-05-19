@@ -46,6 +46,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		this.renderTrack(g);
 		this.renderTicks(g);
 		this.renderLabels(g);
+		this.renderLabel(g);
 		this.renderNeedle(g);
 		this.renderBorder(g);
 	}

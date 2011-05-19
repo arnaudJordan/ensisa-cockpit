@@ -7,16 +7,11 @@ public class DialPartialRenderingModel extends DialRenderingModel{
 	private int startAngle, endAngle;
 	
 	public DialPartialRenderingModel() {
-		super();
-		setupDialPartialRenderingModel(DEFAULT_START_ANGLE, DEFAULT_END_ANGLE);
+		this(DEFAULT_START_ANGLE, DEFAULT_END_ANGLE);
 	}
 	
 	public DialPartialRenderingModel(int startAngle, int endAngle) {
-		super();
-		setupDialPartialRenderingModel(startAngle, endAngle);
-	}
-	
-	private void setupDialPartialRenderingModel(int startAngle, int endAngle) {
+		super(endAngle);
 		setStartAngle(startAngle);
 		setEndAngle(endAngle);
 	}
