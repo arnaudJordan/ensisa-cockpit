@@ -1,4 +1,4 @@
-package jmp.ui.component.dial.drone;
+package jmp.ui.component.dial.aircraft.drone;
 
 import jmp.ui.component.dial.DialPictureRenderer;
 import jmp.ui.component.dial.DialPictureRenderingModel;

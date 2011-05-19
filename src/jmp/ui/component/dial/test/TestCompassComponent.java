@@ -1,4 +1,4 @@
-package jmp.ui.component;
+package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,12 +10,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.dial.DialPictureRenderer;
-import jmp.ui.component.dial.DialPictureRenderingModel;
 import jmp.ui.component.dial.DialView;
-import jmp.ui.component.dial.drone.Compass;
-import jmp.ui.model.DefaultBoundedModel;
-import jmp.ui.model.DefaultModelComposit;
+import jmp.ui.component.dial.aircraft.drone.Compass;
 
 
 public class TestCompassComponent extends JFrame
@@ -55,6 +51,12 @@ public class TestCompassComponent extends JFrame
 		
 		
 		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,360,0);
+		progressSlider.setMajorTickSpacing(90);
+		progressSlider.setMinorTickSpacing(30);
+		progressSlider.setPaintTicks(true);
+		progressSlider.setPaintLabels(true);
+		progressSlider.setPaintTrack(true);
+		progressSlider.setPaintTicks(true);
 		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)

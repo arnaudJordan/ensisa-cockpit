@@ -1,8 +1,9 @@
-package jmp.ui.component;
+package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,30 +11,26 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.dial.DialBorderRenderingModel;
-import jmp.ui.component.dial.DialPictureRenderer;
-import jmp.ui.component.dial.DialPictureRenderingModel;
-import jmp.ui.component.dial.DialTicksRenderingModel;
-import jmp.ui.component.dial.DialView;
-import jmp.ui.model.DefaultBoundedModel;
-import jmp.ui.model.DefaultModelComposit;
+import jmp.ui.component.Orientation;
+import jmp.ui.component.demo.progress.SimpleProgressView;
 
 
-public class TestDialPictureComponent extends JFrame
+public class TestComponents extends JFrame
 {
 	private JPanel slidersPane;
 	private JSlider progressSlider;
 
 	private JPanel componentsPane;
-	private DialView dialView;
-	
-	public TestDialPictureComponent()
+	private SimpleProgressView progressViewH;
+	private SimpleProgressView progressViewV;
+
+	public TestComponents()
 	{
 	}
 
 	public void setup()
 	{
-		this.setupDialPictureComponentPane();
+		this.setupComponentsPane();
 		this.setupSlidersPane();
 
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -64,7 +61,8 @@ public class TestDialPictureComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					dialView.valueModel().setValue(progressSlider.getValue());
+					progressViewH.valueModel().setValue(progressSlider.getValue());
+					progressViewV.valueModel().setValue(progressSlider.getValue());
 				}
 			}
 		});
@@ -73,26 +71,23 @@ public class TestDialPictureComponent extends JFrame
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupDialPictureComponentPane()
+	private void setupComponentsPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
-		this.dialView = new DialView();
-		this.dialView.setRenderer(new DialPictureRenderer(this.dialView));
-		DefaultModelComposit model = new DefaultModelComposit();
-		model.addModel("rendering", new DialPictureRenderingModel());
-		model.addModel("border", new DialBorderRenderingModel());
-		model.addModel("ticks", new DialTicksRenderingModel());
-		model.addModel("value", new DefaultBoundedModel(0,100,0));
-		this.dialView.setModel(model);
-		this.componentsPane.add(this.dialView);
+		this.progressViewH = new SimpleProgressView(Orientation.Horizontal);
+		this.progressViewV = new SimpleProgressView(Orientation.Vertical);
+
+		this.componentsPane.add(this.progressViewH);
+		this.componentsPane.add(this.progressViewV);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}
 	public static void main(String[] args)
 	{
-		final TestDialPictureComponent app = new TestDialPictureComponent();
+		final TestComponents app = new TestComponents();
+
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()

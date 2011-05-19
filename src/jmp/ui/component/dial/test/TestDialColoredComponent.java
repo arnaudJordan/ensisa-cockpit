@@ -1,6 +1,7 @@
-package jmp.ui.component;
+package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 import javax.swing.BoxLayout;
@@ -10,30 +11,36 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.dial.DialHorizonRenderer;
-import jmp.ui.component.dial.DialHorizonRenderingModel;
+import jmp.ui.component.dial.DialBorderRenderingModel;
+import jmp.ui.component.dial.DialColoredRenderer;
+import jmp.ui.component.dial.DialColoredRenderingModel;
+import jmp.ui.component.dial.DialPartialRenderer;
+import jmp.ui.component.dial.DialPartialRenderingModel;
 import jmp.ui.component.dial.DialPictureRenderer;
 import jmp.ui.component.dial.DialPictureRenderingModel;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
+import jmp.ui.utilities.ColoredRange;
+import jmp.ui.utilities.ColoredRanges;
+import jmp.ui.utilities.Range;
 
 
-public class TestDialHorizonComponent extends JFrame
+public class TestDialColoredComponent extends JFrame
 {
 	private JPanel slidersPane;
-	private JSlider progressSliderX, progressSliderRot;
+	private JSlider progressSlider;
 
 	private JPanel componentsPane;
 	private DialView dialView;
 	
-	public TestDialHorizonComponent()
+	public TestDialColoredComponent()
 	{
 	}
 
 	public void setup()
 	{
-		this.setupDialHorizonComponentPane();
+		this.setupDialPartialComponentPane();
 		this.setupSlidersPane();
 
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -53,10 +60,8 @@ public class TestDialHorizonComponent extends JFrame
 		this.slidersPane = new JPanel();
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
-		
-		
-		this.progressSliderX = new JSlider(JSlider.HORIZONTAL,-180,180,0);
-		this.progressSliderX.addChangeListener(new ChangeListener()
+		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		this.progressSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
 			{
@@ -64,51 +69,46 @@ public class TestDialHorizonComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("pitch")).setValue(progressSliderX.getValue());
+					dialView.valueModel().setValue(progressSlider.getValue());
 				}
 			}
 		});
 		
-		this.slidersPane.add(this.progressSliderX);
-		this.getContentPane().add(this.slidersPane, BorderLayout.AFTER_LAST_LINE);
-		
-
-		this.progressSliderRot = new JSlider(JSlider.HORIZONTAL,-100,100,0);
-		this.progressSliderRot.addChangeListener(new ChangeListener()
-		{
-			public void stateChanged(ChangeEvent changeEvent)
-			{
-				Object source = changeEvent.getSource();
-				JSlider s = (JSlider) source;
-				if (!s.getValueIsAdjusting());
-				{
-					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("roll")).setValue(progressSliderRot.getValue());
-				}
-			}
-		});
-		
-		this.slidersPane.add(this.progressSliderRot);
+		this.slidersPane.add(this.progressSlider);
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupDialHorizonComponentPane()
+	private void setupDialPartialComponentPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
-		
+				
 		this.dialView = new DialView();
-		this.dialView.setRenderer(new DialHorizonRenderer(this.dialView));
+		
 		DefaultModelComposit model = new DefaultModelComposit();
-		model.addModel("rendering", new DialHorizonRenderingModel());
-		model.addModel("pitch", new DefaultBoundedModel(-180,180,0));
-		model.addModel("roll", new DefaultBoundedModel(-100,100,0));
+		
+		ColoredRanges colorRanges = new ColoredRanges();
+		colorRanges.addRange(new ColoredRange(0, 30, Color.PINK));
+		colorRanges.addRange(new ColoredRange(30, 60, Color.GREEN));
+		colorRanges.addRange(new ColoredRange(60, 100, Color.RED));
+		DialColoredRenderingModel colorModel = new DialColoredRenderingModel();
+		colorModel.setColorRanges(colorRanges);
+		model.addModel("rendering", colorModel);
+		model.addModel("picture", new DialPictureRenderingModel());
+		model.addModel("border", new DialBorderRenderingModel());
+		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		this.dialView.setModel(model);
+		
+		this.dialView.setRenderer(new DialColoredRenderer(this.dialView));
+		
 		this.componentsPane.add(this.dialView);
+		
+		
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}
 	public static void main(String[] args)
 	{
-		final TestDialHorizonComponent app = new TestDialHorizonComponent();
+		final TestDialColoredComponent app = new TestDialColoredComponent();
 		EventQueue.invokeLater(new Runnable()
 		{
 			public void run()
