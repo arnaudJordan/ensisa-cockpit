@@ -33,12 +33,14 @@ public class DialPictureRenderingModel extends DialRenderingModel {
 
 	public void setBackground(BufferedImage background) {
 		this.background = background;
+		setChanged(true);
 	}
 	public BufferedImage getBackground() {
 		return background;
 	}
 	public void setNeedle(BufferedImage needle) {
 		this.needle = needle;
+		setChanged(true);
 	}
 	public BufferedImage getNeedle() {
 		return needle;

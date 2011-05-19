@@ -24,6 +24,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	}
 
 	public void renderLabel(Graphics2D g) {
+		
 	}
 
 	public void renderLabels(Graphics2D g) {
@@ -42,11 +43,11 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	}
 
 	public void renderDial(Graphics2D g) {
+		this.renderLabels(g);
+		this.renderLabel(g);
 		this.renderBackground(g);
 		this.renderTrack(g);
 		this.renderTicks(g);
-		this.renderLabels(g);
-		this.renderLabel(g);
 		this.renderNeedle(g);
 		this.renderBorder(g);
 	}
@@ -55,6 +56,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
 		g.setRenderingHints(rh);
 		this.renderDial(g);
+		this.dialView().renderingModel().setChanged(false);
 	}
 
 	public void setSize(Dimension size) {
