@@ -43,10 +43,10 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	}
 
 	public void renderDial(Graphics2D g) {
+		this.renderTrack(g);
 		this.renderLabels(g);
 		this.renderLabel(g);
 		this.renderBackground(g);
-		this.renderTrack(g);
 		this.renderTicks(g);
 		this.renderNeedle(g);
 		this.renderBorder(g);

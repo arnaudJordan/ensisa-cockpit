@@ -65,8 +65,26 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		if(borderModel==null || borderModel.getBorderSize()==0) return;
 		g.setColor(borderModel.getBorderColor());
 		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
-		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,background.getWidth()-borderModel.getBorderSize(), background.getHeight()-borderModel.getBorderSize());
+		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,
+				background.getWidth()-borderModel.getBorderSize(), background.getHeight()-borderModel.getBorderSize());
 		g.draw(border);
+	}
+	public void renderTrack(Graphics2D g)
+	{
+		DialPictureRenderingModel renderingModel = (DialPictureRenderingModel) this.dialView().renderingModel();
+		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
+		DialTrackRenderingModel trackModel = ((DialTrackRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("track"));
+		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
+		if(trackModel==null || ticksModel==null || trackModel.getTrackSize()==0 || !renderingModel.isChanged()) return;
+		Graphics2D g2 = background.createGraphics();
+		g2.setRenderingHints(g.getRenderingHints());
+		g2.setColor(trackModel.getTrackColor());
+		g2.setStroke(new BasicStroke(trackModel.getTrackSize()));
+		Shape border = new Ellipse2D.Double(ticksModel.getMinorTickSize()/2, ticksModel.getMinorTickSize()/2,
+				background.getWidth() - ticksModel.getMinorTickSize(),
+				background.getHeight()- ticksModel.getMinorTickSize());
+		g2.draw(border);
+		g2.dispose();
 	}
 	public void renderTicks(Graphics2D g)
 	{
@@ -263,10 +281,7 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		BufferedImage background = ((DialPictureRenderingModel) this.dialView().renderingModel()).getBackground();
 		
 		Graphics2D g2 = background.createGraphics();
-		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
-		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
-		g2.setRenderingHints(rh);
-		
+		g2.setRenderingHints(g.getRenderingHints());		
 		g2.setColor(labelModel.getColor());
 		g2.setFont(labelModel.getFont());
 		final int strWidth = g2.getFontMetrics().stringWidth(labelModel.getLabel());
