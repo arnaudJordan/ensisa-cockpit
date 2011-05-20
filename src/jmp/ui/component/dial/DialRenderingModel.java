@@ -12,7 +12,7 @@ public class DialRenderingModel extends DefaultModel{
 	private int ticksStartAngle;
 	private boolean changed;
 	
-	DialRenderingModel()
+	public DialRenderingModel()
 	{
 		this(SENSE, TICKS_START_ANGLE);
 	}

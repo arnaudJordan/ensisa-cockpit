@@ -31,6 +31,7 @@ public class TestHorizonComponent extends JFrame
 
 	public void setup()
 	{
+		this.setTitle("Horizon");
 		this.setupDialPictureComponentPane();
 		this.setupSlidersPane();
 

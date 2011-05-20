@@ -28,9 +28,9 @@ public class TestCompassComponent extends JFrame
 
 	public void setup()
 	{
+		this.setTitle("Compass");
 		this.setupDialPictureComponentPane();
 		this.setupSlidersPane();
-
 		this.addWindowListener(new java.awt.event.WindowAdapter()
 		{
 			public void windowClosing(WindowEvent winEvt)

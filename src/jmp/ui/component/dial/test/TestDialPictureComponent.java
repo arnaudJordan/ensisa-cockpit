@@ -1,6 +1,7 @@
 package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 
@@ -73,6 +74,13 @@ public class TestDialPictureComponent extends JFrame
 				if (!s.getValueIsAdjusting());
 				{
 					dialView.valueModel().setValue(progressSlider.getValue());
+					if(progressSlider.getValue()==50)
+					{
+						DefaultModelComposit model = (DefaultModelComposit) dialView.getModel();
+						//model.removeModel("label");
+						((DialLabelRenderingModel) model.getModel("label")).setLabel("tesjbgfjdxfxckfj");
+						dialView.renderingModel().setChanged(true);
+					}
 				}
 			}
 		});

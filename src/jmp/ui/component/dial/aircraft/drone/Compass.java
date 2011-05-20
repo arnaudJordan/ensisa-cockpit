@@ -2,6 +2,7 @@ package jmp.ui.component.dial.aircraft.drone;
 
 import jmp.ui.component.dial.DialPictureRenderer;
 import jmp.ui.component.dial.DialPictureRenderingModel;
+import jmp.ui.component.dial.DialRenderingModel;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
@@ -20,7 +21,8 @@ public class Compass extends DialView{
 	protected static Model setupModel() 
 	{
 		DefaultModelComposit model = new DefaultModelComposit();
-		model.addModel(RENDERING_MODEL, new DialPictureRenderingModel(BACKGROUND_PATH, NEEDLE_PATH));
+		model.addModel(RENDERING_MODEL, new DialRenderingModel());
+		model.addModel("picture", new DialPictureRenderingModel(BACKGROUND_PATH, NEEDLE_PATH));
 		model.addModel(VALUE_MODEL, new DefaultBoundedModel(0,360,0));
 		return model;
 	}

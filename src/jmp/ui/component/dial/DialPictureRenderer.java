@@ -16,15 +16,21 @@ import jmp.ui.component.Rotation;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
+import jmp.ui.utilities.JMSwingUtilities;
 
 public class DialPictureRenderer extends DialDefaultRenderer {
 	private final static Insets DEFAULT_INSETS = new Insets(5,5,5,5);
+	private BufferedImage background;
 
 	public DialPictureRenderer(View view) {
 		super(view);
 		this.getView().setBorder(new EmptyBorder(DEFAULT_INSETS));
 	}
-	
+	public void renderDial(Graphics2D g) {
+		this.renderBackground(g);
+		this.renderNeedle(g);
+		this.renderBorder(g);
+	}
 	public void renderNeedle(Graphics2D g)
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
@@ -49,17 +55,51 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		trans.translate(-needle.getWidth()/2,-needle.getHeight()/2);
 		
 		g.drawImage(needle,trans,null);
+		
 	}
 	public void renderBackground(Graphics2D g)
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
-		if(pictureModel == null) return;
+		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
+		DialTrackRenderingModel trackModel = ((DialTrackRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("track"));
+		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
+		DialRenderingModel renderingModel = dialView().renderingModel();
+		if(pictureModel == null || renderingModel==null) return;
+
+		if(renderingModel.isChanged() || pictureModel.isChanged())
+			generateBackground(g);
+		if(ticksModel!=null&&ticksModel.isChanged())
+			generateBackground(g);
+		if(trackModel!=null&&trackModel.isChanged())
+			generateBackground(g);
+		if(labelModel!=null&&labelModel.isChanged())
+			generateBackground(g);
+		renderingModel.setChanged(false);
+		g.drawImage(this.background,0,0,null);
+	}
+	private void generateBackground(Graphics2D g)
+	{
+		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		BufferedImage background = pictureModel.getBackground();
 		if(background == null) return;
-		g.drawImage(background,0,0,null);
-		pictureModel.setChanged(false);
+		this.background= JMSwingUtilities.copyBufferedImage(background);
+		
+		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
+		DialTrackRenderingModel trackModel = ((DialTrackRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("track"));
+		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
+		this.renderTrack(g);
+		this.renderTicks(g);
+		this.renderLabels(g);
+		this.renderLabel(g);
+		if(pictureModel!=null)
+			pictureModel.setChanged(false);
+		if(ticksModel!=null)
+			ticksModel.setChanged(false);
+		if(trackModel!=null)
+			trackModel.setChanged(false);
+		if(labelModel!=null)
+			labelModel.setChanged(false);
 	}
-	
 	public void renderBorder(Graphics2D g)
 	{
 		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
@@ -80,9 +120,9 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		DialTrackRenderingModel trackModel = ((DialTrackRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("track"));
-		if(pictureModel==null|ticksModel==null||trackModel==null||!trackModel.isChanged()) return;
-		BufferedImage background = pictureModel.getBackground();
-		if(background==null || trackModel.getTrackSize()==0 || !pictureModel.isChanged()) return;
+		if(pictureModel==null|ticksModel==null||trackModel==null) return;
+		//BufferedImage background = pictureModel.getBackground();
+		if(background==null || trackModel.getTrackSize()==0) return;
 		
 		Graphics2D g2 = background.createGraphics();
 		g2.setRenderingHints(g.getRenderingHints());
@@ -93,16 +133,15 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 				background.getHeight()- ticksModel.getMinorTickSize());
 		g2.draw(border);
 		g2.dispose();
-		trackModel.setChanged(false);
 	}
 	public void renderTicks(Graphics2D g)
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
-		if(pictureModel==null|ticksModel==null||valueModel==null||!ticksModel.isChanged()) return;
+		if(pictureModel==null|ticksModel==null||valueModel==null) return;
 		
-		BufferedImage background = pictureModel.getBackground();
+		//BufferedImage background = pictureModel.getBackground();
 		if(background==null) return;
 		
 		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
@@ -156,7 +195,6 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			g2.setTransform(oldTrans);
 		}
 		g2.dispose();
-		ticksModel.setChanged(false);
 	}
 	public void renderLabels(Graphics2D g)
 	{
@@ -164,10 +202,10 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		DialRenderingModel renderingModel = dialView().renderingModel();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
-		if(pictureModel==null || valueModel==null || renderingModel==null||ticksModel==null || !pictureModel.isChanged()) return;
+		if(pictureModel==null || valueModel==null || renderingModel==null||ticksModel==null) return;
 		
-		BufferedImage background = pictureModel.getBackground();
-		if(background==null || !pictureModel.isChanged()) return;
+		//BufferedImage background = pictureModel.getBackground();
+		if(background==null) return;
 			
 		Graphics2D g2 = background.createGraphics();
 		g2.setRenderingHints(g.getRenderingHints());
@@ -267,16 +305,15 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 			g2.setTransform(oldTrans);
 		}
 		g2.dispose();
-		ticksModel.setChanged(false);
 	}
 	
 	public void renderLabel(Graphics2D g)
 	{
 		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
-		if(labelModel == null || pictureModel==null || !pictureModel.isChanged()) return;
+		if(labelModel == null || pictureModel==null) return;
 		
-		BufferedImage background = pictureModel.getBackground();
+		//BufferedImage background = pictureModel.getBackground();
 		if(background==null) return;
 		
 		Graphics2D g2 = background.createGraphics();
@@ -286,7 +323,6 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		final int strWidth = g2.getFontMetrics().stringWidth(labelModel.getLabel());
 		g2.drawString(labelModel.getLabel(), background.getWidth()/2 - strWidth/2, background.getHeight()/3);
 		g2.dispose();
-		labelModel.setChanged(false);
 	}
 	public Dimension getPreferredSize()
 	{
