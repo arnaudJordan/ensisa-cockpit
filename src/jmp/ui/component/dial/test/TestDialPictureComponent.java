@@ -3,6 +3,7 @@ package jmp.ui.component.dial.test;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,7 +13,6 @@ import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialBorderRenderingModel;
-import jmp.ui.component.dial.DialDefaultRenderer;
 import jmp.ui.component.dial.DialLabelRenderingModel;
 import jmp.ui.component.dial.DialPictureRenderer;
 import jmp.ui.component.dial.DialPictureRenderingModel;
@@ -87,10 +87,10 @@ public class TestDialPictureComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.dialView = new DialView();
-		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
+		this.dialView.setRenderer(new DialPictureRenderer(this.dialView));
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
-		dialPictureRenderingModel.setSense(Rotation.Anticlockwise);
+		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
 		model.addModel("picture", dialPictureRenderingModel);
 		model.addModel("value", new DefaultBoundedModel(0,100,00));
 		model.addModel("border", new DialBorderRenderingModel());

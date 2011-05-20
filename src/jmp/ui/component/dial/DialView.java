@@ -28,7 +28,7 @@ public class DialView extends View {
 		model.addModel(VALUE_MODEL, new DefaultBoundedModel(0,100,0));
 		return model;
 	}
-	protected DialRenderingModel renderingModel()
+	public DialRenderingModel renderingModel()
 	{
 		return (DialRenderingModel) ((ModelComposit)this.getModel()).getModel(RENDERING_MODEL);
 	}
