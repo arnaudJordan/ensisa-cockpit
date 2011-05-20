@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import jmp.ui.component.Rotation;
-
 public class DialPictureRenderingModel extends DialRenderingModel {
 	private final static String DEFAULT_BACKGROUND_PATH = "pictures/dial/default_background.png";
 	private final static String DEFAULT_NEEDLE_PATH = "pictures/dial/default_needle.png";

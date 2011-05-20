@@ -7,6 +7,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.util.prefs.BackingStoreException;
 
 import jmp.ui.component.Rotation;
 import jmp.ui.model.BoundedModel;
@@ -46,23 +47,31 @@ public class DialColoredRenderer extends DialDefaultRenderer {
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialColoredRenderingModel coloredModel = (DialColoredRenderingModel) dialView().renderingModel();
-		g.setStroke(coloredModel.getStroke());
 		
+		
+		BufferedImage background = pictureModel.getBackground();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		double AngleRatio=360/(valueModel.getMaximum()-valueModel.getMinimum());
+		
+		Graphics2D g2 = background.createGraphics();
+		g2.setRenderingHints(g.getRenderingHints());
+		g2.setStroke(coloredModel.getStroke());
 		
 		int min=0;
 		int max=0;
 		for(ColoredRange range : coloredModel.getColorRanges().getRanges())
 		{
-			g.setColor(range.color);
-			g.drawArc(coloredModel.getMargin()/2, coloredModel.getMargin()/2, pictureModel.getBackground().getWidth()-coloredModel.getMargin(), pictureModel.getBackground().getHeight()-coloredModel.getMargin(), (int) (range.range.min * AngleRatio),(int) ((range.range.max - range.range.min)*AngleRatio));
-			System.out.println((range.range.max - range.range.min)*AngleRatio);
+			g2.setColor(range.color);
+			g2.drawArc(coloredModel.getMargin()/2, coloredModel.getMargin()/2, pictureModel.getBackground().getWidth()-coloredModel.getMargin(), pictureModel.getBackground().getHeight()-coloredModel.getMargin(),
+					(int) (range.range.min * AngleRatio),(int) ((range.range.max - range.range.min)*AngleRatio));
+			//System.out.println((range.range.max - range.range.min)*AngleRatio);
 			if(range.range.min < min)
 				min=range.range.min;
 			if(range.range.max > max)
 				max=range.range.max;
 		}
+		renderTicks(g);
+		g.drawImage(background, null, null);
 	} 
 	public void renderBorder(Graphics2D g)
 	{
@@ -78,7 +87,6 @@ public class DialColoredRenderer extends DialDefaultRenderer {
 	public Dimension getPreferredSize()
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
-		DialColoredRenderingModel coloredModel = (DialColoredRenderingModel) dialView().renderingModel();
         return new Dimension(pictureModel.getBackground().getWidth(), pictureModel.getBackground().getHeight());
 	}
 }

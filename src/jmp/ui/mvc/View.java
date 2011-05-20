@@ -34,7 +34,7 @@ public  class View extends JComponent implements ModelListener
 		if (model == null) return;
 		if (this.model != null)
 		{
-			if (this.model == model) return;
+			//if (this.model == model) return;
 			this.model.removeModelListener(this);
 		}
 		

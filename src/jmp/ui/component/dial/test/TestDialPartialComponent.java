@@ -12,6 +12,8 @@ import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialBorderRenderingModel;
+import jmp.ui.component.dial.DialDefaultRenderer;
+import jmp.ui.component.dial.DialLabelRenderingModel;
 import jmp.ui.component.dial.DialPartialRenderer;
 import jmp.ui.component.dial.DialPartialRenderingModel;
 import jmp.ui.component.dial.DialPictureRenderer;
@@ -88,13 +90,14 @@ public class TestDialPartialComponent extends JFrame
 				
 		this.dialView = new DialView();
 		
-		DefaultModelComposit model = new DefaultModelComposit();
-		this.dialView.setRenderer(new DialPartialRenderer(this.dialView));
+		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
+		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
 		renderingModel = new DialPartialRenderingModel();
 		renderingModel.setSense(Rotation.Clockwise);
 		model.addModel("rendering", renderingModel);
 		model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());
+		model.addModel("label", new DialLabelRenderingModel());
 		//model.addModel("value", new DefaultBoundedModel(0,360,0));
 		model.addModel("value", new DefaultBoundedModel(renderingModel.getStartAngle(),renderingModel.getEndAngle(),renderingModel.getStartAngle()));
 		this.dialView.setModel(model);

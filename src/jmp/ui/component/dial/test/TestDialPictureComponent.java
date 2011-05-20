@@ -12,6 +12,7 @@ import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialBorderRenderingModel;
+import jmp.ui.component.dial.DialDefaultRenderer;
 import jmp.ui.component.dial.DialLabelRenderingModel;
 import jmp.ui.component.dial.DialPictureRenderer;
 import jmp.ui.component.dial.DialPictureRenderingModel;
@@ -56,8 +57,6 @@ public class TestDialPictureComponent extends JFrame
 		this.slidersPane = new JPanel();
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
-		
-		
 		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
 		progressSlider.setMajorTickSpacing(50);
 		progressSlider.setMinorTickSpacing(10);
@@ -88,19 +87,19 @@ public class TestDialPictureComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.dialView = new DialView();
-		this.dialView.setRenderer(new DialPictureRenderer(this.dialView));
-		DefaultModelComposit model = new DefaultModelComposit();
+		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
+		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
 		dialPictureRenderingModel.setSense(Rotation.Anticlockwise);
-		model.addModel("rendering", dialPictureRenderingModel);
+		model.addModel("picture", dialPictureRenderingModel);
+		model.addModel("value", new DefaultBoundedModel(0,100,00));
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("ticks", new DialTicksRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
 		model.addModel("track", new DialTrackRenderingModel());
-		model.addModel("value", new DefaultBoundedModel(0,100,0));
+
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);
-
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}
 	public static void main(String[] args)

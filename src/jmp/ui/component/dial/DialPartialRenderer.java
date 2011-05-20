@@ -3,7 +3,6 @@ package jmp.ui.component.dial;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
@@ -29,7 +28,6 @@ public class DialPartialRenderer extends DialDefaultRenderer {
 
 	public void renderNeedle(Graphics2D g)
 	{
-		
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialPartialRenderingModel renderingModel = (DialPartialRenderingModel) dialView().renderingModel();
 		BufferedImage background = pictureModel.getBackground();

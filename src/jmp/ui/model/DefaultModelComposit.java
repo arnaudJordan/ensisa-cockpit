@@ -19,7 +19,10 @@ public class DefaultModelComposit implements ModelComposit
 	public void addModelListener(ModelListener l)
 	{
 		for(Model m: this.models.values())
+		{
 			m.addModelListener(l);
+			System.out.println(m);
+		}
 	}
 
 	public void removeModelListener(ModelListener l)

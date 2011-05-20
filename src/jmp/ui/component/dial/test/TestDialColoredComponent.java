@@ -14,10 +14,12 @@ import javax.swing.event.ChangeListener;
 import jmp.ui.component.dial.DialBorderRenderingModel;
 import jmp.ui.component.dial.DialColoredRenderer;
 import jmp.ui.component.dial.DialColoredRenderingModel;
+import jmp.ui.component.dial.DialLabelRenderingModel;
 import jmp.ui.component.dial.DialPartialRenderer;
 import jmp.ui.component.dial.DialPartialRenderingModel;
 import jmp.ui.component.dial.DialPictureRenderer;
 import jmp.ui.component.dial.DialPictureRenderingModel;
+import jmp.ui.component.dial.DialTicksRenderingModel;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
@@ -91,7 +93,7 @@ public class TestDialColoredComponent extends JFrame
 				
 		this.dialView = new DialView();
 		
-		DefaultModelComposit model = new DefaultModelComposit();
+		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		
 		ColoredRanges colorRanges = new ColoredRanges();
 		colorRanges.addRange(new ColoredRange(0, 30, Color.PINK));
@@ -103,8 +105,10 @@ public class TestDialColoredComponent extends JFrame
 		model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
-		this.dialView.setModel(model);
+		model.addModel("label", new DialLabelRenderingModel());
+		model.addModel("ticks", new DialTicksRenderingModel());
 		
+		this.dialView.setModel(model);
 		this.dialView.setRenderer(new DialColoredRenderer(this.dialView));
 		
 		this.componentsPane.add(this.dialView);

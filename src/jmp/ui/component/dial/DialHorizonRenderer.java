@@ -60,7 +60,7 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		final int minorLineXEnd = (int) (renderingModel.getSize().getWidth() - minorLineXStart);
 		int nbValues = (max-min)/minorTickSpacing;
 		double pitchInterval = (renderingModel.getSize().getHeight() / (renderingModel.getPitchInterval()/minorTickSpacing));
-		double graduationsInterval = horizonImage.getHeight() / nbValues;
+		//double graduationsInterval = horizonImage.getHeight() / nbValues;
 		
 		g2.translate(horizonImage.getWidth()/2, horizonImage.getHeight()/2);
 		
@@ -72,7 +72,7 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		}
 		nbValues = (max-min)/majorTickSpacing;
 		pitchInterval = (int) (renderingModel.getSize().getHeight() / (renderingModel.getPitchInterval()/majorTickSpacing));
-		graduationsInterval = horizonImage.getHeight() / nbValues;
+		//graduationsInterval = horizonImage.getHeight() / nbValues;
 
 		for (int i = 0, value = 0; i <= nbValues/2; i++, value-=majorTickSpacing)
 		{
@@ -97,8 +97,8 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		DefaultModelComposit model = ((DefaultModelComposit) this.dialView().getModel());
 		
 		if (renderingModel.getHorizonImage() == null || renderingModel.getPlaneImage()==null) return;
-		final int max = ((DefaultRangeModel) model.getModel("pitch")).getMaximum();
-		final int min = ((DefaultRangeModel) model.getModel("pitch")).getMinimum();
+		//final int max = ((DefaultRangeModel) model.getModel("pitch")).getMaximum();
+		//final int min = ((DefaultRangeModel) model.getModel("pitch")).getMinimum();
 		final int value = ((DefaultBoundedModel) model.getModel("pitch")).getValue();
 
 		Dimension size = renderingModel.getSize();
@@ -159,6 +159,7 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		Shape border = new Ellipse2D.Double(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2,renderingModel.getSize().width, renderingModel.getSize().height);
 		g.draw(border);
 	}
+	
 	public Dimension getPreferredSize()
 	{
 		DialHorizonRenderingModel model = ((DialHorizonRenderingModel) this.dialView().renderingModel());
