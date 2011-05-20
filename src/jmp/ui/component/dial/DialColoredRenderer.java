@@ -51,8 +51,7 @@ public class DialColoredRenderer extends DialDefaultRenderer {
 		
 		BufferedImage background = pictureModel.getBackground();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
-		double AngleRatio=360/(valueModel.getMaximum()-valueModel.getMinimum());
-		
+		double AngleRatio=360.0/valueModel.getMaximum()-valueModel.getMinimum();
 		Graphics2D g2 = background.createGraphics();
 		g2.setRenderingHints(g.getRenderingHints());
 		g2.setStroke(coloredModel.getStroke());
@@ -64,7 +63,6 @@ public class DialColoredRenderer extends DialDefaultRenderer {
 			g2.setColor(range.color);
 			g2.drawArc(coloredModel.getMargin()/2, coloredModel.getMargin()/2, pictureModel.getBackground().getWidth()-coloredModel.getMargin(), pictureModel.getBackground().getHeight()-coloredModel.getMargin(),
 					(int) (range.range.min * AngleRatio),(int) ((range.range.max - range.range.min)*AngleRatio));
-			//System.out.println((range.range.max - range.range.min)*AngleRatio);
 			if(range.range.min < min)
 				min=range.range.min;
 			if(range.range.max > max)
