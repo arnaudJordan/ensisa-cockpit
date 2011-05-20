@@ -28,7 +28,10 @@ public class DialPictureRenderingModel extends DialRenderingModel {
 			e.printStackTrace();
 		}
 	}
-
+	public DialPictureRenderingModel(BufferedImage background, BufferedImage needle) {
+		this.setBackground(background);
+		this.setNeedle(needle);
+	}
 	public void setBackground(BufferedImage background) {
 		this.background = background;
 		setChanged(true);
