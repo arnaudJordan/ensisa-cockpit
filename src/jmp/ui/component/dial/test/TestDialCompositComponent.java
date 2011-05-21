@@ -120,10 +120,10 @@ public class TestDialCompositComponent extends JFrame
 		
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		this.dialView.setRenderer(new DialCompositRenderer(this.dialView));
-		model.addModel("composit", new DialCompositRenderingModel(new Point(-130,-25)));
+		model.addModel("composit", new DialCompositRenderingModel(new Point(75,0)));
 		model.addModel("picture", new DialPictureRenderingModel());
 		
-		DialPictureRenderingModel internPicture = new DialPictureRenderingModel("pictures/dial/default_intern_background.png", "pictures/dial/default_intern_background.png");
+		DialPictureRenderingModel internPicture = new DialPictureRenderingModel("pictures/dial/default_intern_background.png", "pictures/dial/default_intern_needle.png");
 		model.addModel("internPicture", internPicture);
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
