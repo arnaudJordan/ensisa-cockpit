@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class DialBorderRenderingModel extends DialRenderingModel {
 	private static final Color BORDER_COLOR = Color.GRAY;
-	private static final int BORDER_SIZE = 3;
+	private static final int BORDER_SIZE = 2;
 	
 	private Color borderColor;
 	private int BorderSize;

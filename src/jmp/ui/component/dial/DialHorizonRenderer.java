@@ -10,9 +10,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
+import jmp.ui.component.dial.DialBorderRenderingModel;
+import jmp.ui.component.dial.DialHorizonRenderingModel;
+import jmp.ui.component.dial.DialTicksRenderingModel;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultRangeModel;
 import jmp.ui.model.DefaultModelComposit;
+import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
 
 public class DialHorizonRenderer extends DialDefaultRenderer 
@@ -49,17 +53,18 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 	}
 	public void renderTicks(Graphics2D g2)
 	{
+		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		DialHorizonRenderingModel renderingModel = ((DialHorizonRenderingModel) this.dialView().renderingModel());
 		g2.setColor(renderingModel.getGraduationColor());
 		DefaultModelComposit model = ((DefaultModelComposit) this.dialView().getModel());
 		BufferedImage horizonImage = renderingModel.getHorizonImage();
 		final int max = ((DefaultRangeModel) model.getModel("pitch")).getMaximum();
 		final int min = ((DefaultRangeModel) model.getModel("pitch")).getMinimum();
-		final int majorTickSpacing = (int) renderingModel.getMajorTickSpacing();
-		final int minorTickSpacing = (int) renderingModel.getMinorTickSpacing();
-		final int majorLineXStart = (int) (renderingModel.getSize().getWidth() * renderingModel.getMajorGradutionRatio());
+		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
+		final int minorTickSpacing = (int) ticksModel.getMinorTickSpacing();
+		final int majorLineXStart = (int) (renderingModel.getSize().getWidth() * ticksModel.getMajorGradutionRatio());
 		final int majorLineXEnd = (int) (renderingModel.getSize().getWidth() - majorLineXStart);
-		final int minorLineXStart = (int) (renderingModel.getSize().getWidth() * renderingModel.getMinorGradutionRatio());
+		final int minorLineXStart = (int) (renderingModel.getSize().getWidth() * ticksModel.getMinorGradutionRatio());
 		final int minorLineXEnd = (int) (renderingModel.getSize().getWidth() - minorLineXStart);
 		int nbValues = (max-min)/minorTickSpacing;
 		double pitchInterval = (renderingModel.getSize().getHeight() / (renderingModel.getPitchInterval()/minorTickSpacing));
@@ -69,7 +74,7 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		
 		for (int i = 0; i < nbValues/2; i++)
 		{
-			g2.setStroke(renderingModel.getMinorGradutionStroke());
+			g2.setStroke(ticksModel.getMinorGradutionStroke());
 			g2.drawLine(minorLineXStart, (int) (i * pitchInterval), minorLineXEnd, (int) (i * pitchInterval));
 			g2.drawLine(minorLineXStart, (int) -(i * pitchInterval), minorLineXEnd, (int) -(i * pitchInterval));
 		}
@@ -79,23 +84,24 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 
 		for (int i = 0, value = 0; i <= nbValues/2; i++, value-=majorTickSpacing)
 		{
-			g2.setStroke(renderingModel.getMajorGradutionStroke());
+			g2.setStroke(ticksModel.getMajorGradutionStroke());
 			g2.drawLine(majorLineXStart, (int) (i * pitchInterval), majorLineXEnd, (int) (i * pitchInterval));
 			
 			final String vString = String.valueOf(value);
 			final int strWidth = g2.getFontMetrics().stringWidth(vString);
-			g2.drawString(vString, majorLineXStart - strWidth - renderingModel.getLabelSpace(), (int) (i * pitchInterval));
-			g2.drawString(vString, majorLineXEnd + renderingModel.getLabelSpace(), (int) (i * pitchInterval));
+			g2.drawString(vString, majorLineXStart - strWidth - ticksModel.getLabelSpace(), (int) (i * pitchInterval));
+			g2.drawString(vString, majorLineXEnd + ticksModel.getLabelSpace(), (int) (i * pitchInterval));
 			
 			g2.drawLine(majorLineXStart, (int) -(i * pitchInterval), majorLineXEnd, (int) -(i * pitchInterval));
 			final String vString2 = String.valueOf(-value);
 			final int strWidth2 = g2.getFontMetrics().stringWidth(vString2);
-			g2.drawString(vString2, majorLineXStart - strWidth2 - renderingModel.getLabelSpace(), (int) -(i * pitchInterval));
-			g2.drawString(vString2, majorLineXEnd + renderingModel.getLabelSpace(), (int) -(i * pitchInterval));
+			g2.drawString(vString2, majorLineXStart - strWidth2 - ticksModel.getLabelSpace(), (int) -(i * pitchInterval));
+			g2.drawString(vString2, majorLineXEnd + ticksModel.getLabelSpace(), (int) -(i * pitchInterval));
 		}
  	}
 	public void renderDial(Graphics2D g)
 	{
+		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
 		DialHorizonRenderingModel renderingModel = ((DialHorizonRenderingModel) this.dialView().renderingModel());
 		DefaultModelComposit model = ((DefaultModelComposit) this.dialView().getModel());
 		
@@ -138,11 +144,11 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 		Dimension d = size;
 		//g.setPaint(new GradientPaint(d.width/2, d.height/2, Color.gray,d.width, d.height, Color.black));
 		g.setColor(Color.DARK_GRAY);
-		g.fillOval(renderingModel.getBorderSize()/2,renderingModel.getBorderSize()/2,(int)d.getWidth(), (int)d.getHeight());
+		g.fillOval(borderModel.getBorderSize()/2,borderModel.getBorderSize()/2,(int)d.getWidth(), (int)d.getHeight());
 		//g.setColor(Color.DARK_GRAY);
 		//g.drawOval(0,0,(int)d.getWidth(), (int)d.getHeight());
 
-		Shape clip = new Ellipse2D.Double(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2, d.getWidth(), d.getHeight());
+		Shape clip = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2, d.getWidth(), d.getHeight());
 		
 		Shape oldClip = g.getClip();
 		g.clip(clip);
@@ -155,17 +161,19 @@ public class DialHorizonRenderer extends DialDefaultRenderer
 	}
 	
 	public void renderBorder(Graphics2D g) {
+		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
 		DialHorizonRenderingModel renderingModel = ((DialHorizonRenderingModel) this.dialView().renderingModel());
-		if(renderingModel.getBorderSize()==0) return;
-		g.setColor(renderingModel.getBorderColor());
-		g.setStroke(new BasicStroke(renderingModel.getBorderSize()));
-		Shape border = new Ellipse2D.Double(renderingModel.getBorderSize()/2, renderingModel.getBorderSize()/2,renderingModel.getSize().width, renderingModel.getSize().height);
+		if(borderModel.getBorderSize()==0) return;
+		g.setColor(borderModel.getBorderColor());
+		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
+		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,renderingModel.getSize().width, renderingModel.getSize().height);
 		g.draw(border);
 	}
 	
 	public Dimension getPreferredSize()
 	{
+		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
 		DialHorizonRenderingModel model = ((DialHorizonRenderingModel) this.dialView().renderingModel());
-		return new Dimension(model.getSize().width + model.getBorderSize()*2, model.getSize().height + model.getBorderSize()*2);
+		return new Dimension((int) model.getSize().getWidth() + borderModel.getBorderSize()*2, (int) model.getSize().getHeight() + borderModel.getBorderSize()*2);
 	}
 }
