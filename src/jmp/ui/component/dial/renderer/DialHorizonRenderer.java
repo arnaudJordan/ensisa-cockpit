@@ -1,4 +1,4 @@
-package jmp.ui.component.dial;
+package jmp.ui.component.dial.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,9 +10,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
-import jmp.ui.component.dial.DialBorderRenderingModel;
-import jmp.ui.component.dial.DialHorizonRenderingModel;
-import jmp.ui.component.dial.DialTicksRenderingModel;
+import jmp.ui.component.dial.model.DialBorderRenderingModel;
+import jmp.ui.component.dial.model.DialHorizonRenderingModel;
+import jmp.ui.component.dial.model.DialTicksRenderingModel;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultRangeModel;
 import jmp.ui.model.DefaultModelComposit;

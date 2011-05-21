@@ -1,4 +1,4 @@
-package jmp.ui.component.dial;
+package jmp.ui.component.dial.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Dimension;
@@ -10,6 +10,9 @@ import java.awt.image.BufferedImage;
 import java.util.prefs.BackingStoreException;
 
 import jmp.ui.component.Rotation;
+import jmp.ui.component.dial.model.DialBorderRenderingModel;
+import jmp.ui.component.dial.model.DialColoredRenderingModel;
+import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;

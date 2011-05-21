@@ -10,13 +10,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.dial.DialBorderRenderingModel;
-import jmp.ui.component.dial.DialHorizonRenderer;
-import jmp.ui.component.dial.DialHorizonRenderingModel;
-import jmp.ui.component.dial.DialPictureRenderer;
-import jmp.ui.component.dial.DialPictureRenderingModel;
-import jmp.ui.component.dial.DialTicksRenderingModel;
 import jmp.ui.component.dial.DialView;
+import jmp.ui.component.dial.model.DialBorderRenderingModel;
+import jmp.ui.component.dial.model.DialHorizonRenderingModel;
+import jmp.ui.component.dial.model.DialPictureRenderingModel;
+import jmp.ui.component.dial.model.DialTicksRenderingModel;
+import jmp.ui.component.dial.renderer.DialHorizonRenderer;
+import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 

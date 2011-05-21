@@ -11,14 +11,14 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.Rotation;
-import jmp.ui.component.dial.DialBorderRenderingModel;
-import jmp.ui.component.dial.DialDefaultRenderer;
-import jmp.ui.component.dial.DialLabelRenderingModel;
-import jmp.ui.component.dial.DialPartialRenderer;
-import jmp.ui.component.dial.DialPartialRenderingModel;
-import jmp.ui.component.dial.DialPictureRenderer;
-import jmp.ui.component.dial.DialPictureRenderingModel;
 import jmp.ui.component.dial.DialView;
+import jmp.ui.component.dial.model.DialBorderRenderingModel;
+import jmp.ui.component.dial.model.DialLabelRenderingModel;
+import jmp.ui.component.dial.model.DialPartialRenderingModel;
+import jmp.ui.component.dial.model.DialPictureRenderingModel;
+import jmp.ui.component.dial.renderer.DialDefaultRenderer;
+import jmp.ui.component.dial.renderer.DialPartialRenderer;
+import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 

@@ -1,4 +1,4 @@
-package jmp.ui.component.dial;
+package jmp.ui.component.dial.model;
 
 import jmp.ui.component.Rotation;
 import jmp.ui.mvc.DefaultModel;

@@ -1,4 +1,4 @@
-package jmp.ui.component.dial;
+package jmp.ui.component.dial.renderer;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -7,6 +7,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 
 import jmp.ui.component.Rotation;
+import jmp.ui.component.dial.model.DialCompositRenderingModel;
+import jmp.ui.component.dial.model.DialPictureRenderingModel;
+import jmp.ui.component.dial.model.DialRenderingModel;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;

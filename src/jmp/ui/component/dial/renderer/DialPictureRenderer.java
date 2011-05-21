@@ -1,4 +1,4 @@
-package jmp.ui.component.dial;
+package jmp.ui.component.dial.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Dimension;
@@ -13,6 +13,12 @@ import java.awt.image.BufferedImage;
 import javax.swing.border.EmptyBorder;
 
 import jmp.ui.component.Rotation;
+import jmp.ui.component.dial.model.DialBorderRenderingModel;
+import jmp.ui.component.dial.model.DialLabelRenderingModel;
+import jmp.ui.component.dial.model.DialPictureRenderingModel;
+import jmp.ui.component.dial.model.DialRenderingModel;
+import jmp.ui.component.dial.model.DialTicksRenderingModel;
+import jmp.ui.component.dial.model.DialTrackRenderingModel;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;

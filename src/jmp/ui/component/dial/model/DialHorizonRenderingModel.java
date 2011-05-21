@@ -1,4 +1,4 @@
-package jmp.ui.component.dial;
+package jmp.ui.component.dial.model;
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -1,5 +1,7 @@
 package jmp.ui.component.dial;
 
+import jmp.ui.component.dial.model.DialRenderingModel;
+import jmp.ui.component.dial.renderer.DialDefaultRenderer;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;

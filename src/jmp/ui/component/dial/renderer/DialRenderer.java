@@ -1,4 +1,4 @@
-package jmp.ui.component.dial;
+package jmp.ui.component.dial.renderer;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
