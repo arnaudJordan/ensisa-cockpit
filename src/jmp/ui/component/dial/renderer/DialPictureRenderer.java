@@ -297,7 +297,6 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 						Math.cos(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
 				deltaY=(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
 						Math.sin(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
-				System.out.println("test");
 			}
 			else
 			{

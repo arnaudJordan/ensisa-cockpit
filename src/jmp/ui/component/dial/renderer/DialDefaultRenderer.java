@@ -192,8 +192,20 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			if(trans2.getTranslateX()+cadre.getCenterX()<point2.getX())
 				deltaX=(int) (trans2.getTranslateX()+cadre.getMinX() - point.getX());
 			
-			deltaX=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth())*Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
-			deltaY=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth())*Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+			if(renderingModel.getSense() == Rotation.Clockwise)
+			{
+				deltaX=(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
+						Math.cos(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+				deltaY=(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
+						Math.sin(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+			}
+			else
+			{
+				deltaX=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
+					Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+				deltaY=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
+					Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+			}
 			g2.drawString(vString, deltaX, deltaY);
 			AffineTransform trans3 = new AffineTransform();
 			trans3.translate(deltaX, deltaY);
