@@ -1,8 +1,8 @@
 package jmp.ui.component.dial.model;
 
 public class DialPartialRenderingModel extends DialRenderingModel{
-	private final static int DEFAULT_START_ANGLE = 180;
-	private final static int DEFAULT_END_ANGLE = -90;
+	private final static int DEFAULT_START_ANGLE = -90;
+	private final static int DEFAULT_END_ANGLE = 0;
 	
 	private int startAngle, endAngle;
 	

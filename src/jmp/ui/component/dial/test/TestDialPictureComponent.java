@@ -19,6 +19,7 @@ import jmp.ui.component.dial.model.DialLabelRenderingModel;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.model.DialTicksRenderingModel;
 import jmp.ui.component.dial.model.DialTrackRenderingModel;
+import jmp.ui.component.dial.renderer.DialDefaultRenderer;
 import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
@@ -95,12 +96,12 @@ public class TestDialPictureComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.dialView = new DialView();
-		this.dialView.setRenderer(new DialPictureRenderer(this.dialView));
+		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
 		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
 		model.addModel("picture", dialPictureRenderingModel);
-		model.addModel("value", new DefaultBoundedModel(0,100,00));
+		model.addModel("value", new DefaultBoundedModel(0,20,00));
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("ticks", new DialTicksRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());

@@ -16,6 +16,7 @@ import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialLabelRenderingModel;
 import jmp.ui.component.dial.model.DialPartialRenderingModel;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
+import jmp.ui.component.dial.model.DialTicksRenderingModel;
 import jmp.ui.component.dial.renderer.DialDefaultRenderer;
 import jmp.ui.component.dial.renderer.DialPartialRenderer;
 import jmp.ui.component.dial.renderer.DialPictureRenderer;
@@ -58,10 +59,9 @@ public class TestDialPartialComponent extends JFrame
 		this.slidersPane = new JPanel();
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
-		//this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,360,0);
-		this.progressSlider = new JSlider(JSlider.HORIZONTAL,renderingModel.getStartAngle(),renderingModel.getEndAngle(),renderingModel.getStartAngle());
-		progressSlider.setMajorTickSpacing(90);
-		progressSlider.setMinorTickSpacing(30);
+		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		progressSlider.setMajorTickSpacing(50);
+		progressSlider.setMinorTickSpacing(10);
 		progressSlider.setPaintTicks(true);
 		progressSlider.setPaintLabels(true);
 		progressSlider.setPaintTrack(true);
@@ -92,14 +92,18 @@ public class TestDialPartialComponent extends JFrame
 		
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
-		renderingModel = new DialPartialRenderingModel();
-		renderingModel.setSense(Rotation.Clockwise);
-		model.addModel("rendering", renderingModel);
+		this.dialView.renderingModel().setSense(Rotation.Clockwise);
+		DialPartialRenderingModel partialModel = new DialPartialRenderingModel();
+		this.dialView.renderingModel().setTicksStartAngle(partialModel.getEndAngle());
+		DialTicksRenderingModel ticksModel = new DialTicksRenderingModel();
+		ticksModel.setMinorTickSpacing(1);
+		ticksModel.setMajorTickSpacing(5);
+		model.addModel("partial", partialModel);
 		model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
-		//model.addModel("value", new DefaultBoundedModel(0,360,0));
-		model.addModel("value", new DefaultBoundedModel(renderingModel.getStartAngle(),renderingModel.getEndAngle(),renderingModel.getStartAngle()));
+		model.addModel("ticks", ticksModel);
+		model.addModel("value", new DefaultBoundedModel(0,20,0));
 		this.dialView.setModel(model);
 		
 		this.componentsPane.add(this.dialView);

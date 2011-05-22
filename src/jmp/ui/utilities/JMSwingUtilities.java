@@ -16,13 +16,7 @@ public class JMSwingUtilities
 	}
 	public static int extendAngle(int startAngle, int endAngle)
 	{
-		if(startAngle < 0)
-			startAngle += 360;
-		if(endAngle < 0)
-			endAngle += 360;
 		int extend = endAngle - startAngle;
-		if(startAngle > endAngle)
-			extend += 360;
 		return java.lang.Math.abs(extend);
 	}
 	public static BufferedImage copyBufferedImage(BufferedImage bImage)
