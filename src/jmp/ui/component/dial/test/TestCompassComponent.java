@@ -20,7 +20,7 @@ public class TestCompassComponent extends JFrame
 	private JSlider progressSlider;
 
 	private JPanel componentsPane;
-	private DialView dialView;
+	private Compass compass;
 	
 	public TestCompassComponent()
 	{
@@ -65,7 +65,7 @@ public class TestCompassComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					dialView.valueModel().setValue(progressSlider.getValue());
+					compass.setValue(progressSlider.getValue());
 				}
 			}
 		});
@@ -79,8 +79,8 @@ public class TestCompassComponent extends JFrame
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
-		this.dialView = new Compass();
-		this.componentsPane.add(this.dialView);
+		this.compass = new Compass();
+		this.componentsPane.add(this.compass);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}

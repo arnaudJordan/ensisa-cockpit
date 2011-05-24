@@ -6,7 +6,7 @@ import java.awt.Font;
 public class DialLabelRenderingModel extends DialRenderingModel {
 
 	final static String DEFAULT_LABEL = "DIAL";
-	final static Color DEFAULT_COLOR = Color.PINK;
+	final static Color DEFAULT_COLOR = Color.BLACK;
 	final static Font DEFAULT_FONT = new Font("Monospaced", Font.PLAIN, 18);
 	
 	private String label;

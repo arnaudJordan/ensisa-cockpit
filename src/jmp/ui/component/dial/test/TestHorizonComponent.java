@@ -2,6 +2,7 @@ package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Label;
 import java.awt.event.WindowEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -10,10 +11,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.aircraft.Horizon;
-import jmp.ui.model.DefaultBoundedModel;
-import jmp.ui.model.DefaultModelComposit;
 
 
 public class TestHorizonComponent extends JFrame
@@ -23,7 +21,7 @@ public class TestHorizonComponent extends JFrame
 	private JSlider progressSliderRoll;
 
 	private JPanel componentsPane;
-	private DialView dialView;
+	private Horizon horizon;
 	
 	public TestHorizonComponent()
 	{
@@ -69,7 +67,7 @@ public class TestHorizonComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("pitch")).setValue(progressSliderPitch.getValue());
+					horizon.setPitch(progressSliderPitch.getValue());
 				}
 			}
 		});
@@ -93,7 +91,7 @@ public class TestHorizonComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("roll")).setValue(progressSliderRoll.getValue());
+					horizon.setRoll(progressSliderRoll.getValue());
 				}
 			}
 		});
@@ -107,8 +105,8 @@ public class TestHorizonComponent extends JFrame
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
-		this.dialView = new Horizon();
-		this.componentsPane.add(this.dialView);
+		this.horizon = new Horizon();
+		this.componentsPane.add(this.horizon);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}

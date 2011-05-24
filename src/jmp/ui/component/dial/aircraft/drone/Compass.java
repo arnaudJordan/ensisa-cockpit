@@ -26,4 +26,8 @@ public class Compass extends DialView{
 		model.addModel(VALUE_MODEL, new DefaultBoundedModel(0,360,0));
 		return model;
 	}
+	public void setValue(int value)
+	{
+		valueModel().setValue(value);
+	}
 }

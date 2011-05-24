@@ -5,6 +5,7 @@ import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialHorizonRenderingModel;
 import jmp.ui.component.dial.model.DialTicksRenderingModel;
 import jmp.ui.component.dial.renderer.DialHorizonRenderer;
+import jmp.ui.model.BoundedModel;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 import jmp.ui.mvc.Model;
@@ -25,5 +26,13 @@ public class Horizon extends DialView {
 		model.addModel("pitch", new DefaultBoundedModel(-180,180,0));
 		model.addModel("roll", new DefaultBoundedModel(-100,100,0));
 		return model;
+	}
+	public void setRoll(int roll)
+	{
+		((BoundedModel) ((DefaultModelComposit) getModel()).getModel("roll")).setValue(roll);
+	}
+	public void setPitch(int pitch)
+	{
+		((BoundedModel) ((DefaultModelComposit) getModel()).getModel("pitch")).setValue(pitch);
 	}
 }

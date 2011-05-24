@@ -103,7 +103,7 @@ public class TestDialPartialComponent extends JFrame
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
 		model.addModel("ticks", ticksModel);
-		model.addModel("value", new DefaultBoundedModel(0,20,0));
+		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		this.dialView.setModel(model);
 		
 		this.componentsPane.add(this.dialView);
