@@ -92,13 +92,13 @@ public class TestDialPartialComponent extends JFrame
 		this.dialView = new DialView();
 		
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
-		this.dialView.setRenderer(new DialPartialRenderer(this.dialView));
-		this.dialView.renderingModel().setSense(Rotation.Clockwise);
+		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
+		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
 		DialPartialRenderingModel partialModel = new DialPartialRenderingModel();
-		this.dialView.renderingModel().setTicksStartAngle(partialModel.getEndAngle());
+		this.dialView.renderingModel().setTicksStartAngle(partialModel.getStartAngle());
 		DialTicksRenderingModel ticksModel = new DialTicksRenderingModel();
-		ticksModel.setMinorTickSpacing(1);
-		ticksModel.setMajorTickSpacing(5);
+		ticksModel.setMinorTickSpacing(10);
+		ticksModel.setMajorTickSpacing(30);
 		model.addModel("partial", partialModel);
 		model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());

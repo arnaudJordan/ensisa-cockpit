@@ -62,11 +62,11 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		final int majorLineXEnd = (int) (background.getWidth()-ticksModel.getMajorGraduationWidth());
 		final int minorLineXStart = (int) (background.getWidth() - minorTickSize);
 		final int minorLineXEnd = (int) (background.getWidth()-ticksModel.getMinorGraduationWidth());
-		int nbValues = (valueModel.getMaximum()-valueModel.getMinimum())/minorTickSpacing;
-		int minorTickAngleSpacing = 360 / nbValues;
+		double nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/(double)minorTickSpacing;
+		double minorTickAngleSpacing = 360 / nbValues;
 		
 		if(partialModel != null)
-			minorTickAngleSpacing = (partialModel.getEndAngle()-partialModel.getStartAngle()) / nbValues;
+			minorTickAngleSpacing = (double)(partialModel.getEndAngle()-partialModel.getStartAngle()) / (double)nbValues;
 		AffineTransform oldTrans = g.getTransform();
 		
 		Graphics2D g2 = background.createGraphics();
@@ -75,11 +75,12 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		for(int i = 0; i < nbValues; i++)
 		{
 			AffineTransform trans = new AffineTransform();
-			trans.translate(background.getWidth()/2 +background.getMinX(), background.getHeight()/2+background.getMinY());
+			
+			trans.translate(background.getWidth()/2 +background.getMinX(), background.getHeight()/2+background.getMinY());	
 			if(renderingModel.getSense() == Rotation.Clockwise)
-				trans.rotate(-Math.toRadians(i*minorTickAngleSpacing + renderingModel.getTicksStartAngle()));
+				trans.rotate(Math.toRadians(i*minorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle()));
 			else
-				trans.rotate(Math.toRadians(i*minorTickAngleSpacing - renderingModel.getTicksStartAngle()));
+				trans.rotate(-Math.toRadians(i*minorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle()));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
 			g2.transform(trans);
 			g2.setColor(ticksModel.getMinorGraduationColor());
@@ -88,10 +89,10 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			g2.setTransform(oldTrans);
 		}
 		
-		nbValues = (valueModel.getMaximum()-valueModel.getMinimum())/majorTickSpacing;
-		int majorTickAngleSpacing = 360 / nbValues;
+		nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/(double)majorTickSpacing;
+		double majorTickAngleSpacing = 360 / nbValues;
 		if(partialModel != null)
-			majorTickAngleSpacing = (partialModel.getEndAngle()-partialModel.getStartAngle()) / nbValues;
+			majorTickAngleSpacing = (double)(partialModel.getEndAngle()-partialModel.getStartAngle()) / (double)nbValues;	
 		
 		for(int i = 0; i < nbValues; i++)
 		{
@@ -99,9 +100,9 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			trans.setToIdentity();
 			trans.translate(background.getWidth()/2, background.getHeight()/2);
 			if(renderingModel.getSense() == Rotation.Clockwise)
-				trans.rotate(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()));
+				trans.rotate(Math.toRadians(i*majorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle()));
 			else
-				trans.rotate(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()));
+				trans.rotate(-Math.toRadians(i*majorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle()));
 			trans.translate(-background.getWidth()/2,-background.getHeight()/2);
 			g2.transform(trans);
 			g2.setColor(ticksModel.getMajorGraduationColor());
@@ -131,6 +132,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	public void renderLabels(Graphics2D g) {
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
+		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
 		DialRenderingModel renderingModel = dialView().renderingModel();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
 		if(pictureModel==null || valueModel==null || renderingModel==null||ticksModel==null) return;
@@ -144,9 +146,12 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		g2.setColor(ticksModel.getLabelColor());
 		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
 		final int majorTickSize = (int) ticksModel.getMajorTickSize();
-		int nbValues = (valueModel.getMaximum()-valueModel.getMinimum())/majorTickSpacing;
+		double nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/(double)majorTickSpacing;
 		
-		int majorTickAngleSpacing = 360 / nbValues;
+		double majorTickAngleSpacing = 360 / nbValues;
+		if(partialModel != null)
+			majorTickAngleSpacing = (double)(partialModel.getEndAngle()-partialModel.getStartAngle()) / (double)nbValues;
+		
 		AffineTransform oldTrans = g2.getTransform();
 		for(int i = 0; i < nbValues; i++)
 		{
@@ -174,17 +179,17 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			
 			if(renderingModel.getSense() == Rotation.Clockwise)
 			{
-				deltaX=(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
-						Math.cos(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
-				deltaY=(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
-						Math.sin(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+				deltaX=-(int) ((Math.sqrt(cadre.getHeight()+cadre.getWidth())+ticksModel.getLabelSpace())*
+						Math.cos(Math.toRadians(i*majorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle())));
+				deltaY=-(int) ((Math.sqrt(cadre.getHeight()+cadre.getWidth())+ticksModel.getLabelSpace())*
+						Math.sin(Math.toRadians(i*majorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle())));
 			}
 			else
 			{
-				deltaX=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
-					Math.cos(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
-				deltaY=-(int) (Math.sqrt(cadre.getHeight()+cadre.getWidth()+400)*
-					Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle())));
+				deltaX=-(int) ((Math.sqrt(cadre.getHeight()+cadre.getWidth())+ticksModel.getLabelSpace())*
+					Math.cos(-Math.toRadians(i*majorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle())));
+				deltaY=-(int) ((Math.sqrt(cadre.getHeight()+cadre.getWidth())+ticksModel.getLabelSpace())*
+					Math.sin(-Math.toRadians(i*majorTickAngleSpacing) - Math.toRadians(renderingModel.getTicksStartAngle())));
 			}
 			
 			g2.drawString(vString, deltaX, deltaY);
@@ -255,6 +260,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		DialTrackRenderingModel trackModel = ((DialTrackRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("track"));
 		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
+		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
 		DialRenderingModel renderingModel = dialView().renderingModel();
 		BufferedImage needle = pictureModel.getNeedle();
 		if(pictureModel == null || renderingModel==null) return;
@@ -271,9 +277,14 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			generateBackground(g);
 		renderingModel.setChanged(false);
 		
+		int borderSize = 0;
+		
+		if(borderModel != null)
+			borderSize = borderModel.getBorderSize();
+		
 		if(partialModel != null)
 		{
-			clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
+			clip = new Arc2D.Double(0, 0, background.getWidth() + borderSize, background.getHeight() + borderSize, partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
 			AffineTransform trans = new AffineTransform();		
 			trans.setToIdentity();
 			double transX = 0;
@@ -333,6 +344,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
 		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,
 				background.getWidth()-borderModel.getBorderSize(), background.getHeight()-borderModel.getBorderSize());
+		g.setClip(clip);
 		g.draw(border);
 	}
 
@@ -354,13 +366,19 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	public Dimension getPreferredSize() {
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
+		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
 		BufferedImage background = pictureModel.getBackground();
 		BufferedImage needle = pictureModel.getNeedle();
 		
 		if(background == null) return null;
 		
+		int borderSize = 0;
+		
+		if(borderModel != null)
+			borderSize = borderModel.getBorderSize();
+		
 		if(partialModel == null)
-			return new Dimension(background.getWidth(), background.getHeight());
+			return new Dimension(background.getWidth() + borderSize, background.getHeight() + borderSize);
 		
 		clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
 		double transX = 0;
@@ -370,7 +388,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			transX = needle.getHeight();
 		if((clip.getBounds2D().getMinY() > clip.getCenterY() -  needle.getHeight()) || (clip.getBounds2D().getMaxY() < clip.getCenterY() + needle.getHeight()))
 			transY = needle.getHeight();
-		return new Dimension((int)(clip.getBounds2D().getWidth() + transX), (int)(clip.getBounds2D().getHeight() + transY));
+		return new Dimension((int)(clip.getBounds2D().getWidth() + borderSize + transX), (int)(clip.getBounds2D().getHeight() + borderSize + transY));
 	}
 
 	public Dimension getMinimumSize() {

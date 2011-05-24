@@ -76,13 +76,6 @@ public class TestDialPictureComponent extends JFrame
 				if (!s.getValueIsAdjusting());
 				{
 					dialView.valueModel().setValue(progressSlider.getValue());
-					if(progressSlider.getValue()==50)
-					{
-						DefaultModelComposit model = (DefaultModelComposit) dialView.getModel();
-						//model.removeModel("label");
-						((DialLabelRenderingModel) model.getModel("label")).setLabel("tesjbgfjdxfxckfj");
-						dialView.renderingModel().setChanged(true);
-					}
 				}
 			}
 		});
@@ -100,9 +93,10 @@ public class TestDialPictureComponent extends JFrame
 		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
-		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
+		this.dialView.renderingModel().setSense(Rotation.Clockwise);
+		this.dialView.renderingModel().setTicksStartAngle(150);
 		model.addModel("picture", dialPictureRenderingModel);
-		model.addModel("value", new DefaultBoundedModel(0,20,00));
+		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("ticks", new DialTicksRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());

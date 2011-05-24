@@ -10,15 +10,15 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	private static final Color LABEL_COLOR = Color.BLACK;
 	
 	private static final double MAJOR_GRADUTION_RATIO = 0.25;
-	private static final int LABEL_SPACE = 2;
+	private static final int LABEL_SPACE = 10;
 	
 
 	private static final double MINOR_GRADUTION_RATIO = MAJOR_GRADUTION_RATIO * 1.5;
-	private static final float MINOR_GRADUTION_WIDTH = 0.5f;
+	private static final float MINOR_GRADUTION_WIDTH = 2f;
 	private static final float MAJOR_GRADUTION_WIDTH = 2f;
 	//private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(MINOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
 	//private static final Stroke MAJOR_GRADUTION_STROKE = new BasicStroke(MAJOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
-	private static final int MAJOR_TICK_SPACING = 10;
+	private static final int MAJOR_TICK_SPACING = 30;
 	private static final int MINOR_TICK_SPACING = 5;
 	private static final int MINOR_TICK_SIZE = 20;
 	private static final int MAJOR_TICK_SIZE = 2 * MINOR_TICK_SIZE;
