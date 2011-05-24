@@ -10,7 +10,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.aircraft.drone.Compass;
 
 

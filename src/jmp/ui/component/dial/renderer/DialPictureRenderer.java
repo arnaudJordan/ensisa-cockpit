@@ -83,7 +83,7 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 		renderingModel.setChanged(false);
 		g.drawImage(this.background,0,0,null);
 	}
-	private void generateBackground(Graphics2D g)
+	protected void generateBackground(Graphics2D g)
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		BufferedImage background = pictureModel.getBackground();

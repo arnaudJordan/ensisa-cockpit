@@ -32,7 +32,7 @@ import jmp.ui.utilities.JMSwingUtilities;
 public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer {
 	
 	private Arc2D.Double clip;
-	private BufferedImage background;
+	protected BufferedImage background;
 
 	public DialDefaultRenderer(View view) {
 		super(view);
@@ -294,7 +294,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			g.drawImage(this.background,0,0,null);
 	}
 
-	private void generateBackground(Graphics2D g)
+	protected void generateBackground(Graphics2D g)
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		BufferedImage background = pictureModel.getBackground();
