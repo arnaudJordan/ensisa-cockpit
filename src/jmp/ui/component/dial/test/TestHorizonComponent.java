@@ -2,7 +2,6 @@ package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Label;
 import java.awt.event.WindowEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;

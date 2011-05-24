@@ -35,6 +35,7 @@ public class TestDialHorizonComponent extends JFrame
 
 	public void setup()
 	{
+		setTitle("DialHorizon");
 		this.setupDialHorizonComponentPane();
 		this.setupSlidersPane();
 

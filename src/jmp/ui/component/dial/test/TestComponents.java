@@ -30,6 +30,7 @@ public class TestComponents extends JFrame
 
 	public void setup()
 	{
+		setTitle("Test Components");
 		this.setupComponentsPane();
 		this.setupSlidersPane();
 

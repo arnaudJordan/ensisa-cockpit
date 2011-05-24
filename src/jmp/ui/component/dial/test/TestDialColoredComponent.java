@@ -15,17 +15,13 @@ import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialColoredRenderingModel;
 import jmp.ui.component.dial.model.DialLabelRenderingModel;
-import jmp.ui.component.dial.model.DialPartialRenderingModel;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.model.DialTicksRenderingModel;
 import jmp.ui.component.dial.renderer.DialColoredRenderer;
-import jmp.ui.component.dial.renderer.DialPartialRenderer;
-import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 import jmp.ui.utilities.ColoredRange;
 import jmp.ui.utilities.ColoredRanges;
-import jmp.ui.utilities.Range;
 
 
 public class TestDialColoredComponent extends JFrame
@@ -42,6 +38,7 @@ public class TestDialColoredComponent extends JFrame
 
 	public void setup()
 	{
+		setTitle("DialColored");
 		this.setupDialPartialComponentPane();
 		this.setupSlidersPane();
 

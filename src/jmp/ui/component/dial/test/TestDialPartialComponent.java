@@ -39,6 +39,7 @@ public class TestDialPartialComponent extends JFrame
 
 	public void setup()
 	{
+		setTitle("DialPartial");
 		this.setupDialPartialComponentPane();
 		this.setupSlidersPane();
 

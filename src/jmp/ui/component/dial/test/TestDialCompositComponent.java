@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,15 +11,12 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialCompositRenderingModel;
 import jmp.ui.component.dial.model.DialLabelRenderingModel;
-import jmp.ui.component.dial.model.DialPartialRenderingModel;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.renderer.DialCompositRenderer;
-import jmp.ui.component.dial.renderer.DialDefaultRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 
@@ -41,6 +36,7 @@ public class TestDialCompositComponent extends JFrame
 
 	public void setup()
 	{
+		setTitle("DialComposit");
 		this.setupDialPartialComponentPane();
 		this.setupSlidersPane();
 

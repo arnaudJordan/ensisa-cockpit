@@ -39,6 +39,7 @@ public class TestDialPictureComponent extends JFrame
 
 	public void setup()
 	{
+		setTitle("DialPicture");
 		this.setupDialPictureComponentPane();
 		this.setupSlidersPane();
 
