@@ -1,5 +1,7 @@
 package jmp.ui.component.dial.model;
 
+import java.awt.Dimension;
+
 import jmp.ui.component.Rotation;
 import jmp.ui.mvc.DefaultModel;
 
@@ -7,10 +9,12 @@ public class DialRenderingModel extends DefaultModel{
 	
 	private final static Rotation SENSE = Rotation.Clockwise;
 	private final static int TICKS_START_ANGLE = 90;
+	private final static Dimension SIZE = new Dimension(200,200);
 	
 	private Rotation sense;
 	private int ticksStartAngle;
 	private boolean changed;
+	private Dimension size;
 	
 	public DialRenderingModel()
 	{
@@ -26,6 +30,7 @@ public class DialRenderingModel extends DefaultModel{
 		setSense(sense);
 		setTicksStartAngle(tickStartAngle);
 		setChanged(true);
+		setSize(SIZE);
 	}
 	
 	public DialRenderingModel(int tickStartAngle) 
@@ -57,5 +62,13 @@ public class DialRenderingModel extends DefaultModel{
 
 	public boolean isChanged() {
 		return changed;
+	}
+
+	public void setSize(Dimension size) {
+		this.size = size;
+	}
+
+	public Dimension getSize() {
+		return size;
 	}
 }

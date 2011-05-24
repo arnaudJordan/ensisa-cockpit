@@ -17,9 +17,8 @@ import jmp.ui.component.dial.model.DialLabelRenderingModel;
 import jmp.ui.component.dial.model.DialPartialRenderingModel;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.model.DialTicksRenderingModel;
+import jmp.ui.component.dial.model.DialTrackRenderingModel;
 import jmp.ui.component.dial.renderer.DialDefaultRenderer;
-import jmp.ui.component.dial.renderer.DialPartialRenderer;
-import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 
@@ -31,7 +30,6 @@ public class TestDialPartialComponent extends JFrame
 
 	private JPanel componentsPane;
 	private DialView dialView;
-	private DialPartialRenderingModel renderingModel;
 	
 	public TestDialPartialComponent()
 	{
@@ -100,10 +98,11 @@ public class TestDialPartialComponent extends JFrame
 		ticksModel.setMinorTickSpacing(10);
 		ticksModel.setMajorTickSpacing(30);
 		model.addModel("partial", partialModel);
-		model.addModel("picture", new DialPictureRenderingModel());
+		//model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
 		model.addModel("ticks", ticksModel);
+		model.addModel("track", new DialTrackRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		this.dialView.setModel(model);
 		

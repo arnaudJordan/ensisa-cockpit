@@ -1,7 +1,9 @@
 package jmp.ui.component.dial.renderer;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -36,6 +38,11 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 
 	public DialDefaultRenderer(View view) {
 		super(view);
+		DialRenderingModel renderingModel = dialView().renderingModel();
+		background = new BufferedImage((int) renderingModel.getSize().getWidth(), (int) renderingModel.getSize().getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics g = background.getGraphics();
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, (int) renderingModel.getSize().getWidth(), (int) renderingModel.getSize().getHeight());
 	}
 	protected DialView dialView()
 	{
@@ -45,12 +52,11 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	}
 
 	public void renderTicks(Graphics2D g) {
-		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
 		DialRenderingModel renderingModel = dialView().renderingModel();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
-		if(pictureModel==null|ticksModel==null||valueModel==null) return;
+		if(ticksModel==null||valueModel==null) return;
 		
 		if(background==null) return;
 		
@@ -115,8 +121,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 
 	public void renderLabel(Graphics2D g) {
 		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
-		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
-		if(labelModel == null || pictureModel==null) return;
+		if(labelModel == null) return;
 		
 		if(background==null) return;
 		
@@ -130,12 +135,11 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	}
 
 	public void renderLabels(Graphics2D g) {
-		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
 		DialRenderingModel renderingModel = dialView().renderingModel();
 		BoundedModel valueModel = ((BoundedModel) this.dialView().valueModel());
-		if(pictureModel==null || valueModel==null || renderingModel==null||ticksModel==null) return;
+		if(valueModel==null || renderingModel==null||ticksModel==null) return;
 		
 		if(background==null) return;
 			
@@ -199,10 +203,10 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	}
 
 	public void renderTrack(Graphics2D g) {
-		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
+
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		DialTrackRenderingModel trackModel = ((DialTrackRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("track"));
-		if(pictureModel==null || ticksModel==null || trackModel==null) return;
+		if(ticksModel==null || trackModel==null) return;
 
 		if(background==null || trackModel.getTrackSize()==0) return;
 		
@@ -262,11 +266,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
 		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
 		DialRenderingModel renderingModel = dialView().renderingModel();
-		BufferedImage needle = pictureModel.getNeedle();
-		if(pictureModel == null || renderingModel==null) return;
 
-		if(renderingModel.isChanged() || pictureModel.isChanged())
-			generateBackground(g);
 		if(partialModel!=null && partialModel.isChanged())
 			generateBackground(g);
 		if(ticksModel!=null && ticksModel.isChanged())
@@ -277,6 +277,11 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			generateBackground(g);
 		renderingModel.setChanged(false);
 		
+		if(pictureModel != null && renderingModel!=null) 
+		{		
+			if(renderingModel.isChanged() || pictureModel.isChanged())
+				generateBackground(g);
+		}
 		int borderSize = 0;
 		
 		if(borderModel != null)
@@ -290,12 +295,15 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			double transX = 0;
 			double transY = 0;
 	
-			if(clip.getBounds2D().getMinX() > clip.getCenterX() - needle.getHeight())
-				transX = needle.getHeight();
-			if(clip.getBounds2D().getMinY() > clip.getCenterY() - needle.getHeight())
-				transY = needle.getHeight();
+			if(pictureModel != null)
+			{
+				BufferedImage needle = pictureModel.getNeedle();
+				if(clip.getBounds2D().getMinX() > clip.getCenterX() - needle.getHeight())
+					transX = needle.getHeight();
+				if(clip.getBounds2D().getMinY() > clip.getCenterY() - needle.getHeight())
+					transY = needle.getHeight();
+			}
 			trans.translate(-clip.getBounds2D().getMinX() + transX, -clip.getBounds2D().getMinY() + transY);
-
 			g.transform(trans);
 			g.clip(clip);
 			g.drawImage(this.background,0,0,null);
@@ -308,10 +316,12 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	protected void generateBackground(Graphics2D g)
 	{
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
-		BufferedImage background = pictureModel.getBackground();
-		if(background == null) return;
-		this.background= JMSwingUtilities.copyBufferedImage(background);
-		
+		if(pictureModel != null)
+		{
+			BufferedImage background = pictureModel.getBackground();
+			if(background != null)
+				this.background= JMSwingUtilities.copyBufferedImage(background);
+		}
 		DialTicksRenderingModel ticksModel = ((DialTicksRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("ticks"));
 		DialTrackRenderingModel trackModel = ((DialTrackRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("track"));
 		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
@@ -334,10 +344,8 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	
 	public void renderBorder(Graphics2D g) {
 		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
-		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
-		if(borderModel==null || pictureModel==null) return;
+		if(borderModel==null) return;
 		
-		BufferedImage background = pictureModel.getBackground();
 		if(borderModel==null || borderModel.getBorderSize()==0) return;
 		
 		g.setColor(borderModel.getBorderColor());
@@ -366,29 +374,32 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	public Dimension getPreferredSize() {
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
-		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
-		BufferedImage background = pictureModel.getBackground();
-		BufferedImage needle = pictureModel.getNeedle();
+		DialRenderingModel renderingModel = this.dialView().renderingModel();
 		
-		if(background == null) return null;
+		if(pictureModel != null)
+		{
+			BufferedImage background = pictureModel.getBackground();
+			BufferedImage needle = pictureModel.getNeedle();
 		
-		int borderSize = 0;
-		
-		if(borderModel != null)
-			borderSize = borderModel.getBorderSize();
-		
-		if(partialModel == null)
-			return new Dimension(background.getWidth() + borderSize, background.getHeight() + borderSize);
-		
-		clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
-		double transX = 0;
-		double transY = 0;
-
-		if((clip.getBounds2D().getMinX() > clip.getCenterX() - needle.getHeight()) || (clip.getBounds2D().getMaxX() < clip.getCenterX() + needle.getHeight()))
-			transX = needle.getHeight();
-		if((clip.getBounds2D().getMinY() > clip.getCenterY() -  needle.getHeight()) || (clip.getBounds2D().getMaxY() < clip.getCenterY() + needle.getHeight()))
-			transY = needle.getHeight();
-		return new Dimension((int)(clip.getBounds2D().getWidth() + borderSize + transX), (int)(clip.getBounds2D().getHeight() + borderSize + transY));
+			if(partialModel == null)
+				return new Dimension(background.getWidth(), background.getHeight());
+			
+			clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
+			double transX = 0;
+			double transY = 0;
+	
+			if((clip.getBounds2D().getMinX() > clip.getCenterX() - needle.getHeight()) || (clip.getBounds2D().getMaxX() < clip.getCenterX() + needle.getHeight()))
+				transX = needle.getHeight();
+			if((clip.getBounds2D().getMinY() > clip.getCenterY() -  needle.getHeight()) || (clip.getBounds2D().getMaxY() < clip.getCenterY() + needle.getHeight()))
+				transY = needle.getHeight();
+			return new Dimension((int)(clip.getBounds2D().getWidth() + transX), (int)(clip.getBounds2D().getHeight() + transY));
+		}
+		if(partialModel != null)
+		{
+			clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
+			return new Dimension((int)(clip.getBounds2D().getWidth()), (int)(clip.getBounds2D().getHeight()));
+		}
+		return renderingModel.getSize();
 	}
 
 	public Dimension getMinimumSize() {
