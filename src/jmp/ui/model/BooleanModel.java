@@ -7,4 +7,5 @@ public interface BooleanModel extends Model
 	public void set();
 	public void reset();
 	public boolean is();
+	public void setState(boolean state);
 }

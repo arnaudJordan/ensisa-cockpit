@@ -21,6 +21,4 @@ public interface DialRenderer extends Renderer
 	public Dimension getPreferredSize();
 	public Dimension getMinimumSize();
 	public Dimension getMaximumSize();
-
-
 }
