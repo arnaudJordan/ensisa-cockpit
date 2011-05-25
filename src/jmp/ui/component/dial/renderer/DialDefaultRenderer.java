@@ -33,7 +33,7 @@ import jmp.ui.utilities.JMSwingUtilities;
 
 public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer {
 	
-	private Arc2D.Double clip;
+	protected Arc2D.Double clip;
 	protected BufferedImage background;
 
 	public DialDefaultRenderer(View view) {
@@ -344,7 +344,6 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 	
 	public void renderBorder(Graphics2D g) {
 		DialBorderRenderingModel borderModel = ((DialBorderRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("border"));
-		if(borderModel==null) return;
 		
 		if(borderModel==null || borderModel.getBorderSize()==0) return;
 		
@@ -358,8 +357,8 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 
 	public void renderDial(Graphics2D g) {
 		this.renderBackground(g);
-		this.renderNeedle(g);
 		this.renderBorder(g);
+		this.renderNeedle(g);
 	}
 	public void renderView(Graphics2D g) {
 		RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 

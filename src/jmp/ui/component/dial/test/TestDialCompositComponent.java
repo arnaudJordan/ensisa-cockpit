@@ -19,6 +19,7 @@ import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.renderer.DialCompositRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
+import jmp.ui.model.ModelComposit;
 
 
 public class TestDialCompositComponent extends JFrame
@@ -60,8 +61,8 @@ public class TestDialCompositComponent extends JFrame
 		
 		
 		this.progressSliderMain = new JSlider(JSlider.HORIZONTAL,0,100,0);
-		progressSliderMain.setMajorTickSpacing(90);
-		progressSliderMain.setMinorTickSpacing(30);
+		progressSliderMain.setMajorTickSpacing(50);
+		progressSliderMain.setMinorTickSpacing(10);
 		progressSliderMain.setPaintTicks(true);
 		progressSliderMain.setPaintLabels(true);
 		progressSliderMain.setPaintTrack(true);
@@ -98,7 +99,7 @@ public class TestDialCompositComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					((DefaultBoundedModel) ((DefaultModelComposit) dialView.getModel()).getModel("internValue")).setValue(progressSliderIntern.getValue());
+					((DefaultBoundedModel)((ModelComposit) ((ModelComposit) dialView.getModel()).getModel("composit")).getModel("value")).setValue(progressSliderIntern.getValue());
 				}
 			}
 		});
@@ -116,15 +117,19 @@ public class TestDialCompositComponent extends JFrame
 		
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		this.dialView.setRenderer(new DialCompositRenderer(this.dialView));
-		model.addModel("composit", new DialCompositRenderingModel(new Point(75,0)));
 		model.addModel("picture", new DialPictureRenderingModel());
-		
-		DialPictureRenderingModel internPicture = new DialPictureRenderingModel("pictures/dial/default_intern_background.png", "pictures/dial/default_intern_needle.png");
-		model.addModel("internPicture", internPicture);
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
-		model.addModel("internValue", new DefaultBoundedModel(0,100,0));
+		
+		DefaultModelComposit compositModel = new DefaultModelComposit();
+		compositModel.addModel("rendering", new DialCompositRenderingModel(new Point(75,0)));
+		compositModel.addModel("picture", new DialPictureRenderingModel("pictures/dial/default_intern_background.png", "pictures/dial/default_intern_needle.png"));
+		compositModel.addModel("border", new DialBorderRenderingModel());
+		compositModel.addModel("value", new DefaultBoundedModel(0,100,0));
+		
+		model.addModel("composit", compositModel);
+		
 		this.dialView.setModel(model);
 		
 		this.componentsPane.add(this.dialView);
