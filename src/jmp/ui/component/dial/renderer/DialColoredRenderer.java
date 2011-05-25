@@ -7,8 +7,6 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.util.prefs.BackingStoreException;
-
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialColoredRenderingModel;
