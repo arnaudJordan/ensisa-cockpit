@@ -13,6 +13,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.model.DialBorderRenderingModel;
@@ -23,6 +24,8 @@ import jmp.ui.component.dial.model.DialTrackRenderingModel;
 import jmp.ui.component.dial.renderer.DialDefaultRenderer;
 import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.component.indicator.IndicatorView;
+import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
 import jmp.ui.model.DefaultBoundedModel;
@@ -71,8 +74,6 @@ public class TestIndicatorPictureComponent extends JFrame
 		{
 			public void stateChanged(ChangeEvent changeEvent)
 			{
-				Object source = changeEvent.getSource();
-				JCheckBox s = (JCheckBox) source;
 				indicatorView.valueModel().setState(checkBox.isSelected());
 			}
 		});
@@ -90,6 +91,8 @@ public class TestIndicatorPictureComponent extends JFrame
 		this.indicatorView.setRenderer(new IndicatorDefaultRenderer(this.indicatorView));
 		ModelComposit model = (ModelComposit) indicatorView.getModel();
 		model.addModel("picture", new IndicatorPictureRenderingModel());
+		model.addModel("border", new IndicatorBorderRenderingModel());
+		model.addModel("label", new IndicatorLabelRenderingModel("LED", CardinalPosition.NORTH));
 
 		this.indicatorView.setModel(model);
 		this.componentsPane.add(this.indicatorView);
