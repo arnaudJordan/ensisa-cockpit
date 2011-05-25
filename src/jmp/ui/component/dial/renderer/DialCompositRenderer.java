@@ -2,7 +2,6 @@ package jmp.ui.component.dial.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
@@ -16,7 +15,6 @@ import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.model.DialRenderingModel;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
-import jmp.ui.mvc.Model;
 import jmp.ui.mvc.View;
 
 public class DialCompositRenderer extends DialDefaultRenderer {
