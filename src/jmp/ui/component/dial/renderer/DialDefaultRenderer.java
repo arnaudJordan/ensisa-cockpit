@@ -127,6 +127,9 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		g2.setColor(labelModel.getColor());
 		g2.setFont(labelModel.getFont());
 		final int strWidth = g2.getFontMetrics().stringWidth(labelModel.getLabel());
+		AffineTransform trans = new AffineTransform();
+		trans.translate(background.getWidth()/2, background.getHeight()/2);
+		g2.transform(trans);
 		g2.drawString(labelModel.getLabel(), (int) labelModel.getPosition().getX() - strWidth/2, (int) labelModel.getPosition().getY());
 		g2.dispose();
 	}

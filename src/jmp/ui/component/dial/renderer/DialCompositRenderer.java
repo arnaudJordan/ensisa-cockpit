@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialCompositRenderingModel;
+import jmp.ui.component.dial.model.DialLabelRenderingModel;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.model.DialRenderingModel;
 import jmp.ui.model.BoundedModel;
@@ -142,5 +143,48 @@ public class DialCompositRenderer extends DialDefaultRenderer {
 			}
 		}
 		g.setClip(oldClip);
+	}
+	public void renderLabel(Graphics2D g) {
+		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
+		ModelComposit compositModel = ((ModelComposit) ((ModelComposit) (dialView().getModel())).getModel("composit"));
+
+		if(background==null) return;
+		g.setRenderingHints(g.getRenderingHints());	
+		if(labelModel != null)
+		{
+			g.setColor(labelModel.getColor());
+			g.setFont(labelModel.getFont());
+			final int strWidth = g.getFontMetrics().stringWidth(labelModel.getLabel());
+			AffineTransform trans = new AffineTransform();
+			AffineTransform oldTrans = g.getTransform();
+			trans.translate(background.getWidth()/2, background.getHeight()/2);
+			g.transform(trans);
+			g.drawString(labelModel.getLabel(), (int) labelModel.getPosition().getX() - strWidth/2, (int) labelModel.getPosition().getY());
+			g.setTransform(oldTrans);
+		}
+		if(compositModel!=null)
+		{
+			DialCompositRenderingModel compositRenderingModel = (DialCompositRenderingModel) compositModel.getModel("rendering");
+			DialLabelRenderingModel compositLabelModel = (DialLabelRenderingModel) compositModel.getModel("label");
+			
+			if(compositLabelModel != null && compositRenderingModel != null)
+			{
+				g.setColor(compositLabelModel.getColor());
+				g.setFont(compositLabelModel.getFont());
+				AffineTransform trans = new AffineTransform();
+				trans.translate(background.getWidth()/2  + compositRenderingModel.getInternDialPosition().getX(), background.getHeight()/2 + compositRenderingModel.getInternDialPosition().getY());
+				AffineTransform oldTrans = g.getTransform();
+				g.transform(trans);
+				final int strWidth = g.getFontMetrics().stringWidth(compositLabelModel.getLabel());
+				g.drawString(compositLabelModel.getLabel(), (int) compositLabelModel.getPosition().getX() - strWidth/2, (int) compositLabelModel.getPosition().getY());
+				g.setTransform(oldTrans);
+			}
+		}
+	}
+	public void renderDial(Graphics2D g) {
+		this.renderBackground(g);
+		this.renderBorder(g);
+		this.renderLabel(g);
+		this.renderNeedle(g);
 	}
 }

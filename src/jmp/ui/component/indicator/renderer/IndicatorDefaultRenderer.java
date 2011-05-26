@@ -60,7 +60,31 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		
 		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
 		
-		if(colorModel != null)
+		if(pictureModel != null && renderingModel!=null)
+		{
+			BufferedImage stateImage;
+			if(valueModel.is())
+				stateImage = pictureModel.getOnImage();
+			else
+				stateImage = pictureModel.getOffImage();
+			
+			IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
+			if(labelModel != null) 
+			{		
+				switch (labelModel.getPosition())
+				{
+				case NORTH : g.drawImage(stateImage, (int) (getPreferredSize().getWidth()/2 - stateImage.getWidth()/2), (int) (getPreferredSize().getHeight() - stateImage.getHeight()), null); break;
+				case SOUTH : g.drawImage(stateImage, (int) (getPreferredSize().getWidth()/2 - stateImage.getWidth()/2), 0, null); break;
+				case EAST : g.drawImage(stateImage, 0, (int) getPreferredSize().getHeight()/2 - stateImage.getHeight()/2, null); break;
+				case WEST : g.drawImage(stateImage, (int)getPreferredSize().getWidth() - stateImage.getWidth(), (int) getPreferredSize().getHeight()/2 - stateImage.getHeight()/2, null); break;
+				}
+			}
+			else 
+				g.drawImage(stateImage,0,0,null);
+			return;
+		}
+		
+		if(colorModel != null && renderingModel!=null)
 		{
 			Color oldColor = g.getColor();
 			if(valueModel.is())
@@ -83,32 +107,11 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 				g.fillOval(0,0,(int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight());
 			g.setColor(oldColor);
 		}
-		
-		if(pictureModel == null || renderingModel==null) return;
-		
-		BufferedImage stateImage;
-		if(valueModel.is())
-			stateImage = pictureModel.getOnImage();
-		else
-			stateImage = pictureModel.getOffImage();
-		
-		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
-		if(labelModel != null) 
-		{		
-			switch (labelModel.getPosition())
-			{
-			case NORTH : g.drawImage(stateImage, (int) (getPreferredSize().getWidth()/2 - stateImage.getWidth()/2), (int) (getPreferredSize().getHeight() - stateImage.getHeight()), null); break;
-			case SOUTH : g.drawImage(stateImage, (int) (getPreferredSize().getWidth()/2 - stateImage.getWidth()/2), 0, null); break;
-			case EAST : g.drawImage(stateImage, 0, (int) getPreferredSize().getHeight()/2 - stateImage.getHeight()/2, null); break;
-			case WEST : g.drawImage(stateImage, (int)getPreferredSize().getWidth() - stateImage.getWidth(), (int) getPreferredSize().getHeight()/2 - stateImage.getHeight()/2, null); break;
-			}
-		}
-		else 
-			g.drawImage(stateImage,0,0,null);
 	}
 
 	public void renderLabel(Graphics2D g) {
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
+		
 		if(labelModel == null) return;
 			
 		g.setColor(labelModel.getColor());
@@ -117,10 +120,10 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		final int strWidth = g.getFontMetrics().stringWidth(labelModel.getLabel());
 		switch (labelModel.getPosition())
 		{
-		case NORTH : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth()/2 - strWidth/2, strHeight); break;
-		case SOUTH : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth()/2 - strWidth/2, (int) getPreferredSize().getHeight()); break;
-		case EAST : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth() - strWidth, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
-		case WEST : g.drawString(labelModel.getLabel(), 0, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
+			case NORTH : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth()/2 - strWidth/2, strHeight); break;
+			case SOUTH : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth()/2 - strWidth/2, (int) getPreferredSize().getHeight()); break;
+			case EAST : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth() - strWidth, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
+			case WEST : g.drawString(labelModel.getLabel(), 0, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
 		}
 
 	}
@@ -148,12 +151,12 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		{		
 			switch (labelModel.getPosition())
 			{
-			case NORTH :transY=(int) (getPreferredSize().getHeight()-dimension.getHeight());
-			transX=(int) (getPreferredSize().getWidth()-dimension.getWidth())/2;
-			break;
-			case SOUTH : transX=(int) (getPreferredSize().getWidth()-dimension.getWidth())/2; break;
-			case EAST : ; break;
-			case WEST : transX=(int) (getPreferredSize().getWidth()-dimension.getWidth()); break;
+				case NORTH :transY=(int) (getPreferredSize().getHeight()-dimension.getHeight());
+				transX=(int) (getPreferredSize().getWidth()-dimension.getWidth())/2;
+				break;
+				case SOUTH : transX=(int) (getPreferredSize().getWidth()-dimension.getWidth())/2; break;
+				case EAST : ; break;
+				case WEST : transX=(int) (getPreferredSize().getWidth()-dimension.getWidth()); break;
 			}
 		}
 		Double border = new Ellipse2D.Double(borderModel.getBorderSize()/2 + transX, borderModel.getBorderSize()/2 + transY,
@@ -169,16 +172,20 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
 		Dimension dimension = new Dimension(0,0);
+		
 		if(colorModel != null)
 			dimension = colorModel.getSize();
 		if(pictureModel != null)
 			dimension = new Dimension(pictureModel.getOnImage().getWidth(), pictureModel.getOnImage().getHeight());
+		
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
 		
 		if(labelModel == null) 
 			return dimension;
+		
 		Graphics g = this.indicatorView().getGraphics();
 		g.setFont(labelModel.getFont());
+		
 		if(labelModel.getPosition() == CardinalPosition.NORTH || labelModel.getPosition() == CardinalPosition.SOUTH)
 			return new Dimension((int)Math.max(dimension.getWidth(), g.getFontMetrics().stringWidth(labelModel.getLabel())) + 1,
 				(int)dimension.getHeight() +  g.getFontMetrics().getHeight() + 1);
