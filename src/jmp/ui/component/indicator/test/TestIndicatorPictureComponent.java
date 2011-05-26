@@ -1,7 +1,6 @@
 package jmp.ui.component.indicator.test;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 
@@ -9,30 +8,17 @@ import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.CardinalPosition;
-import jmp.ui.component.Rotation;
-import jmp.ui.component.dial.DialView;
-import jmp.ui.component.dial.model.DialBorderRenderingModel;
-import jmp.ui.component.dial.model.DialLabelRenderingModel;
-import jmp.ui.component.dial.model.DialPictureRenderingModel;
-import jmp.ui.component.dial.model.DialTicksRenderingModel;
-import jmp.ui.component.dial.model.DialTrackRenderingModel;
-import jmp.ui.component.dial.renderer.DialDefaultRenderer;
-import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
-import jmp.ui.model.DefaultBoundedModel;
-import jmp.ui.model.DefaultModelComposit;
 import jmp.ui.model.ModelComposit;
-import jmp.ui.mvc.Model;
 
 
 public class TestIndicatorPictureComponent extends JFrame
