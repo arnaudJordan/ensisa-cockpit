@@ -349,10 +349,12 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		
 		g.setColor(borderModel.getBorderColor());
 		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
+		Shape oldClip = g.getClip();
 		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,
 				background.getWidth()-borderModel.getBorderSize(), background.getHeight()-borderModel.getBorderSize());
 		g.setClip(clip);
 		g.draw(border);
+		g.setClip(oldClip);
 	}
 
 	public void renderDial(Graphics2D g) {

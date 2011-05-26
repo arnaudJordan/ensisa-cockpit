@@ -97,7 +97,7 @@ public class TestDialPartialComponent extends JFrame
 		DialTicksRenderingModel ticksModel = new DialTicksRenderingModel();
 		ticksModel.setMinorTickSpacing(10);
 		ticksModel.setMajorTickSpacing(30);
-		//model.addModel("partial", partialModel);
+		model.addModel("partial", partialModel);
 		model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
