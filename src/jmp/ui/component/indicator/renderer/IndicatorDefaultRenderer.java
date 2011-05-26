@@ -2,24 +2,17 @@ package jmp.ui.component.indicator.renderer;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Ellipse2D.Double;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 import jmp.ui.component.CardinalPosition;
-import jmp.ui.component.dial.DialView;
-import jmp.ui.component.dial.model.DialBorderRenderingModel;
-import jmp.ui.component.dial.model.DialLabelRenderingModel;
-import jmp.ui.component.dial.model.DialPictureRenderingModel;
-import jmp.ui.component.dial.model.DialRenderingModel;
-import jmp.ui.component.dial.model.DialTicksRenderingModel;
-import jmp.ui.component.dial.model.DialTrackRenderingModel;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColorRenderingModel;
@@ -87,14 +80,29 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		if(colorModel != null && renderingModel!=null)
 		{
 			Color oldColor = g.getColor();
+			RadialGradientPaint p;
 			if(valueModel.is())
+			{
 				g.setColor(colorModel.getOnColor());
+				p = new RadialGradientPaint(new Point2D.Double(getPreferredSize().getWidth() / 2.0,
+		                getPreferredSize().getHeight() / 2.0), (float) (getPreferredSize().getWidth() / 2.0f),
+		                new float[] { 0.0f, 1.0f },
+		                new Color[] { new Color(255, 255, 255), colorModel.getOnColor()});
+			}
 			else
+			{
 				g.setColor(colorModel.getOffColor());
+				p = new RadialGradientPaint(new Point2D.Double(getPreferredSize().getWidth() / 2.0,
+		                getPreferredSize().getHeight() / 2.0), (float) (getPreferredSize().getWidth() / 2.0f),
+		                new float[] { 0.0f, 1.0f },
+		                new Color[] { new Color(255, 255, 255), colorModel.getOffColor()});
+			}
 			
 			IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
 			if(labelModel != null) 
 			{		
+				
+		        g.setPaint(p);
 				switch (labelModel.getPosition())
 				{
 				case NORTH : g.fillOval((int) (getPreferredSize().getWidth()/2 - colorModel.getSize().getWidth()/2), (int) (getPreferredSize().getHeight() - colorModel.getSize().getHeight()), (int) colorModel.getSize().getWidth(), (int)colorModel.getSize().getHeight()); break;
