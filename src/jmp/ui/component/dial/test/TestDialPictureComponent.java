@@ -3,6 +3,7 @@ package jmp.ui.component.dial.test;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
@@ -95,11 +96,14 @@ public class TestDialPictureComponent extends JFrame
 		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
 		this.dialView.renderingModel().setSense(Rotation.Clockwise);
 		this.dialView.renderingModel().setTicksStartAngle(150);
+		DialLabelRenderingModel dialLabelRenderingModel = new DialLabelRenderingModel();
+		dialLabelRenderingModel.setPosition(new Point(dialPictureRenderingModel.getBackground().getWidth()/2, 
+				dialPictureRenderingModel.getBackground().getHeight()/3));
 		model.addModel("picture", dialPictureRenderingModel);
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("ticks", new DialTicksRenderingModel());
-		model.addModel("label", new DialLabelRenderingModel());
+		model.addModel("label", dialLabelRenderingModel);
 		model.addModel("track", new DialTrackRenderingModel());
 
 		this.dialView.setModel(model);
