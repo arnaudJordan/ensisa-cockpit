@@ -15,7 +15,7 @@ import java.awt.image.BufferedImage;
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorColorRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorRenderingModel;
@@ -51,7 +51,7 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		BooleanModel valueModel = ((BooleanModel) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		IndicatorRenderingModel renderingModel = indicatorView().renderingModel();
 		
-		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
 		
 		if(pictureModel != null && renderingModel!=null)
 		{
@@ -139,7 +139,7 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 	public void renderBorder(Graphics2D g) {
 		IndicatorBorderRenderingModel borderModel = ((IndicatorBorderRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("border"));
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
-		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
 		if(borderModel==null) return;
 		
@@ -178,7 +178,7 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 
 	public Dimension getPreferredSize() {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
-		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
 		Dimension dimension = new Dimension(0,0);
 		
 		if(colorModel != null)

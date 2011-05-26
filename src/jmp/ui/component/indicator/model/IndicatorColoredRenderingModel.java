@@ -3,7 +3,7 @@ package jmp.ui.component.indicator.model;
 import java.awt.Color;
 import java.awt.Dimension;
 
-public class IndicatorColorRenderingModel extends IndicatorRenderingModel {
+public class IndicatorColoredRenderingModel extends IndicatorRenderingModel {
 	private final static Color DEFAULT_ON_COLOR = Color.GREEN;
 	private final static Color DEFAULT_OFF_COLOR = Color.RED;
 	private final static Dimension DEFAULT_SIZE = new Dimension(200, 200);
@@ -12,11 +12,11 @@ public class IndicatorColorRenderingModel extends IndicatorRenderingModel {
 	private Color offColor;
 	private Dimension size;
 	
-	public IndicatorColorRenderingModel() {
+	public IndicatorColoredRenderingModel() {
 		this(DEFAULT_ON_COLOR, DEFAULT_OFF_COLOR);
 	}
 	
-	public IndicatorColorRenderingModel(Color onColor, Color offColor) {
+	public IndicatorColoredRenderingModel(Color onColor, Color offColor) {
 		setOnColor(onColor);
 		setOffColor(offColor);
 		setSize(DEFAULT_SIZE);
