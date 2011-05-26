@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
@@ -179,8 +180,11 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 	public Dimension getPreferredSize() {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		IndicatorColoredRangeRenderingModel coloredRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
 		Dimension dimension = new Dimension(0,0);
 		
+		if(coloredRangeModel != null)
+			dimension = coloredRangeModel.getSize();
 		if(colorModel != null)
 			dimension = colorModel.getSize();
 		if(pictureModel != null)
