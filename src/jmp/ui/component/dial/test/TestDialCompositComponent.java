@@ -1,7 +1,6 @@
 package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
@@ -58,8 +57,6 @@ public class TestDialCompositComponent extends JFrame
 	{
 		this.slidersPane = new JPanel();
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
-		
-		
 		
 		this.progressSliderMain = new JSlider(JSlider.HORIZONTAL,0,100,0);
 		progressSliderMain.setMajorTickSpacing(50);

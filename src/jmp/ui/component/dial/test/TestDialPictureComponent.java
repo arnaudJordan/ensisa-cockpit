@@ -95,7 +95,7 @@ public class TestDialPictureComponent extends JFrame
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
 		this.dialView.renderingModel().setSense(Rotation.Clockwise);
-		this.dialView.renderingModel().setTicksStartAngle(150);
+		this.dialView.renderingModel().setTicksStartAngle(0);
 		DialLabelRenderingModel dialLabelRenderingModel = new DialLabelRenderingModel();
 		dialLabelRenderingModel.setPosition(new Point(0, -dialPictureRenderingModel.getBackground().getHeight()/6));
 		model.addModel("picture", dialPictureRenderingModel);
