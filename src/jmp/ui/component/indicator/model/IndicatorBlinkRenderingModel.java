@@ -4,18 +4,26 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 import jmp.ui.utilities.ImageList;
+import jmp.ui.utilities.ImageListRange;
+import jmp.ui.utilities.ImageListRanges;
 
 public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
-	private final static ImageList DEFAULT_IMAGELIST = new ImageList();
-	private ImageList imageList;
+	private final static ImageListRanges DEFAULT_IMAGELIST = new ImageListRanges();
+	private final static int DEFAULT_BLINK_TIME = 100;
+	private ImageListRanges imageListRanges;
+	private int blinkTime;
 	
 	public IndicatorBlinkRenderingModel()
 	{
 		setImageList(DEFAULT_IMAGELIST);
-		BufferedImage image1 = new BufferedImage((int) 500, 500, BufferedImage.TYPE_INT_RGB);
-		BufferedImage image2 = new BufferedImage((int) 500, 500, BufferedImage.TYPE_INT_RGB);
+		setBlinkTime(DEFAULT_BLINK_TIME);
+		
+		
+		BufferedImage image1 = new BufferedImage((int) 500, 500, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image2 = new BufferedImage((int) 500, 500, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = image1.createGraphics();
 		g.setColor(Color.GREEN);
 		g.fillOval(0, 0, image1.getWidth(), image1.getHeight());
@@ -24,21 +32,42 @@ public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 		g.setColor(Color.RED);
 		g.fillOval(0, 0, image1.getWidth(), image1.getHeight());
 		
-		imageList.add(0, image1);
-		imageList.add(1, image2);
+		ImageList imageList1 = new ImageList();
+		imageList1.add(image1);
+		imageList1.add(image2);
+		
+		ImageList imageList2 = new ImageList();
+		imageList2.add(image2);
+		
+		ImageList imageList0 = new ImageList();
+		imageList0.add(image1);
+		
+		imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
+		imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
+		imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
 	}
 
-	public void setImageList(ImageList imageList) {
-		this.imageList = imageList;
+	public void setImageList(ImageListRanges imageList) {
+		this.imageListRanges = imageList;
 	}
 
-	public ImageList getImageList() {
-		return imageList;
+	public ImageListRanges getImageList() {
+		return imageListRanges;
 	}
 	public Dimension getSize()
 	{
-		if(imageList.isEmpty())
+		if(imageListRanges.getRanges().isEmpty())
 			return  new Dimension(0,0);
-		return new Dimension(imageList.get(0).getWidth(),imageList.get(0).getWidth());
+		Iterator<ImageListRange> it = imageListRanges.getRanges().iterator();
+		BufferedImage tmp = it.next().imageList.get(0);
+		return new Dimension(tmp.getWidth(), tmp.getHeight());
+	}
+
+	public void setBlinkTime(int blinkTime) {
+		this.blinkTime = blinkTime;
+	}
+
+	public int getBlinkTime() {
+		return blinkTime;
 	}
 }

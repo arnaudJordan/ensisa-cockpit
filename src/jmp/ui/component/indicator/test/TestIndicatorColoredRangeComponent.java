@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -16,10 +15,8 @@ import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorColoredRangeRenderer;
-import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.ModelComposit;

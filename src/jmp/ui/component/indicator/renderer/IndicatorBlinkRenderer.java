@@ -1,10 +1,7 @@
 package jmp.ui.component.indicator.renderer;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import javax.swing.Timer;
 
@@ -14,23 +11,22 @@ import jmp.ui.component.indicator.model.IndicatorRenderingModel;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
+import jmp.ui.utilities.BlinkDrawer;
+import jmp.ui.utilities.ImageList;
 
-public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer implements ActionListener{
-
-	private Graphics2D g;
-	private IndicatorBlinkRenderingModel blinkModel;
-	private AffineTransform trans;
+public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer{
 	private Timer timer;
 
 	public IndicatorBlinkRenderer(View view) {
 		super(view);
+		this.timer = new Timer(1000, null);
 	}
 	
 	public void renderState(final Graphics2D g) {
 		BoundedModel valueModel = ((BoundedModel) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		IndicatorRenderingModel renderingModel = indicatorView().renderingModel();
 		
-		blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
+		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
 		
 		if(blinkModel != null && renderingModel!=null)
 		{
@@ -50,26 +46,26 @@ public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer implements 
 					case WEST : transX=(int) (getPreferredSize().getWidth()-dimension.getWidth()); break;
 				}
 			}
-			trans = new AffineTransform();
+			AffineTransform trans = new AffineTransform();
 			trans.translate(transX, transY);
-			this.g=g;
-			//g.drawImage(blinkModel.getImageList().get(0), trans, null);
-			timer = new Timer(500, this);
-			timer.start();
+			ImageList imageList = blinkModel.getImageList().getRange(valueModel.getValue()).imageList;
+			
+			timer.stop();
+			if(imageList.size()<=1)
+			{
+				if(imageList.size()==1)
+					g.drawImage(imageList.get(0), trans, null);
+			}
+			else
+			{
+				BlinkDrawer timerAction = new BlinkDrawer(indicatorView());
+				timerAction.setImageList(imageList);
+				timerAction.setTrans(trans);
+				timer = new Timer(blinkModel.getBlinkTime(), timerAction);
+				timer.start();
+			}
+	
+			
 		}
 	}
-
-	public void actionPerformed(ActionEvent e) {
-		g.drawImage(blinkModel.getImageList().get(0), trans, null);
-		System.out.print("dkfjghdfkjg");
-		g.setColor(Color.PINK);
-		g.drawOval(100, 100, 100, 100);
-		g.setBackground(Color.blue);
-		paintComponent(g);
-	}
-	
-	public void paintComponent(Graphics2D g) {
-		g.drawOval(100, 100, 100, 100);
-    }
-
 }
