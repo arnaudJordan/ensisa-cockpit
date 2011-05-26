@@ -1,12 +1,15 @@
 package jmp.ui.component.indicator.renderer;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Ellipse2D.Double;
 import java.awt.image.BufferedImage;
 
 import jmp.ui.component.CardinalPosition;
@@ -19,6 +22,7 @@ import jmp.ui.component.dial.model.DialTicksRenderingModel;
 import jmp.ui.component.dial.model.DialTrackRenderingModel;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorColorRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorRenderingModel;
@@ -39,6 +43,12 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		g.setRenderingHints(rh);
 		renderIndicator(g);
 	}
+	public void renderIndicator(Graphics2D g) {
+		renderState(g);
+		renderLabel(g);
+		renderBorder(g);
+	}
+	
 	protected IndicatorView indicatorView()
 	{
 		return (IndicatorView) this.getView();
@@ -47,6 +57,33 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 		BooleanModel valueModel = ((BooleanModel) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		IndicatorRenderingModel renderingModel = indicatorView().renderingModel();
+		
+		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		
+		if(colorModel != null)
+		{
+			Color oldColor = g.getColor();
+			if(valueModel.is())
+				g.setColor(colorModel.getOnColor());
+			else
+				g.setColor(colorModel.getOffColor());
+			
+			IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
+			if(labelModel != null) 
+			{		
+				switch (labelModel.getPosition())
+				{
+				case NORTH : g.fillOval((int) (getPreferredSize().getWidth()/2 - colorModel.getSize().getWidth()/2), (int) (getPreferredSize().getHeight() - colorModel.getSize().getHeight()), (int) colorModel.getSize().getWidth(), (int)colorModel.getSize().getHeight()); break;
+				case SOUTH : g.fillOval((int) (getPreferredSize().getWidth()/2 - colorModel.getSize().getWidth()/2), 0, (int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight()); break;
+				case EAST : g.fillOval(0, (int) (getPreferredSize().getHeight()/2 - colorModel.getSize().getHeight()/2), (int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight()); break;
+				case WEST : g.fillOval((int)(getPreferredSize().getWidth() - colorModel.getSize().getWidth()), (int) (getPreferredSize().getHeight()/2 - colorModel.getSize().getHeight()/2), (int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight()); break;
+				}
+			}
+			else 
+				g.fillOval(0,0,(int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight());
+			g.setColor(oldColor);
+		}
+		
 		if(pictureModel == null || renderingModel==null) return;
 		
 		BufferedImage stateImage;
@@ -85,30 +122,43 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		case EAST : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth() - strWidth, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
 		case WEST : g.drawString(labelModel.getLabel(), 0, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
 		}
-		
-		g.dispose();
 
 	}
 
 	public void renderBorder(Graphics2D g) {
 		IndicatorBorderRenderingModel borderModel = ((IndicatorBorderRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("border"));
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
-		if(borderModel==null || pictureModel==null) return;
+		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
+		if(borderModel==null) return;
 		
-		BufferedImage onImage = pictureModel.getOnImage();
-		if(borderModel==null || borderModel.getBorderSize()==0) return;
+		Dimension dimension = null;
+		if(colorModel != null)
+			dimension=colorModel.getSize();
+		
+		if(pictureModel!=null)
+			dimension= new Dimension(pictureModel.getOnImage().getWidth(),pictureModel.getOnImage().getHeight());
+
+		if(dimension==null || borderModel.getBorderSize()==0) return;
 		
 		g.setColor(borderModel.getBorderColor());
 		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
-		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,
-				onImage.getWidth()-borderModel.getBorderSize(), onImage.getHeight()-borderModel.getBorderSize());
+		int transX=0, transY=0;
+		if(labelModel != null) 
+		{		
+			switch (labelModel.getPosition())
+			{
+			case NORTH :transY=(int) (getPreferredSize().getHeight()-dimension.getHeight());
+			transX=(int) (getPreferredSize().getWidth()-dimension.getWidth())/2;
+			break;
+			case SOUTH : transX=(int) (getPreferredSize().getWidth()-dimension.getWidth())/2; break;
+			case EAST : ; break;
+			case WEST : transX=(int) (getPreferredSize().getWidth()-dimension.getWidth()); break;
+			}
+		}
+		Double border = new Ellipse2D.Double(borderModel.getBorderSize()/2 + transX, borderModel.getBorderSize()/2 + transY,
+				dimension.getWidth()-borderModel.getBorderSize(), dimension.getHeight()-borderModel.getBorderSize());
 		g.draw(border);
-	}
-
-	public void renderIndicator(Graphics2D g) {
-		renderState(g);
-		renderLabel(g);
-		renderBorder(g);
 	}
 
 	public void setSize(Dimension size) {
@@ -117,18 +167,24 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 
 	public Dimension getPreferredSize() {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
-		if(pictureModel == null) return new Dimension(40,40);;
+		IndicatorColorRenderingModel colorModel = ((IndicatorColorRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		Dimension dimension = new Dimension(0,0);
+		if(colorModel != null)
+			dimension = colorModel.getSize();
+		if(pictureModel != null)
+			dimension = new Dimension(pictureModel.getOnImage().getWidth(), pictureModel.getOnImage().getHeight());
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
+		
 		if(labelModel == null) 
-			return new Dimension(pictureModel.getOnImage().getWidth() + 1, pictureModel.getOnImage().getHeight() + 1);
-		Graphics2D g = pictureModel.getOnImage().createGraphics();
+			return dimension;
+		Graphics g = this.indicatorView().getGraphics();
 		g.setFont(labelModel.getFont());
 		if(labelModel.getPosition() == CardinalPosition.NORTH || labelModel.getPosition() == CardinalPosition.SOUTH)
-			return new Dimension(Math.max(pictureModel.getOnImage().getWidth(), g.getFontMetrics().stringWidth(labelModel.getLabel())) + 1,
-				pictureModel.getOnImage().getHeight() +  g.getFontMetrics().getHeight() + 1);
+			return new Dimension((int)Math.max(dimension.getWidth(), g.getFontMetrics().stringWidth(labelModel.getLabel())) + 1,
+				(int)dimension.getHeight() +  g.getFontMetrics().getHeight() + 1);
 		
-		return new Dimension(pictureModel.getOnImage().getWidth() + g.getFontMetrics().stringWidth(labelModel.getLabel()) + 1,
-				Math.max(pictureModel.getOnImage().getHeight(), g.getFontMetrics().getHeight() + 1));
+		return new Dimension((int)dimension.getWidth() + g.getFontMetrics().stringWidth(labelModel.getLabel()) + 1,
+				Math.max((int)dimension.getHeight(), g.getFontMetrics().getHeight() + 1));
 	}
 
 	public Dimension getMinimumSize() {
