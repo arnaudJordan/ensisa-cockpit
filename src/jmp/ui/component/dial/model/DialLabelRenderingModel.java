@@ -9,7 +9,7 @@ public class DialLabelRenderingModel extends DialRenderingModel {
 	final static String DEFAULT_LABEL = "DIAL";
 	final static Color DEFAULT_COLOR = Color.BLACK;
 	final static Font DEFAULT_FONT = new Font("Monospaced", Font.PLAIN, 18);
-	final static Point DEFAULT_POSITION = new Point(174, 100);
+	final static Point DEFAULT_POSITION = new Point(0, 0);
 	
 	private String label;
 	private Color color;

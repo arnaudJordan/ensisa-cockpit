@@ -1,6 +1,7 @@
 package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
@@ -117,15 +118,22 @@ public class TestDialCompositComponent extends JFrame
 		
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		this.dialView.setRenderer(new DialCompositRenderer(this.dialView));
-		model.addModel("picture", new DialPictureRenderingModel());
+		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
+		DialLabelRenderingModel dialLabelRenderingModel = new DialLabelRenderingModel();
+		dialLabelRenderingModel.setPosition(new Point(0, -dialPictureRenderingModel.getBackground().getHeight()/6));
+		model.addModel("picture", dialPictureRenderingModel);
 		model.addModel("border", new DialBorderRenderingModel());
-		model.addModel("label", new DialLabelRenderingModel());
+		model.addModel("label", dialLabelRenderingModel);
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		
 		DefaultModelComposit compositModel = new DefaultModelComposit();
+		DialPictureRenderingModel dialCompositPictureRenderingModel = new DialPictureRenderingModel("pictures/dial/default_intern_background.png", "pictures/dial/default_intern_needle.png");
+		DialLabelRenderingModel dialCompositLabelRenderingModel = new DialLabelRenderingModel("I.D");
+		dialCompositLabelRenderingModel.setPosition(new Point(0, -dialCompositPictureRenderingModel.getBackground().getHeight()/6));
 		compositModel.addModel("rendering", new DialCompositRenderingModel(new Point(75,0)));
-		compositModel.addModel("picture", new DialPictureRenderingModel("pictures/dial/default_intern_background.png", "pictures/dial/default_intern_needle.png"));
+		compositModel.addModel("picture", dialCompositPictureRenderingModel);
 		compositModel.addModel("border", new DialBorderRenderingModel());
+		compositModel.addModel("label", dialCompositLabelRenderingModel);
 		compositModel.addModel("value", new DefaultBoundedModel(0,100,0));
 		
 		model.addModel("composit", compositModel);

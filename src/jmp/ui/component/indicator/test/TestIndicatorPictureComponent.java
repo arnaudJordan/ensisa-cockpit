@@ -25,6 +25,7 @@ import jmp.ui.component.dial.renderer.DialDefaultRenderer;
 import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorColorRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
@@ -90,6 +91,7 @@ public class TestIndicatorPictureComponent extends JFrame
 		this.indicatorView = new IndicatorView();
 		this.indicatorView.setRenderer(new IndicatorDefaultRenderer(this.indicatorView));
 		ModelComposit model = (ModelComposit) indicatorView.getModel();
+		model.addModel("color", new IndicatorColorRenderingModel());
 		model.addModel("picture", new IndicatorPictureRenderingModel());
 		model.addModel("border", new IndicatorBorderRenderingModel());
 		model.addModel("label", new IndicatorLabelRenderingModel("LED", CardinalPosition.NORTH));

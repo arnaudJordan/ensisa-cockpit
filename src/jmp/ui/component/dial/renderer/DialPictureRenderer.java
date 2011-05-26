@@ -239,8 +239,8 @@ public class DialPictureRenderer extends DialDefaultRenderer {
 					(int)((background.getHeight()/2- majorTickSize) * Math.sin(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle()))));
 				lineStart = new Point((int)((background.getHeight()/2) * Math.cos(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))),
 						(int)((background.getHeight()/2) * Math.sin(Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))));
-				textCorner1 = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle())))-5,
-						(int)((background.getHeight()/2- majorTickSize) * Math.sin(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle())))-5);
+				textCorner1 = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle()))),
+						(int)((background.getHeight()/2- majorTickSize) * Math.sin(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle()))));
 				
 			}
 			else
