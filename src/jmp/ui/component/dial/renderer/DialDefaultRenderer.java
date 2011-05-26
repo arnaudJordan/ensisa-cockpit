@@ -13,8 +13,6 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
-
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.model.DialBorderRenderingModel;
@@ -27,7 +25,6 @@ import jmp.ui.component.dial.model.DialTrackRenderingModel;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.DefaultRenderer;
-import jmp.ui.mvc.Model;
 import jmp.ui.mvc.View;
 import jmp.ui.utilities.JMSwingUtilities;
 
@@ -130,7 +127,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		g2.setColor(labelModel.getColor());
 		g2.setFont(labelModel.getFont());
 		final int strWidth = g2.getFontMetrics().stringWidth(labelModel.getLabel());
-		g2.drawString(labelModel.getLabel(), background.getWidth()/2 - strWidth/2, background.getHeight()/3);
+		g2.drawString(labelModel.getLabel(), (int) labelModel.getPosition().getX() - strWidth/2, (int) labelModel.getPosition().getY());
 		g2.dispose();
 	}
 
