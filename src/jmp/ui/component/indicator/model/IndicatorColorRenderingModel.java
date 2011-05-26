@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 public class IndicatorColorRenderingModel extends IndicatorRenderingModel {
-	private final static Color DEFAULT_ON_COLOR = Color.RED;
-	private final static Color DEFAULT_OFF_COLOR = Color.YELLOW;
-	private final static Dimension DEFAULT_SIZE = new Dimension(400, 400);
+	private final static Color DEFAULT_ON_COLOR = Color.GREEN;
+	private final static Color DEFAULT_OFF_COLOR = Color.RED;
+	private final static Dimension DEFAULT_SIZE = new Dimension(200, 200);
 	
 	private Color onColor;
 	private Color offColor;
