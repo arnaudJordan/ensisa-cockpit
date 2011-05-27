@@ -3,7 +3,7 @@ package jmp.ui.component.bar.model;
 import java.awt.Color;
 
 public class BarBorderRenderingModel extends BarRenderingModel {
-	private static final Color BORDER_COLOR = Color.MAGENTA;
+	private static final Color BORDER_COLOR = Color.BLACK;
 	private static final int BORDER_SIZE = 2;
 	
 	private Color borderColor;
