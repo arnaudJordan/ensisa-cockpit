@@ -5,10 +5,8 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
-
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
-import jmp.ui.mvc.View;
 
 public class BlinkDrawer implements ActionListener {
 	private IndicatorView view;
@@ -31,6 +29,7 @@ public class BlinkDrawer implements ActionListener {
 		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
 		g.setRenderingHints(rh);
 		
+		g.clearRect(0, 0, imageList.get(currentIndex).getWidth(), imageList.get(currentIndex).getHeight());
 		g.drawImage(imageList.get(currentIndex), trans, null);
 		currentIndex=(++currentIndex)%imageList.size();
 		((IndicatorDefaultRenderer) view.renderer()).renderBorder(g);

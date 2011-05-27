@@ -3,6 +3,7 @@ package jmp.ui.component.dial.test;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.event.WindowEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -105,12 +106,15 @@ public class TestDialColoredComponent extends JFrame
 		DialPartialRenderingModel partialModel = new DialPartialRenderingModel();
 		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
 		this.dialView.renderingModel().setTicksStartAngle(partialModel.getStartAngle());
+		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
+		DialLabelRenderingModel dialLabelRenderingModel = new DialLabelRenderingModel();
+		dialLabelRenderingModel.setPosition(new Point(dialPictureRenderingModel.getBackground().getHeight()/6, dialPictureRenderingModel.getBackground().getHeight()/6));
 		model.addModel("partial", partialModel);
 		model.addModel("colored", colorModel);
-		model.addModel("picture", new DialPictureRenderingModel());
+		model.addModel("picture", dialPictureRenderingModel);
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
-		model.addModel("label", new DialLabelRenderingModel());
+		model.addModel("label", dialLabelRenderingModel);
 		model.addModel("ticks", new DialTicksRenderingModel());
 		
 		this.dialView.setModel(model);

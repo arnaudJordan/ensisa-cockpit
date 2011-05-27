@@ -13,6 +13,8 @@ import jmp.ui.utilities.ImageListRanges;
 public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 	private final static ImageListRanges DEFAULT_IMAGELIST = new ImageListRanges();
 	private final static int DEFAULT_BLINK_TIME = 100;
+	private final static Dimension DEFAULT_SIZE = new Dimension(100, 100);
+	
 	private ImageListRanges imageListRanges;
 	private int blinkTime;
 	
@@ -22,8 +24,9 @@ public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 		setBlinkTime(DEFAULT_BLINK_TIME);
 		
 		
-		BufferedImage image1 = new BufferedImage((int) 500, 500, BufferedImage.TYPE_INT_ARGB);
-		BufferedImage image2 = new BufferedImage((int) 500, 500, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image1 = new BufferedImage(DEFAULT_SIZE.width, DEFAULT_SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage image2 = new BufferedImage(DEFAULT_SIZE.width, DEFAULT_SIZE.height, BufferedImage.TYPE_INT_ARGB);
+		
 		Graphics2D g = image1.createGraphics();
 		g.setColor(Color.GREEN);
 		g.fillOval(0, 0, image1.getWidth(), image1.getHeight());
@@ -45,6 +48,12 @@ public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 		imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
 		imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
 		imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
+	}
+	
+	public IndicatorBlinkRenderingModel(ImageListRanges imageList)
+	{
+		setImageList(imageList);
+		setBlinkTime(DEFAULT_BLINK_TIME);
 	}
 
 	public void setImageList(ImageListRanges imageList) {

@@ -13,7 +13,6 @@ import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
-import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
@@ -79,7 +78,7 @@ public class TestIndicatorPictureComponent extends JFrame
 		ModelComposit model = (ModelComposit) indicatorView.getModel();
 		model.addModel("color", new IndicatorColoredRenderingModel());
 		model.addModel("picture", new IndicatorPictureRenderingModel());
-		model.addModel("border", new IndicatorBorderRenderingModel());
+		//model.addModel("border", new IndicatorBorderRenderingModel());
 		model.addModel("label", new IndicatorLabelRenderingModel("LED", CardinalPosition.NORTH));
 
 		this.indicatorView.setModel(model);

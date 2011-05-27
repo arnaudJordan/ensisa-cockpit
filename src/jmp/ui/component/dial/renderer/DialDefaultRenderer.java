@@ -292,30 +292,6 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		if(borderModel != null)
 			borderSize = borderModel.getBorderSize();
 		
-		if(coloredModel != null)
-		{
-			BoundedModel valueModel = this.dialView().valueModel();
-			double AngleRatio = 0;
-			if(partialModel != null)
-				AngleRatio = (double) (partialModel.getEndAngle() - partialModel.getStartAngle()) / (double) (valueModel.getMaximum() - valueModel.getMinimum());
-			else 
-				AngleRatio = 360.0 / (valueModel.getMaximum() - valueModel.getMinimum());
-			Graphics2D g2 = background.createGraphics();
-			g2.setRenderingHints(g.getRenderingHints());
-			g2.setStroke(coloredModel.getStroke());
-
-			for(ColoredRange range : coloredModel.getColorRanges().getRanges())
-			{
-				g2.setColor(range.color);
-				if(renderingModel.getSense() == Rotation.Clockwise)
-					g2.drawArc(coloredModel.getMargin()/2, coloredModel.getMargin()/2, background.getWidth() - coloredModel.getMargin(), background.getHeight() - coloredModel.getMargin(),
-						-((int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle()),-((int) ((range.range.max - range.range.min)*AngleRatio)));
-				else
-					g2.drawArc(coloredModel.getMargin()/2, coloredModel.getMargin()/2, background.getWidth() - coloredModel.getMargin(), background.getHeight() - coloredModel.getMargin(),
-						(int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle(),(int) ((range.range.max - range.range.min)*AngleRatio));
-			}
-			g2.dispose();
-		}
 		if(partialModel != null)
 		{
 			clip = new Arc2D.Double(0, 0, background.getWidth() + borderSize, background.getHeight() + borderSize, partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
@@ -356,6 +332,33 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		DialLabelRenderingModel labelModel = ((DialLabelRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("label"));
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
 		DialColoredRenderingModel coloredModel = ((DialColoredRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("colored"));
+		DialRenderingModel renderingModel = dialView().renderingModel();
+		
+		if(coloredModel != null)
+		{
+			BoundedModel valueModel = this.dialView().valueModel();
+			double AngleRatio = 0;
+			if(partialModel != null)
+				AngleRatio = (double) (partialModel.getEndAngle() - partialModel.getStartAngle()) / (double) (valueModel.getMaximum() - valueModel.getMinimum());
+			else 
+				AngleRatio = 360.0 / (valueModel.getMaximum() - valueModel.getMinimum());
+			Graphics2D g2 = background.createGraphics();
+			g2.setRenderingHints(g.getRenderingHints());
+			g2.setStroke(coloredModel.getStroke());
+
+			for(ColoredRange range : coloredModel.getColorRanges().getRanges())
+			{
+				g2.setColor(range.color);
+				if(renderingModel.getSense() == Rotation.Clockwise)
+					g2.drawArc(coloredModel.getMargin()/2, coloredModel.getMargin()/2, background.getWidth() - coloredModel.getMargin(), background.getHeight() - coloredModel.getMargin(),
+						-((int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle()),-((int) ((range.range.max - range.range.min)*AngleRatio)));
+				else
+					g2.drawArc(coloredModel.getMargin()/2, coloredModel.getMargin()/2, background.getWidth() - coloredModel.getMargin(), background.getHeight() - coloredModel.getMargin(),
+						(int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle(),(int) ((range.range.max - range.range.min)*AngleRatio));
+			}
+			g2.dispose();
+		}
+		
 		this.renderTrack(g);
 		this.renderTicks(g);
 		this.renderLabels(g);

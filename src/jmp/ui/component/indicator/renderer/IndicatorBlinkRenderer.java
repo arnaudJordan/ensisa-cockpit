@@ -51,21 +51,19 @@ public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer{
 			ImageList imageList = blinkModel.getImageList().getRange(valueModel.getValue()).imageList;
 			
 			timer.stop();
-			if(imageList.size()<=1)
-			{
-				if(imageList.size()==1)
-					g.drawImage(imageList.get(0), trans, null);
-			}
-			else
-			{
-				BlinkDrawer timerAction = new BlinkDrawer(indicatorView());
-				timerAction.setImageList(imageList);
-				timerAction.setTrans(trans);
-				timer = new Timer(blinkModel.getBlinkTime(), timerAction);
-				timer.start();
-			}
-	
 			
+			if(imageList.size()>0)
+			{
+				g.drawImage(imageList.get(0), trans, null);
+				if(imageList.size()>1)
+				{
+					BlinkDrawer timerAction = new BlinkDrawer(indicatorView());
+					timerAction.setImageList(imageList);
+					timerAction.setTrans(trans);
+					timer = new Timer(blinkModel.getBlinkTime(), timerAction);
+					timer.start();
+				}
+			}
 		}
 	}
 }
