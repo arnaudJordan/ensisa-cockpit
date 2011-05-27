@@ -11,9 +11,12 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jmp.ui.component.CardinalPosition;
+import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
 import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
+import jmp.ui.component.bar.model.BarLabelRenderingModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.Model;
 
@@ -24,7 +27,7 @@ public class TestBarColoredComponent extends JFrame
 	private JSlider progressSlider;
 
 	private JPanel componentsPane;
-	private BarView progressView;
+	private BarView barView;
 
 	public TestBarColoredComponent()
 	{
@@ -69,7 +72,7 @@ public class TestBarColoredComponent extends JFrame
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					progressView.valueModel().setValue(progressSlider.getValue());
+					barView.valueModel().setValue(progressSlider.getValue());
 				}
 			}
 		});
@@ -83,11 +86,13 @@ public class TestBarColoredComponent extends JFrame
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
-		this.progressView = new BarView();
-		ModelComposit model = (ModelComposit) this.progressView.getModel();
+		this.barView = new BarView();
+		this.barView.renderingModel().setOrientation(Orientation.Vertical);
+		ModelComposit model = (ModelComposit) this.barView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
 		model.addModel("border", new BarBorderRenderingModel());
-		this.componentsPane.add(this.progressView);
+		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.SOUTH));
+		this.componentsPane.add(this.barView);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}
