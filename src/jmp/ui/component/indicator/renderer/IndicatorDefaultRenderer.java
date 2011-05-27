@@ -142,10 +142,17 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		IndicatorBorderRenderingModel borderModel = ((IndicatorBorderRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("border"));
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		IndicatorColoredRangeRenderingModel coloredRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
+		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
+		
 		if(borderModel==null) return;
 		
 		Dimension dimension = null;
+		if(coloredRangeModel != null)
+			dimension = coloredRangeModel.getSize();
+		if(blinkModel != null)
+			dimension=blinkModel.getSize();
 		if(colorModel != null)
 			dimension=colorModel.getSize();
 		
