@@ -3,7 +3,11 @@ package jmp.ui.component.indicator.test;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,12 +18,14 @@ import javax.swing.event.ChangeListener;
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorBlinkRenderer;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.ModelComposit;
+import jmp.ui.utilities.ImageList;
+import jmp.ui.utilities.ImageListRange;
+import jmp.ui.utilities.ImageListRanges;
 
 
 public class TestIndicatorBlinkComponent extends JFrame
@@ -89,9 +95,36 @@ public class TestIndicatorBlinkComponent extends JFrame
 		this.indicatorView = new IndicatorView();
 		this.indicatorView.setRenderer(new IndicatorBlinkRenderer(this.indicatorView));
 		ModelComposit model = (ModelComposit) indicatorView.getModel();
-		model.addModel("blink", new IndicatorBlinkRenderingModel());
+		
+		BufferedImage image1;
+		BufferedImage image2;
+		try {
+			image1 = ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + "pictures/indicator/default_on.png"));
+			image2 = ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + "pictures/indicator/default_off.png"));
+			ImageList imageList1 = new ImageList();
+			imageList1.add(image1);
+			imageList1.add(image2);
+			
+			ImageList imageList2 = new ImageList();
+			imageList2.add(image2);
+			
+			ImageList imageList0 = new ImageList();
+			imageList0.add(image1);
+			
+			ImageListRanges imageListRanges = new ImageListRanges();
+			imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
+			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
+			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
+			
+			
+			model.addModel("blink", new IndicatorBlinkRenderingModel(imageListRanges));
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		}
+		
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
-		model.addModel("border", new IndicatorBorderRenderingModel());
+		//model.addModel("border", new IndicatorBorderRenderingModel());
 		model.addModel("label", new IndicatorLabelRenderingModel("LED", CardinalPosition.EAST));
 
 		this.indicatorView.setModel(model);
