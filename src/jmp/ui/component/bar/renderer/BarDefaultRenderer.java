@@ -1,11 +1,15 @@
 package jmp.ui.component.bar.renderer;
 
+import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Ellipse2D.Double;
 
 import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
+import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarRenderingModel;
 import jmp.ui.model.BoundedModel;
@@ -38,13 +42,13 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		int progressRectHeight = 0;
 		if (renderingModel.getOrientation() == Orientation.Horizontal)
 		{
-			progressRectWidth = (int) getMaximumSize().width;
+			progressRectWidth = (int) this.getView().getSize().width;
 			progressRectHeight = (int) renderingModel.getSize().getHeight();
 		}
 		else 
 		{
 			progressRectWidth = (int) renderingModel.getSize().getHeight();
-			progressRectHeight = getMaximumSize().width;
+			progressRectHeight = this.getView().getSize().width;
 		}
 		g.fillRect(0, 0, progressRectWidth, progressRectHeight);
 		
@@ -67,11 +71,39 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 	}
 
 	public void renderBorder(Graphics2D g) {
+		BarRenderingModel renderingModel = this.barView().renderingModel();	
+		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
+		BarColoredRenderingModel coloredModel = ((BarColoredRenderingModel) ((ModelComposit) (barView().getModel())).getModel("colored"));
 		
+		if(borderModel == null) return;
+		
+		Dimension dimension = null;
+		if(coloredModel != null)
+			dimension = coloredModel.getSize();
+		
+		if(dimension==null || borderModel.getBorderSize()==0) return;
+		
+		g.setColor(borderModel.getBorderColor());
+		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
+		
+		int progressRectWidth = 0;
+		int progressRectHeight = 0;
+		if (renderingModel.getOrientation() == Orientation.Horizontal)
+		{
+			progressRectWidth = (int) this.getView().getSize().width;
+			progressRectHeight = (int) renderingModel.getSize().getHeight();
+		}
+		else 
+		{
+			progressRectWidth = (int) renderingModel.getSize().getHeight();
+			progressRectHeight = this.getView().getSize().width;
+		}
+		g.drawRect(0, 0, progressRectWidth-1, progressRectHeight-1);
 	}
 
 	public void renderBar(Graphics2D g) {
 		renderProgress(g);
+		renderBorder(g);
 	}
 
 	protected BarView barView()

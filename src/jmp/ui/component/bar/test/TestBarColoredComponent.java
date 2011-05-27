@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.bar.BarView;
+import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.Model;
@@ -54,8 +55,8 @@ public class TestBarColoredComponent extends JFrame
 		
 
 		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
-		this.progressSlider.setMajorTickSpacing(90);
-		this.progressSlider.setMinorTickSpacing(30);
+		this.progressSlider.setMajorTickSpacing(50);
+		this.progressSlider.setMinorTickSpacing(10);
 		this.progressSlider.setPaintTicks(true);
 		this.progressSlider.setPaintLabels(true);
 		this.progressSlider.setPaintTrack(true);
@@ -85,6 +86,7 @@ public class TestBarColoredComponent extends JFrame
 		this.progressView = new BarView();
 		ModelComposit model = (ModelComposit) this.progressView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
+		model.addModel("border", new BarBorderRenderingModel());
 		this.componentsPane.add(this.progressView);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
