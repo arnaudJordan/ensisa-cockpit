@@ -58,7 +58,7 @@ public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer{
 			}
 			else
 			{
-				BlinkDrawer timerAction = new BlinkDrawer(getView());
+				BlinkDrawer timerAction = new BlinkDrawer(indicatorView());
 				timerAction.setImageList(imageList);
 				timerAction.setTrans(trans);
 				timer = new Timer(blinkModel.getBlinkTime(), timerAction);

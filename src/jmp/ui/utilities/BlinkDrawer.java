@@ -6,16 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 
+import jmp.ui.component.indicator.IndicatorView;
+import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
 import jmp.ui.mvc.View;
 
 public class BlinkDrawer implements ActionListener {
-	private View view;
+	private IndicatorView view;
 	private ImageList imageList;
 	private int currentIndex;
 	private AffineTransform trans;
 	
 	
-	public BlinkDrawer(View view) {
+	public BlinkDrawer(IndicatorView view) {
 		super();
 		this.view = view;
 		this.trans = new AffineTransform();
@@ -31,6 +33,7 @@ public class BlinkDrawer implements ActionListener {
 		
 		g.drawImage(imageList.get(currentIndex), trans, null);
 		currentIndex=(++currentIndex)%imageList.size();
+		((IndicatorDefaultRenderer) view.renderer()).renderBorder(g);
 	}
 
 
