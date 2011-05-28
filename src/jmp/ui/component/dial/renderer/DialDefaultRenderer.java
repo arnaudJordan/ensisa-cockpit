@@ -148,8 +148,8 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		Graphics2D g2 = background.createGraphics();
 		g2.setRenderingHints(g.getRenderingHints());
 		
-		
 		g2.setColor(ticksModel.getLabelColor());
+		g2.setFont(ticksModel.getLabelFont());
 		final int majorTickSpacing = (int) ticksModel.getMajorTickSpacing();
 		final int majorTickSize = (int) ticksModel.getMajorTickSize();
 		double nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/(double)majorTickSpacing;
@@ -176,7 +176,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 						(int)((background.getHeight()/2- majorTickSize) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))));
 			
 			AffineTransform trans2 = new AffineTransform();
-			Rectangle2D cadre = g.getFontMetrics().getStringBounds(vString, g).getBounds2D();
+			Rectangle2D cadre = g2.getFontMetrics().getStringBounds(vString, g2).getBounds2D();
 			trans2.translate(textCorner.getX()-cadre.getCenterX(), textCorner.getY()-cadre.getCenterY());
 			g2.transform(trans2);
 			
