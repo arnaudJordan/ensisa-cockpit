@@ -2,12 +2,14 @@ package jmp.ui.component.dial.model;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Stroke;
 
 public class DialTicksRenderingModel extends DialRenderingModel {
 	private static final Color MINOR_GRADUATION_COLOR = Color.PINK;
 	private static final Color MAJOR_GRADUATION_COLOR = Color.RED;
 	private static final Color LABEL_COLOR = Color.BLACK;
+	final static Font LABEL_FONT = new Font("Monospaced", Font.PLAIN, 18);
 	
 	private static final double MAJOR_GRADUTION_RATIO = 0.25;
 	private static final int LABEL_SPACE = 10;
@@ -26,6 +28,7 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	private Color MinorGraduationColor;
 	private Color MajorGraduationColor;
 	private Color LabelColor;
+	private Font LabelFont;
 	private int LabelSpace;
 	private float MinorGraduationWidth;
 	private float MajorGraduationWidth;
@@ -43,6 +46,7 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 		this.setMinorGraduationColor(MINOR_GRADUATION_COLOR);
 		this.setMajorGraduationColor(MAJOR_GRADUATION_COLOR);
 		this.setLabelColor(LABEL_COLOR);
+		this.setLabelFont(LABEL_FONT);
 		this.setLabelSpace(LABEL_SPACE);
 		this.setMinorGraduationWidth(MINOR_GRADUTION_WIDTH);
 		this.setMajorGraduationWidth(MAJOR_GRADUTION_WIDTH);
@@ -76,6 +80,14 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 
 	public void setLabelColor(Color labelColor) {
 		LabelColor = labelColor;
+	}
+
+	public void setLabelFont(Font labelFont) {
+		LabelFont = labelFont;
+	}
+
+	public Font getLabelFont() {
+		return LabelFont;
 	}
 
 	public int getLabelSpace() {
