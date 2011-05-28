@@ -18,7 +18,6 @@ import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarLabelRenderingModel;
 import jmp.ui.model.ModelComposit;
-import jmp.ui.mvc.Model;
 
 
 public class TestBarColoredComponent extends JFrame
@@ -87,11 +86,11 @@ public class TestBarColoredComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.barView = new BarView();
-		this.barView.renderingModel().setOrientation(Orientation.Vertical);
+		//this.barView.renderingModel().setOrientation(Orientation.Vertical);
 		ModelComposit model = (ModelComposit) this.barView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
 		model.addModel("border", new BarBorderRenderingModel());
-		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.SOUTH));
+		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
 		this.componentsPane.add(this.barView);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
