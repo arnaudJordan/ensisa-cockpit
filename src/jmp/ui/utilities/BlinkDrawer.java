@@ -29,7 +29,7 @@ public class BlinkDrawer implements ActionListener {
 		rh.put(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); 
 		g.setRenderingHints(rh);
 		
-		g.clearRect(0, 0, imageList.get(currentIndex).getWidth(), imageList.get(currentIndex).getHeight());
+		g.clearRect((int)trans.getTranslateX(), (int)trans.getTranslateY(), imageList.get(currentIndex).getWidth(), imageList.get(currentIndex).getHeight());
 		g.drawImage(imageList.get(currentIndex), trans, null);
 		currentIndex=(++currentIndex)%imageList.size();
 		((IndicatorDefaultRenderer) view.renderer()).renderBorder(g);
