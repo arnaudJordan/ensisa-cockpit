@@ -19,15 +19,21 @@ public class DefaultBoundedModels extends DefaultModel implements BoundedModels{
 	}
 
 	public void setValue(int n, int v) {
-		 models.get(n).setValue(v);		
+		if(models.get(n).getValue() == v) return;
+		models.get(n).setValue(v);
+		this.modelChange();
 	}
 
 	public void update(int n, int min, int max, int v) {
-		models.get(n).update(min, max, v);		
+		if(models.get(n).getValue() == v && models.get(n).getMaximum()==max && models.get(n).getMinimum()==min) return;
+		models.get(n).update(min, max, v);
+		this.modelChange();
 	}
 
 	public void setModels(List<BoundedModel> models) {
+		if (this.models == models) return;
 		this.models = models;
+		this.modelChange();
 	}
 
 	public List<BoundedModel> getModels() {

@@ -1,14 +1,14 @@
 package jmp.ui.component.indicator.renderer;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RadialGradientPaint;
-import java.awt.RenderingHints;
-import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
+import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+import javax.swing.Timer;
 
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
@@ -19,22 +19,26 @@ import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorRenderingModel;
-import jmp.ui.model.BooleanModel;
-import jmp.ui.model.BooleanModels;
+import jmp.ui.model.BoundedModel;
+import jmp.ui.model.BoundedModels;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.View;
+import jmp.ui.utilities.BlinkDrawer;
+import jmp.ui.utilities.ImageList;
 
-public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
-
-	public IndicatorMultiRenderer(View view) {
+public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
+	private List<Timer> timer;
+	
+	public IndicatorBlinkMultiRenderer(View view) {
 		super(view);
+		this.timer = new ArrayList<Timer>();
 	}
+	
 	public void renderState(Graphics2D g) {
-		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
-		BooleanModels valueModel = ((BooleanModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
+		BoundedModels valueModel = ((BoundedModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		IndicatorRenderingModel renderingModel = indicatorView().renderingModel();
 		
-		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
 		
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
 		
@@ -45,59 +49,43 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 				multY=1;
 			else
 				multX=1;
-		
-		if(pictureModel != null && renderingModel!=null)
+
+		if(blinkModel != null && renderingModel!=null)
 		{
-			Iterator<BooleanModel> it = valueModel.getIterator();
-			int transX = 0;
-			int transY = 0;
+			Dimension dimension = blinkModel.getSize();
+			int transX=0, transY=0;
+			Iterator<BoundedModel> it = valueModel.getIterator();
+			int i=0;
 			while(it.hasNext())
 			{
-				BooleanModel value = it.next();
-				BufferedImage stateImage;
-				if(value.is())
-					stateImage = pictureModel.getOnImage();
+				BoundedModel value = it.next();
+				AffineTransform trans = new AffineTransform();
+				trans.translate(transX, transY);
+
+				ImageList imageList = blinkModel.getImageList().getRange(value.getValue()).imageList;
+				
+				if(timer.size()>i)
+					timer.get(i).stop();
 				else
-					stateImage = pictureModel.getOffImage();
-				g.drawImage(stateImage,transX,transY,null);
-				transX+=stateImage.getWidth() * multX;
-				transY+=stateImage.getHeight() * multY;
-			}
-			return;
-		}
-		
-		if(colorModel != null && renderingModel!=null)
-		{
-			Color oldColor = g.getColor();
-			Iterator<BooleanModel> it = valueModel.getIterator();
-			int transX = 0;
-			int transY = 0;
-			while(it.hasNext())
-			{
-				BooleanModel value = it.next();
-				RadialGradientPaint p;
-				if(value.is())
+					timer.add(i, new Timer(0, null));
+				
+				if(imageList.size()>0)
 				{
-					g.setColor(colorModel.getOnColor());
-					p = new RadialGradientPaint(new Point2D.Double(getPreferredSize().getWidth() / 2.0,
-			                getPreferredSize().getHeight() / 2.0), (float) (getPreferredSize().getWidth() / 2.0f),
-			                new float[] { 0.0f, 1.0f },
-			                new Color[] { new Color(255, 255, 255), colorModel.getOnColor()});
+					g.drawImage(imageList.get(0), trans, null);
+					if(imageList.size()>1)
+					{
+						BlinkDrawer timerAction = new BlinkDrawer(indicatorView());
+						timerAction.setImageList(imageList);
+						timerAction.setTrans(trans);
+						timer.set(i, new Timer(blinkModel.getBlinkTime(), timerAction));
+						timer.get(i).start();
+					}
 				}
-				else
-				{
-					g.setColor(colorModel.getOffColor());
-					p = new RadialGradientPaint(new Point2D.Double(getPreferredSize().getWidth() / 2.0,
-			                getPreferredSize().getHeight() / 2.0), (float) (getPreferredSize().getWidth() / 2.0f),
-			                new float[] { 0.0f, 1.0f },
-			                new Color[] { new Color(255, 255, 255), colorModel.getOffColor()});
-				}
-				g.setPaint(p);
-				g.fillOval(transX,transY,(int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight());
-				transX+=colorModel.getSize().getWidth() * multX;
-				transY+=colorModel.getSize().getHeight() * multY;
+				transX+=dimension.getWidth() * multX;
+				transY+=dimension.getHeight() * multY;
+				i++;
 			}
-			g.setColor(oldColor);
+			
 		}
 	}
 	public Dimension getPreferredSize() {
@@ -106,7 +94,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 		IndicatorColoredRangeRenderingModel coloredRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
 		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
-		BooleanModels valueModel = ((BooleanModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
+		BoundedModels valueModel = ((BoundedModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		
 		int multX=1;
 		int multY=1;

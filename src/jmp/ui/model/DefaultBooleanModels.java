@@ -37,7 +37,6 @@ public class DefaultBooleanModels extends DefaultModel implements BooleanModels 
 	}
 
 	public void setModels(List<BooleanModel> models) {
-		this.models = models;
 		if (this.models == models) return;
 		this.models = models;
 		this.modelChange();
