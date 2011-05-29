@@ -5,13 +5,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
+import jmp.ui.component.Rotation;
 import jmp.ui.component.bar.BarView;
 import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarLabelRenderingModel;
 import jmp.ui.component.bar.model.BarRenderingModel;
+import jmp.ui.component.bar.model.BarTicksRenderingModel;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.ModelComposit;
 import jmp.ui.mvc.DefaultRenderer;
@@ -63,8 +67,8 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			switch (labelModel.getPosition())
 			{
 				case NORTH : transY = g.getFontMetrics().getHeight() + 1; break;
-				case SOUTH : if (renderingModel.getOrientation() == Orientation.Vertical) dimWidthY = g.getFontMetrics().getHeight() + 1; break;
-				case EAST : if (renderingModel.getOrientation() == Orientation.Horizontal) dimWidthX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) dimWidthY = g.getFontMetrics().getHeight() + 1; break;
+				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) dimWidthX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 				case WEST : transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 			}
 		}
@@ -96,9 +100,9 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		switch (labelModel.getPosition())
 		{
 			case NORTH : g.drawString(labelModel.getLabel(), this.getView().getSize().width/2 - strWidth/2, strHeight); break;
-			case SOUTH : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth()/2 - strWidth/2, (int) getPreferredSize().getHeight()); break;
-			case EAST : g.drawString(labelModel.getLabel(), (int) getPreferredSize().getWidth() - strWidth, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
-			case WEST : g.drawString(labelModel.getLabel(), 0, (int) getPreferredSize().getHeight()/2 + strHeight/2); break;
+			case SOUTH : g.drawString(labelModel.getLabel(), this.getView().getSize().width/2 - strWidth/2, this.getView().getSize().height); break;
+			case EAST : g.drawString(labelModel.getLabel(), this.getView().getSize().width - strWidth, this.getView().getSize().height/2 + strHeight/2); break;
+			case WEST : g.drawString(labelModel.getLabel(), 0, this.getView().getSize().height/2 + strHeight/2); break;
 		}
 	}
 
@@ -107,7 +111,92 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 	}
 
 	public void renderTicks(Graphics2D g) {
+		BarTicksRenderingModel ticksModel = ((BarTicksRenderingModel) ((ModelComposit) (barView().getModel())).getModel("ticks"));
+		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
+		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
+		BarRenderingModel renderingModel = barView().renderingModel();
+		BoundedModel valueModel = ((BoundedModel) this.barView().valueModel());
+		if(ticksModel==null||valueModel==null) return;
 		
+		int borderSize = 0;
+		if(borderModel != null)
+			borderSize = borderModel.getBorderSize();
+		final int majorTickSize = (int) ticksModel.getMajorTickSize();
+		final int minorTickSize = (int) ticksModel.getMinorTickSize();
+		final int majorTickWidth = (int) ticksModel.getMajorGraduationWidth();
+		final int minorTickWidth = (int) ticksModel.getMinorGraduationWidth();
+		int barWidth = 0;
+		if(renderingModel.getOrientation() == Orientation.Horizontal)
+			barWidth = (int) this.getView().getSize().getWidth();
+		else
+			barWidth = (int) this.getView().getSize().getHeight();
+		int lineXStart = 0;
+		int lineXEnd = 0;
+		int lineYStart = 0;
+		int lineYEnd = 0;
+		double nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/ticksModel.getMinorTickSpacing();
+		double minorTickSpacing = 0;
+		if(labelModel != null)
+		{
+			g.setFont(labelModel.getFont());
+			if(renderingModel.getOrientation() == Orientation.Horizontal)
+			{
+				lineXStart = borderSize/2 + minorTickWidth/2;
+				lineXEnd = barWidth - borderSize/2 - minorTickWidth/2;
+				switch (labelModel.getPosition())
+				{
+					case NORTH : lineYStart += g.getFontMetrics().getHeight() + 1; break;
+					case EAST : lineXEnd -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+					case WEST : lineXStart += g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				}
+				minorTickSpacing = (lineXEnd - lineXStart) / nbValues;
+			}	
+			else
+			{
+				lineYStart = barWidth - borderSize/2 - minorTickWidth/2;
+				lineYEnd = borderSize/2 + minorTickWidth/2;
+				switch (labelModel.getPosition())
+				{
+					case NORTH : lineYEnd += g.getFontMetrics().getHeight() + 1; break;
+					case SOUTH : lineYStart -= g.getFontMetrics().getHeight() + 1; break;
+					case WEST : lineXStart = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				}
+				minorTickSpacing = (lineYStart - lineYEnd) / nbValues;
+			}
+		}
+		g.setColor(ticksModel.getMinorGraduationColor());
+		g.setStroke(ticksModel.getMinorGradutionStroke());
+		if(renderingModel.getOrientation() == Orientation.Horizontal)
+		{
+			for(int i = 0; i < nbValues+1; i++)
+				g.drawLine((int) (i*minorTickSpacing) + lineXStart, lineYStart + borderSize/2, (int) (i*minorTickSpacing) + lineXStart, lineYStart + borderSize/2 + minorTickSize);		
+		}
+		else
+		{
+			for(int i = 0; i < nbValues+1; i++)
+				g.drawLine(lineXStart + borderSize/2, (int) (-i*minorTickSpacing) + lineYStart, lineXStart + borderSize/2 + minorTickSize, (int) (-i*minorTickSpacing) + lineYStart);		
+		}
+		nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/ticksModel.getMajorTickSpacing();
+		
+		g.setColor(ticksModel.getMajorGraduationColor());
+		g.setStroke(ticksModel.getMajorGradutionStroke());
+		double majorTickSpacing = 0;
+		if(renderingModel.getOrientation() == Orientation.Horizontal)
+		{
+			lineXStart += -minorTickWidth/2 + majorTickWidth/2;
+			lineXEnd += minorTickWidth/2 - majorTickWidth/2;
+			majorTickSpacing = (lineXEnd - lineXStart) / nbValues;
+			for(int i = 0; i < nbValues+1; i++)
+				g.drawLine((int) (i*majorTickSpacing) + lineXStart, lineYStart + borderSize/2, (int) (i*majorTickSpacing) + lineXStart, lineYStart + borderSize/2 + majorTickSize);		
+		}
+		else
+		{
+			lineYStart += minorTickWidth/2 - majorTickWidth/2;
+			lineYEnd += -minorTickWidth/2 + majorTickWidth/2;
+			majorTickSpacing = (lineYStart - lineYEnd) / nbValues;
+			for(int i = 0; i < nbValues+1; i++)
+				g.drawLine(lineXStart + borderSize/2, (int) (-i*majorTickSpacing) + lineYStart, lineXStart + borderSize/2 + majorTickSize, (int) (-i*majorTickSpacing) + lineYStart);			
+		}
 	}
 
 	public void renderBorder(Graphics2D g) {
@@ -164,6 +253,7 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		renderProgress(g);
 		renderBorder(g);
 		renderLabel(g);
+		renderTicks(g);
 	}
 
 	protected BarView barView()
