@@ -1,6 +1,7 @@
 package jmp.ui.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import jmp.ui.mvc.DefaultModel;
@@ -31,5 +32,13 @@ public class DefaultBoundedModels extends DefaultModel implements BoundedModels{
 
 	public List<BoundedModel> getModels() {
 		return models;
+	}
+
+	public Iterator<BoundedModel> getIterator() {
+		return models.iterator();
+	}
+
+	public int getSize() {
+		return models.size();
 	}
 }
