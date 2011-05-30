@@ -1,11 +1,13 @@
 package jmp.ui.component.indicator.renderer;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -13,6 +15,7 @@ import java.util.Iterator;
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
@@ -31,12 +34,9 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 	}
 	public void renderState(Graphics2D g) {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
-		BooleanModels valueModel = ((BooleanModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
-		IndicatorRenderingModel renderingModel = indicatorView().renderingModel();
-		
 		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
-		
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
+		BooleanModels valueModel = ((BooleanModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		
 		int multX=0;
 		int multY=0;
@@ -46,7 +46,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			else
 				multX=1;
 		
-		if(pictureModel != null && renderingModel!=null)
+		if(pictureModel != null)
 		{
 			Iterator<BooleanModel> it = valueModel.getIterator();
 			int transX = 0;
@@ -66,7 +66,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			return;
 		}
 		
-		if(colorModel != null && renderingModel!=null)
+		if(colorModel != null)
 		{
 			Color oldColor = g.getColor();
 			Iterator<BooleanModel> it = valueModel.getIterator();
@@ -79,16 +79,16 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 				if(value.is())
 				{
 					g.setColor(colorModel.getOnColor());
-					p = new RadialGradientPaint(new Point2D.Double(getPreferredSize().getWidth() / 2.0,
-			                getPreferredSize().getHeight() / 2.0), (float) (getPreferredSize().getWidth() / 2.0f),
+					p = new RadialGradientPaint(new Point2D.Double(transX +colorModel.getSize().getWidth()/ 2.0,
+			                transY +colorModel.getSize().getHeight()/ 2.0), (float) (colorModel.getSize().getWidth() / 2.0f),
 			                new float[] { 0.0f, 1.0f },
 			                new Color[] { new Color(255, 255, 255), colorModel.getOnColor()});
 				}
 				else
 				{
 					g.setColor(colorModel.getOffColor());
-					p = new RadialGradientPaint(new Point2D.Double(getPreferredSize().getWidth() / 2.0,
-			                getPreferredSize().getHeight() / 2.0), (float) (getPreferredSize().getWidth() / 2.0f),
+					p = new RadialGradientPaint(new Point2D.Double(transX +colorModel.getSize().getWidth()/ 2.0,
+			                transY +colorModel.getSize().getHeight()/ 2.0), (float) (colorModel.getSize().getWidth() / 2.0f),
 			                new float[] { 0.0f, 1.0f },
 			                new Color[] { new Color(255, 255, 255), colorModel.getOffColor()});
 				}
@@ -100,6 +100,8 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			g.setColor(oldColor);
 		}
 	}
+	
+	
 	public Dimension getPreferredSize() {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
@@ -141,5 +143,54 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 		
 		return new Dimension((int)dimension.getWidth() + g.getFontMetrics().stringWidth(labelModel.getLabel()) + 1,
 				Math.max((int)dimension.getHeight(), g.getFontMetrics().getHeight() + 1));
+	}
+	public void renderBorder(Graphics2D g) {
+			IndicatorBorderRenderingModel borderModel = ((IndicatorBorderRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("border"));
+			IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
+			IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+			IndicatorColoredRangeRenderingModel coloredRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
+			IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
+			IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
+			BooleanModels valueModel = ((BooleanModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
+			IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
+			
+			if(borderModel==null) return;
+			
+			Dimension dimension = null;
+			if(coloredRangeModel != null)
+				dimension = coloredRangeModel.getSize();
+			if(blinkModel != null)
+				dimension=blinkModel.getSize();
+			if(colorModel != null)
+				dimension=colorModel.getSize();
+			if(pictureModel!=null)
+				dimension= new Dimension(pictureModel.getOnImage().getWidth(),pictureModel.getOnImage().getHeight());
+	
+			if(dimension==null || borderModel.getBorderSize()==0) return;
+			
+			
+			int multX=0;
+			int multY=0;
+			if(valueModel!=null)
+				if(orientationModel!=null && orientationModel.getOrientation()==Orientation.Vertical)
+					multY=1;
+				else
+					multX=1;
+			
+			g.setColor(borderModel.getBorderColor());
+			g.setStroke(new BasicStroke(borderModel.getBorderSize()));
+			int transX=0, transY=0;
+			
+			Color oldColor = g.getColor();
+			g.setColor(borderModel.getBorderColor());
+			Iterator<BooleanModel> it = valueModel.getIterator();
+			while(it.hasNext())
+			{
+				g.drawOval(transX,transY,(int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight());
+				it.next();
+				transX+=colorModel.getSize().getWidth() * multX;
+				transY+=colorModel.getSize().getHeight() * multY;
+			}
+			g.setColor(oldColor);
 	}
 }

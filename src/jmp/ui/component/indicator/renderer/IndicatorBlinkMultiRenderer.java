@@ -36,10 +36,8 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 	
 	public void renderState(Graphics2D g) {
 		BoundedModels valueModel = ((BoundedModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
-		IndicatorRenderingModel renderingModel = indicatorView().renderingModel();
 		
 		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
-		
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
 		
 		int multX=0;
@@ -50,7 +48,7 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 			else
 				multX=1;
 
-		if(blinkModel != null && renderingModel!=null)
+		if(blinkModel != null)
 		{
 			Dimension dimension = blinkModel.getSize();
 			int transX=0, transY=0;
