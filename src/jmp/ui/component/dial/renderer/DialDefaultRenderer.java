@@ -386,7 +386,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		g.setStroke(new BasicStroke(borderModel.getBorderSize()));
 		Shape oldClip = g.getClip();
 		Shape border = new Ellipse2D.Double(borderModel.getBorderSize()/2, borderModel.getBorderSize()/2,
-				background.getWidth()-borderModel.getBorderSize(), background.getHeight()-borderModel.getBorderSize());
+				background.getWidth()-borderModel.getBorderSize()+1, background.getHeight()-borderModel.getBorderSize()+1);
 		g.setClip(clip);
 		g.draw(border);
 		g.setClip(oldClip);
@@ -418,7 +418,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			BufferedImage needle = pictureModel.getNeedle();
 		
 			if(partialModel == null)
-				return new Dimension(background.getWidth(), background.getHeight());
+				return new Dimension(background.getWidth()+1, background.getHeight()+1);
 			
 			clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
 			double transX = 0;
@@ -428,12 +428,12 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 				transX = needle.getHeight();
 			if((clip.getBounds2D().getMinY() > clip.getCenterY() -  needle.getHeight()) || (clip.getBounds2D().getMaxY() < clip.getCenterY() + needle.getHeight()))
 				transY = needle.getHeight();
-			return new Dimension((int)(clip.getBounds2D().getWidth() + transX), (int)(clip.getBounds2D().getHeight() + transY));
+			return new Dimension((int)(clip.getBounds2D().getWidth() + transX)+1, (int)(clip.getBounds2D().getHeight() + transY)+1);
 		}
 		if(partialModel != null)
 		{
 			clip = new Arc2D.Double(0, 0, background.getWidth(), background.getHeight(), partialModel.getStartAngle(), JMSwingUtilities.extendAngle(partialModel.getStartAngle(), partialModel.getEndAngle()),Arc2D.PIE);
-			return new Dimension((int)(clip.getBounds2D().getWidth()), (int)(clip.getBounds2D().getHeight()));
+			return new Dimension((int)(clip.getBounds2D().getWidth())+1, (int)(clip.getBounds2D().getHeight())+1);
 		}
 		return renderingModel.getSize();
 	}
