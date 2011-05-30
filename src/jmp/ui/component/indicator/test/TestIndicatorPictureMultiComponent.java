@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -14,19 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.indicator.IndicatorView;
+import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
-import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
 import jmp.ui.component.indicator.renderer.IndicatorMultiRenderer;
 import jmp.ui.model.BooleanModel;
 import jmp.ui.model.BooleanModels;
-import jmp.ui.model.BoundedModel;
-import jmp.ui.model.BoundedModels;
 import jmp.ui.model.DefaultBooleanModel;
 import jmp.ui.model.DefaultBooleanModels;
 import jmp.ui.model.ModelComposit;
@@ -133,6 +127,7 @@ public class TestIndicatorPictureMultiComponent extends JFrame
 		model.addModel("value", valueModel);
 		//model.addModel("picture", new IndicatorPictureRenderingModel());
 		model.addModel("color", new IndicatorColoredRenderingModel());
+		model.addModel("border", new IndicatorBorderRenderingModel());
 		model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Vertical));
 		
 		this.indicatorView.setModel(model);
