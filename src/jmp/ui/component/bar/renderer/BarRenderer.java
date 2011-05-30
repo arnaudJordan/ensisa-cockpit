@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import jmp.ui.mvc.Renderer;
 
 public interface BarRenderer extends Renderer{
+	public void renderBackground(Graphics2D g);
 	public void renderProgress(Graphics2D g);
 	public void renderLabel(Graphics2D g);
 	public void renderLabels(Graphics2D g);
