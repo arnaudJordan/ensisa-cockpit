@@ -63,7 +63,6 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		if(labelModel != null)
 		{
 			g.setFont(labelModel.getFont());
-			
 			switch (labelModel.getPosition())
 			{
 				case NORTH : transY = g.getFontMetrics().getHeight() + 1; break;
@@ -78,29 +77,22 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		{
 			if(renderingModel.getOrientation() == Orientation.Horizontal)
 			{
-				double ratio=(double) (progressRectWidth - dimWidthX) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectWidth - transX - dimWidthX) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g.setColor(range.color);
-					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (transX + ratio*range.range.max), progressRectHeight - dimWidthY);
+					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight - dimWidthY);
 				}
 			}
 			else
 			{
-				double ratio=(double) (progressRectHeight + dimWidthY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectHeight - transY - dimWidthY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g.setColor(range.color);
-					g.fillRect(transX, (int)(progressRectHeight - dimWidthY - ratio*range.range.min),
-							progressRectWidth - dimWidthX, (int)(progressRectHeight - dimWidthY - ratio*range.range.max));
-					System.out.println("rezrez" +( progressRectHeight + dimWidthY - (int) (transY + ratio*range.range.min)));
-					System.out.println(progressRectHeight + dimWidthY - (int) (transY + ratio*range.range.max));
-					System.out.println("x st" + transX);
-					System.out.println("TransY" + transY);
-					System.out.println(progressRectWidth - dimWidthX);
+					g.fillRect(transX, (int)(progressRectHeight - dimWidthY - ratio*range.range.max),
+							progressRectWidth - dimWidthX, (int)(ratio*(range.range.max - range.range.min)));
 				}
-				System.out.println(ratio);
-				
 			}
 		}
 	}
