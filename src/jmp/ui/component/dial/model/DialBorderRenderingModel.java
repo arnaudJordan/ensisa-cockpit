@@ -11,8 +11,20 @@ public class DialBorderRenderingModel extends DialRenderingModel {
 	
 	public DialBorderRenderingModel()
 	{
-		setBorderColor(BORDER_COLOR);
-		setBorderSize(BORDER_SIZE);
+		this(BORDER_SIZE, BORDER_COLOR);
+	}
+
+	public DialBorderRenderingModel(int size) {
+		this(size, BORDER_COLOR);
+	}
+	
+	public DialBorderRenderingModel(Color color) {
+		this(BORDER_SIZE, color);
+	}
+	
+	public DialBorderRenderingModel(int size, Color color) {
+		setBorderSize(size);
+		setBorderColor(color);
 	}
 
 	public void setBorderColor(Color borderColor) {

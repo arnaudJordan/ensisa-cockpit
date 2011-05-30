@@ -20,7 +20,7 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	private static final float MAJOR_GRADUTION_WIDTH = 2f;
 	//private static final Stroke MINOR_GRADUTION_STROKE = new BasicStroke(MINOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
 	//private static final Stroke MAJOR_GRADUTION_STROKE = new BasicStroke(MAJOR_GRADUTION_WIDTH,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL);
-	private static final int MAJOR_TICK_SPACING = 30;
+	private static final int MAJOR_TICK_SPACING = 20;
 	private static final int MINOR_TICK_SPACING = 5;
 	private static final int MINOR_TICK_SIZE = 20;
 	private static final int MAJOR_TICK_SIZE = 2 * MINOR_TICK_SIZE;

@@ -3,6 +3,7 @@ package jmp.ui.component.dial.test;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
 
@@ -93,17 +94,24 @@ public class TestDialPictureComponent extends JFrame
 		this.dialView = new DialView();
 		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
-		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
+		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel("pictures/dial/background.png", "pictures/dial/needle.png");
 		this.dialView.renderingModel().setSense(Rotation.Clockwise);
-		this.dialView.renderingModel().setTicksStartAngle(0);
+		this.dialView.renderingModel().setTicksStartAngle(90);
 		DialLabelRenderingModel dialLabelRenderingModel = new DialLabelRenderingModel();
 		dialLabelRenderingModel.setPosition(new Point(0, -dialPictureRenderingModel.getBackground().getHeight()/6));
+		dialLabelRenderingModel.setColor(Color.WHITE);
+		dialLabelRenderingModel.setFont(new Font("Monospaced", Font.PLAIN, 26));
+		DialTicksRenderingModel dialTicksRenderingModel = new DialTicksRenderingModel();
+		dialTicksRenderingModel.setMajorGraduationColor(Color.WHITE);
+		dialTicksRenderingModel.setMinorGraduationColor(Color.WHITE);
+		dialTicksRenderingModel.setLabelColor(Color.WHITE);
+		dialTicksRenderingModel.setMajorTickSize(25);
 		model.addModel("picture", dialPictureRenderingModel);
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
-		model.addModel("border", new DialBorderRenderingModel());
-		model.addModel("ticks", new DialTicksRenderingModel());
+		model.addModel("border", new DialBorderRenderingModel(3));
+		model.addModel("ticks", dialTicksRenderingModel);
 		model.addModel("label", dialLabelRenderingModel);
-		model.addModel("track", new DialTrackRenderingModel());
+		//model.addModel("track", new DialTrackRenderingModel());
 
 		this.dialView.setModel(model);
 		this.componentsPane.add(this.dialView);
