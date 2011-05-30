@@ -5,11 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.AffineTransform;
-
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
-import jmp.ui.component.Rotation;
 import jmp.ui.component.bar.BarView;
 import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRangeRenderingModel;
@@ -94,8 +91,8 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g.setColor(range.color);
-					g.fillRect(transX, (int)(progressRectHeight + dimWidthY + transY - ratio*range.range.min),
-							progressRectWidth - dimWidthX, (int)(progressRectHeight + dimWidthY + transY - ratio*range.range.max));
+					g.fillRect(transX, (int)(progressRectHeight - dimWidthY - ratio*range.range.min),
+							progressRectWidth - dimWidthX, (int)(progressRectHeight - dimWidthY - ratio*range.range.max));
 					System.out.println("rezrez" +( progressRectHeight + dimWidthY - (int) (transY + ratio*range.range.min)));
 					System.out.println(progressRectHeight + dimWidthY - (int) (transY + ratio*range.range.max));
 					System.out.println("x st" + transX);
@@ -209,33 +206,38 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		int lineYEnd = 0;
 		double nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/ticksModel.getMinorTickSpacing();
 		double minorTickSpacing = 0;
-		if(labelModel != null)
+		
+		if(renderingModel.getOrientation() == Orientation.Horizontal)
 		{
-			g.setFont(labelModel.getFont());
-			if(renderingModel.getOrientation() == Orientation.Horizontal)
+			lineXStart = borderSize/2 + minorTickWidth/2;
+			lineXEnd = barWidth - borderSize/2 - minorTickWidth/2;
+			if(labelModel != null)
 			{
-				lineXStart = borderSize/2 + minorTickWidth/2;
-				lineXEnd = barWidth - borderSize/2 - minorTickWidth/2;
+				g.setFont(labelModel.getFont());
 				switch (labelModel.getPosition())
 				{
-					case NORTH : lineYStart += g.getFontMetrics().getHeight() + 1; break;
-					case EAST : lineXEnd -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
-					case WEST : lineXStart += g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case NORTH : lineYStart += g.getFontMetrics().getHeight() + 1; break;
+				case EAST : lineXEnd -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case WEST : lineXStart += g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 				}
-				minorTickSpacing = (lineXEnd - lineXStart) / nbValues;
-			}	
-			else
-			{
-				lineYStart = barWidth - borderSize/2 - minorTickWidth/2;
-				lineYEnd = borderSize/2 + minorTickWidth/2;
-				switch (labelModel.getPosition())
-				{
-					case NORTH : lineYEnd += g.getFontMetrics().getHeight() + 1; break;
-					case SOUTH : lineYStart -= g.getFontMetrics().getHeight() + 1; break;
-					case WEST : lineXStart = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
-				}
-				minorTickSpacing = (lineYStart - lineYEnd) / nbValues;
 			}
+			minorTickSpacing = (lineXEnd - lineXStart) / nbValues;
+		}	
+		else
+		{
+			lineYStart = barWidth - borderSize/2 - minorTickWidth/2;
+			lineYEnd = borderSize/2 + minorTickWidth/2;
+			if(labelModel != null)
+			{
+				g.setFont(labelModel.getFont());
+				switch (labelModel.getPosition())
+				{
+				case NORTH : lineYEnd += g.getFontMetrics().getHeight() + 1; break;
+				case SOUTH : lineYStart -= g.getFontMetrics().getHeight() + 1; break;
+				case WEST : lineXStart = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				}
+			}
+			minorTickSpacing = (lineYStart - lineYEnd) / nbValues;
 		}
 		g.setColor(ticksModel.getMinorGraduationColor());
 		g.setStroke(ticksModel.getMinorGradutionStroke());
