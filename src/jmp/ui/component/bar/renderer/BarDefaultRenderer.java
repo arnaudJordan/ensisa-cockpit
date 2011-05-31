@@ -5,6 +5,13 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Iterator;
+import java.util.Set;
+
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
@@ -42,7 +49,6 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		
 		if(coloredModel==null) return;
 		
-		g.setColor(coloredModel.getTrailColor());
 		int progressRectWidth = 0;
 		int progressRectHeight = 0;
 		
@@ -72,7 +78,10 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			}
 		}
 		if(coloredRangeModel == null)
+		{
+			g.setColor(coloredModel.getTrailColor());
 			g.fillRect(transX, transY, progressRectWidth - dimWidthX, progressRectHeight - dimWidthY);
+		}
 		else
 		{
 			if(renderingModel.getOrientation() == Orientation.Horizontal)
@@ -103,11 +112,16 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		BarColoredRenderingModel coloredModel = ((BarColoredRenderingModel) ((ModelComposit) (barView().getModel())).getModel("colored"));
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
 		BarColoredRangeRenderingModel coloredRangeModel = ((BarColoredRangeRenderingModel) ((ModelComposit) (barView().getModel())).getModel("coloredRangeProgress"));
+		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
 		
 		if(coloredModel==null) return;
 		
 		int progressRectWidth = 0;
 		int progressRectHeight = 0;
+		
+		//int borderSize = 0;
+		//if(borderModel != null)
+		//	borderSize = borderModel.getBorderSize();
 		
 		if (renderingModel.getOrientation() == Orientation.Horizontal)
 		{
@@ -119,34 +133,67 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			progressRectWidth = (int) renderingModel.getSize().getHeight();
 			progressRectHeight = this.getView().getSize().height;
 		}
+		
 		int transX = 0;
 		int transY = 0;
-		int dimWidthX = 0;
-		int dimWidthY = 0;
 		if(labelModel != null)
 		{
 			g.setFont(labelModel.getFont());
 			
 			switch (labelModel.getPosition())
 			{
-				case NORTH : transY = g.getFontMetrics().getHeight() + 1; break;
-				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) dimWidthY = g.getFontMetrics().getHeight() + 1; break;
-				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) dimWidthX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
-				case WEST : transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
+							 transY = g.getFontMetrics().getHeight() + 1; break;
+				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1; break;
+				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case WEST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel());
+							transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 			}
 		}
 		
-		g.setColor(coloredModel.getProgressColor());
-		
-		if (renderingModel.getOrientation() == Orientation.Horizontal)
+		if(coloredRangeModel == null)
 		{
-			final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
-			g.fillRect(transX, transY, fillWidth - dimWidthX, progressRectHeight);
+			g.setColor(coloredModel.getProgressColor());
+	        if (renderingModel.getOrientation() == Orientation.Horizontal)
+	        {
+	                final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
+	                g.fillRect(transX, transY, fillWidth, progressRectHeight);
+	        }
+	        else
+	        {
+	                final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
+	                g.fillRect(transX, progressRectHeight - fillHeight + transY, progressRectWidth, fillHeight);
+	        }
 		}
 		else
 		{
-			final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
-			g.fillRect(transX, progressRectHeight - fillHeight + transY - dimWidthY, progressRectWidth, fillHeight);
+			Graphics2D g2 = (Graphics2D) g.create();
+			Rectangle2D progress;
+			if(renderingModel.getOrientation() == Orientation.Horizontal)
+			{
+				final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectWidth - transX) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
+				{
+					g.setColor(range.color);
+					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
+				}
+				progress = new Rectangle2D.Double(transX + fillWidth, transY, progressRectWidth + transX, progressRectHeight);
+				g2.fill(progress);
+			}
+			else
+			{
+				final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectHeight - transY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
+				{
+					g.setColor(range.color);
+					g.fillRect(transX, (int)(progressRectHeight - ratio*range.range.max),
+							progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
+				}
+				progress = new Rectangle2D.Double(transX, progressRectHeight - fillHeight + transY, progressRectWidth, fillHeight);
+			}
+			g2.dispose();
 		}
 	}
 
