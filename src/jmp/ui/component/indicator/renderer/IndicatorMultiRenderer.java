@@ -14,6 +14,7 @@ import java.util.Iterator;
 
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
+import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
@@ -159,6 +160,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			Dimension dimension = null;
 			if(coloredRangeModel != null)
 				dimension = coloredRangeModel.getSize();
+			
 			if(blinkModel != null)
 				dimension=blinkModel.getSize();
 			if(colorModel != null)

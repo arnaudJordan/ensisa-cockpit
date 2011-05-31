@@ -20,9 +20,7 @@ import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialLabelRenderingModel;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.model.DialTicksRenderingModel;
-import jmp.ui.component.dial.model.DialTrackRenderingModel;
 import jmp.ui.component.dial.renderer.DialDefaultRenderer;
-import jmp.ui.component.dial.renderer.DialPictureRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 
