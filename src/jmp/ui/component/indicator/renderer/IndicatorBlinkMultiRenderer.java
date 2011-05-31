@@ -12,6 +12,7 @@ import javax.swing.Timer;
 
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
+import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
@@ -35,9 +36,10 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 	}
 	
 	public void renderState(Graphics2D g) {
+		System.out.println("-------------------------------");
 		BoundedModels valueModel = ((BoundedModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		
-		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
+		IndicatorBlinkMultiRenderingModel blinkModel = ((IndicatorBlinkMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blinkMulti"));
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
 		
 		int multX=0;
@@ -53,6 +55,11 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 			Dimension dimension = blinkModel.getSize();
 			int transX=0, transY=0;
 			Iterator<BoundedModel> it = valueModel.getIterator();
+			while(valueModel.getSize()>timer.size())
+			{
+				timer.add(new Timer(0, new BlinkDrawer(indicatorView())));
+			}
+			
 			int i=0;
 			while(it.hasNext())
 			{
@@ -60,25 +67,31 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 				AffineTransform trans = new AffineTransform();
 				trans.translate(transX, transY);
 
-				ImageList imageList = blinkModel.getImageList().getRange(value.getValue()).imageList;
-				
-				if(timer.size()>i)
-					timer.get(i).stop();
-				else
-					timer.add(i, new Timer(0, null));
-				
-				if(imageList.size()>0)
+				ImageList imageList = blinkModel.getImageList().get(i).getRange(value.getValue()).imageList;
+				if(timer.get(i).getDelay()!=imageList.getPeriod())
 				{
-					g.drawImage(imageList.get(0), trans, null);
-					if(imageList.size()>1)
-					{
-						BlinkDrawer timerAction = new BlinkDrawer(indicatorView());
-						timerAction.setImageList(imageList);
-						timerAction.setTrans(trans);
-						timer.set(i, new Timer(blinkModel.getBlinkTime(), timerAction));
-						timer.get(i).start();
-					}
+					timer.get(i).stop();
+					timer.get(i).setDelay(imageList.getPeriod());
+					timer.get(i).start();
+					System.out.println("nouveau :" + i);
+					
 				}
+				if(((BlinkDrawer) timer.get(i).getActionListeners()[0]).isUpdate())
+				{
+					g.drawImage(imageList.getNext(), trans, null);
+					((BlinkDrawer) timer.get(i).getActionListeners()[0]).setUpdate(false);
+					System.out.println("update");
+					System.out.println(i);
+					System.out.println(timer.get(i).getDelay());
+				}
+				else
+				{
+					g.drawImage(imageList.getCurrent(), trans, null);
+					System.out.println("pas update");
+					System.out.println(i);
+					System.out.println(timer.get(i).getDelay());
+				}
+				
 				transX+=dimension.getWidth() * multX;
 				transY+=dimension.getHeight() * multY;
 				i++;
@@ -90,7 +103,7 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
 		IndicatorColoredRangeRenderingModel coloredRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
-		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
+		IndicatorBlinkMultiRenderingModel blinkModel = ((IndicatorBlinkMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blinkMulti"));
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
 		BoundedModels valueModel = ((BoundedModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		
@@ -128,4 +141,5 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 		return new Dimension((int)dimension.getWidth() + g.getFontMetrics().stringWidth(labelModel.getLabel()) + 1,
 				Math.max((int)dimension.getHeight(), g.getFontMetrics().getHeight() + 1));
 	}
+
 }

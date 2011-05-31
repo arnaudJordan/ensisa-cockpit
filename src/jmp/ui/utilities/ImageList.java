@@ -9,10 +9,15 @@ import java.util.List;
 public class ImageList
 {
 	private List<BufferedImage> images;
+	public final int DEFAULT_PERIOD=500;
+	private int period;
+	private int current;
 	
 	public ImageList()
 	{
 		this.images = new ArrayList<BufferedImage>();
+		this.setPeriod(DEFAULT_PERIOD);
+		this.current=0;
 	}
 
 	/**
@@ -130,5 +135,22 @@ public class ImageList
 		return images.size();
 	}
 
+	public void setPeriod(int period) {
+		this.period = period;
+	}
+
+	public int getPeriod() {
+		return period;
+	}
+	public BufferedImage getNext()
+	{
+		BufferedImage image = images.get(current);
+		current=(++current)%images.size();
+		return image;
+	}
+	public BufferedImage getCurrent()
+	{
+		return images.get(current);
+	}
 	
 }

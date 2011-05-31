@@ -19,6 +19,7 @@ import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
+import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorBlinkMultiRenderer;
@@ -200,7 +201,7 @@ public class TestIndicatorBlinkMultiComponent extends JFrame
 			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
 			
 			
-			model.addModel("blink", new IndicatorBlinkRenderingModel(imageListRanges));
+			model.addModel("blinkMulti", new IndicatorBlinkMultiRenderingModel());
 		} catch (IOException e) {
 			e.printStackTrace();
 			
