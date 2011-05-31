@@ -36,7 +36,6 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 	}
 	
 	public void renderState(Graphics2D g) {
-		System.out.println("-------------------------------");
 		BoundedModels valueModel = ((BoundedModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		
 		IndicatorBlinkMultiRenderingModel blinkModel = ((IndicatorBlinkMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blinkMulti"));
@@ -73,23 +72,15 @@ public class IndicatorBlinkMultiRenderer extends IndicatorDefaultRenderer {
 					timer.get(i).stop();
 					timer.get(i).setDelay(imageList.getPeriod());
 					timer.get(i).start();
-					System.out.println("nouveau :" + i);
-					
 				}
 				if(((BlinkDrawer) timer.get(i).getActionListeners()[0]).isUpdate())
 				{
 					g.drawImage(imageList.getNext(), trans, null);
 					((BlinkDrawer) timer.get(i).getActionListeners()[0]).setUpdate(false);
-					System.out.println("update");
-					System.out.println(i);
-					System.out.println(timer.get(i).getDelay());
 				}
 				else
 				{
 					g.drawImage(imageList.getCurrent(), trans, null);
-					System.out.println("pas update");
-					System.out.println(i);
-					System.out.println(timer.get(i).getDelay());
 				}
 				
 				transX+=dimension.getWidth() * multX;

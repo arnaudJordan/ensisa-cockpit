@@ -17,19 +17,11 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorBlinkMultiRenderer;
-import jmp.ui.component.indicator.renderer.IndicatorBlinkRenderer;
-import jmp.ui.model.BooleanModel;
-import jmp.ui.model.BooleanModels;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.BoundedModels;
-import jmp.ui.model.DefaultBooleanModel;
-import jmp.ui.model.DefaultBooleanModels;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultBoundedModels;
 import jmp.ui.model.ModelComposit;
@@ -200,8 +192,58 @@ public class TestIndicatorBlinkMultiComponent extends JFrame
 			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
 			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
 			
+			List<ImageListRanges> imageListRangesList=new ArrayList<ImageListRanges>();
+			imageListRangesList.add(imageListRanges);
 			
-			model.addModel("blinkMulti", new IndicatorBlinkMultiRenderingModel());
+			imageList1 = new ImageList();
+			imageList1.add(image1);
+			imageList1.add(image2);
+			
+			imageList2 = new ImageList();
+			imageList2.add(image2);
+			
+			imageList0 = new ImageList();
+			imageList0.add(image1);
+			
+			imageListRanges = new ImageListRanges();
+			imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
+			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
+			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
+			imageListRangesList.add(imageListRanges);
+			
+			imageList1 = new ImageList();
+			imageList1.add(image1);
+			imageList1.add(image2);
+			
+			imageList2 = new ImageList();
+			imageList2.add(image2);
+			
+			imageList0 = new ImageList();
+			imageList0.add(image1);
+			
+			imageListRanges = new ImageListRanges();
+			imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
+			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
+			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
+			imageListRangesList.add(imageListRanges);
+			
+			imageList1 = new ImageList();
+			imageList1.add(image1);
+			imageList1.add(image2);
+			
+			imageList2 = new ImageList();
+			imageList2.add(image2);
+			
+			imageList0 = new ImageList();
+			imageList0.add(image1);
+			
+			imageListRanges = new ImageListRanges();
+			imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
+			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
+			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
+			imageListRangesList.add(imageListRanges);
+			
+			model.addModel("blinkMulti", new IndicatorBlinkMultiRenderingModel(imageListRangesList));
 		} catch (IOException e) {
 			e.printStackTrace();
 			
