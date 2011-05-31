@@ -12,18 +12,14 @@ import jmp.ui.utilities.ImageListRanges;
 
 public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 	private final static ImageListRanges DEFAULT_IMAGELIST = new ImageListRanges();
-	private final static int DEFAULT_BLINK_TIME = 100;
 	private final static Dimension DEFAULT_SIZE = new Dimension(100, 100);
 	
 	private ImageListRanges imageListRanges;
-	private int blinkTime;
 	
 	public IndicatorBlinkRenderingModel()
 	{
 		setImageList(DEFAULT_IMAGELIST);
-		setBlinkTime(DEFAULT_BLINK_TIME);
-		
-		
+			
 		BufferedImage image1 = new BufferedImage(DEFAULT_SIZE.width, DEFAULT_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage image2 = new BufferedImage(DEFAULT_SIZE.width, DEFAULT_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		
@@ -53,7 +49,6 @@ public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 	public IndicatorBlinkRenderingModel(ImageListRanges imageList)
 	{
 		setImageList(imageList);
-		setBlinkTime(DEFAULT_BLINK_TIME);
 	}
 
 	public void setImageList(ImageListRanges imageList) {
@@ -70,13 +65,5 @@ public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 		Iterator<ImageListRange> it = imageListRanges.getRanges().iterator();
 		BufferedImage tmp = it.next().imageList.get(0);
 		return new Dimension(tmp.getWidth(), tmp.getHeight());
-	}
-
-	public void setBlinkTime(int blinkTime) {
-		this.blinkTime = blinkTime;
-	}
-
-	public int getBlinkTime() {
-		return blinkTime;
 	}
 }
