@@ -19,7 +19,7 @@ public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer{
 
 	public IndicatorBlinkRenderer(View view) {
 		super(view);
-		this.timer = new Timer(1000, null);
+		this.timer = new Timer(0, new BlinkDrawer(indicatorView()));
 	}
 	
 	public void renderState(final Graphics2D g) {
@@ -50,20 +50,13 @@ public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer{
 			trans.translate(transX, transY);
 			ImageList imageList = blinkModel.getImageList().getRange(valueModel.getValue()).imageList;
 			
-			timer.stop();
-			
-			if(imageList.size()>0)
+			if(timer.getDelay()!=imageList.getPeriod())
 			{
-				g.drawImage(imageList.get(0), trans, null);
-				if(imageList.size()>1)
-				{
-					BlinkDrawer timerAction = new BlinkDrawer(indicatorView());
-					timerAction.setImageList(imageList);
-					timerAction.setTrans(trans);
-					timer = new Timer(blinkModel.getBlinkTime(), timerAction);
-					timer.start();
-				}
+				timer.stop();
+				timer.setDelay(imageList.getPeriod());
+				timer.start();
 			}
+			g.drawImage(imageList.getNext(), trans, null);
 		}
 	}
 }

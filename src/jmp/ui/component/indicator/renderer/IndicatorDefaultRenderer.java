@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.indicator.IndicatorView;
+import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
@@ -44,7 +45,7 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		renderBorder(g);
 	}
 	
-	protected IndicatorView indicatorView()
+	public IndicatorView indicatorView()
 	{
 		return (IndicatorView) this.getView();
 	}
@@ -145,12 +146,15 @@ public class IndicatorDefaultRenderer extends DefaultRenderer implements Indicat
 		IndicatorColoredRangeRenderingModel coloredRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
 		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
+		IndicatorBlinkMultiRenderingModel blinkMultiModel = ((IndicatorBlinkMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blinkMulti"));
 		
 		if(borderModel==null) return;
 		
 		Dimension dimension = null;
 		if(coloredRangeModel != null)
 			dimension = coloredRangeModel.getSize();
+		if(blinkMultiModel != null)
+			dimension=blinkMultiModel.getSize();
 		if(blinkModel != null)
 			dimension=blinkModel.getSize();
 		if(colorModel != null)
