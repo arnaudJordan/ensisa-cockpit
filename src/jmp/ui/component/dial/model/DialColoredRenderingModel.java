@@ -19,7 +19,9 @@ public class DialColoredRenderingModel extends DialRenderingModel{
 	}
 
 	public void setColorRanges(ColoredRanges colorRanges) {
+		if(this.colorRanges == colorRanges) return;
 		this.colorRanges = colorRanges;
+		this.modelChange();
 	}
 
 	public ColoredRanges getColorRanges() {
@@ -32,7 +34,9 @@ public class DialColoredRenderingModel extends DialRenderingModel{
 	}
 
 	public void setStroke(Stroke stroke) {
+		if(this.stroke == stroke) return;
 		this.stroke = stroke;
+		this.modelChange();
 	}
 
 	public Stroke getStroke() {
@@ -40,8 +44,10 @@ public class DialColoredRenderingModel extends DialRenderingModel{
 	}
 
 	public void setMargin(int margin) {
+		if(this.margin == margin) return;
 		this.margin = margin;
 		setStroke(new BasicStroke(margin,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
+		this.modelChange();
 	}
 
 	public int getMargin() {
