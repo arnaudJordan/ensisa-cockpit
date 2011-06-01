@@ -23,7 +23,7 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	private Color skyColor;
 	private Color groundColor;
 	private Color graduationColor;
-	private Dimension Size;
+	private Dimension size;
 	private int pitchInterval; 
 	private BufferedImage horizonImage;
 	private BufferedImage planeImage;
@@ -37,7 +37,7 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 		this.setSize(SIZE);
 		this.setPitchInterval(PITCH_INTERVAL);
 		this.setBackgroundMultiplier(BACKGROUND_MULTIPLIER);
-		this.setHorizonImage(new BufferedImage((int) Size.getWidth() * getBackgroundMultiplier(), (int) Size.getHeight() * getBackgroundMultiplier(), BufferedImage.TYPE_INT_RGB));
+		this.setHorizonImage(new BufferedImage((int) size.getWidth() * getBackgroundMultiplier(), (int) size.getHeight() * getBackgroundMultiplier(), BufferedImage.TYPE_INT_RGB));
 		try
 		{
 			this.setPlaneImage(ImageIO.read(new File(System.getProperty("java.class.path") + "/../" + PLANE_IMAGE_PATH)));
@@ -51,7 +51,9 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 
 	public void setSkyColor(Color skyColor) 
 	{
+		if(this.skyColor == skyColor) return;
 		this.skyColor = skyColor;
+		this.modelChange();
 	}
 
 	public Color getSkyColor() 
@@ -61,7 +63,9 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 
 	public void setGroundColor(Color groundColor) 
 	{
+		if(this.graduationColor == groundColor) return;
 		this.groundColor = groundColor;
+		this.modelChange();
 	}
 
 	public Color getGroundColor() 
@@ -71,7 +75,9 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 
 	public void setGraduationColor(Color graduationColor) 
 	{
+		if(this.graduationColor == graduationColor) return;
 		this.graduationColor = graduationColor;
+		this.modelChange();
 	}
 
 	public Color getGraduationColor() 
@@ -81,15 +87,19 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 
 	public void setSize(Dimension size) 
 	{
-		Size = size;
+		if(this.size == size) return;
+		this.size = size;
+		this.modelChange();
 	}
 	public Dimension getSize() 
 	{
-		return Size;
+		return size;
 	}
 
 	public void setPitchInterval(int pitchInterval) {
+		if(this.pitchInterval == pitchInterval) return;
 		this.pitchInterval = pitchInterval;
+		this.modelChange();
 	}
 
 
@@ -99,7 +109,9 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 
 
 	public void setHorizonImage(BufferedImage horizonImage) {
+		if(this.horizonImage == horizonImage) return;
 		this.horizonImage = horizonImage;
+		this.modelChange();
 	}
 
 	public BufferedImage getHorizonImage() {
@@ -107,7 +119,9 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	}
 
 	public void setPlaneImage(BufferedImage planeImage) {
+		if(this.planeImage == planeImage) return;
 		this.planeImage = planeImage;
+		this.modelChange();
 	}
 
 	public BufferedImage getPlaneImage() {
@@ -115,7 +129,9 @@ public class DialHorizonRenderingModel extends DialRenderingModel
 	}
 
 	public void setBackgroundMultiplier(int backgroundMultiplier) {
+		if(this.backgroundMultiplier == backgroundMultiplier) return;
 		this.backgroundMultiplier = backgroundMultiplier;
+		this.modelChange();
 	}
 
 	public int getBackgroundMultiplier() {

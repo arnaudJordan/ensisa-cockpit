@@ -18,7 +18,9 @@ public class DialCompositRenderingModel extends DialRenderingModel {
 	}
 
 	public void setInternDialPosition(Point internDialPosition) {
+		if(this.internDialPosition == internDialPosition) return;
 		this.internDialPosition = internDialPosition;
+		this.modelChange();
 	}
 
 	public Point getInternDialPosition() {
