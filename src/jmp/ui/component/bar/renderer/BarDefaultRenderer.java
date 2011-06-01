@@ -9,6 +9,7 @@ import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -64,43 +65,43 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		}
 		int transX = 0;
 		int transY = 0;
-		int dimWidthX = 0;
-		int dimWidthY = 0;
 		if(labelModel != null)
 		{
 			g.setFont(labelModel.getFont());
 			switch (labelModel.getPosition())
 			{
-				case NORTH : transY = g.getFontMetrics().getHeight() + 1; break;
-				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) dimWidthY = g.getFontMetrics().getHeight() + 1; break;
-				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) dimWidthX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
-				case WEST : transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
+							 transY = g.getFontMetrics().getHeight() + 1; break;
+				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1; break;
+				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case WEST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel());
+							transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 			}
 		}
 		if(coloredRangeModel == null)
 		{
 			g.setColor(coloredModel.getTrailColor());
-			g.fillRect(transX, transY, progressRectWidth - dimWidthX, progressRectHeight - dimWidthY);
+			g.fillRect(transX, transY, progressRectWidth, progressRectHeight);
 		}
 		else
 		{
 			if(renderingModel.getOrientation() == Orientation.Horizontal)
 			{
-				double ratio=(double) (progressRectWidth - transX - dimWidthX) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectWidth) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g.setColor(range.color);
-					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight - dimWidthY);
+					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
 				}
 			}
 			else
 			{
-				double ratio=(double) (progressRectHeight - transY - dimWidthY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectHeight - transY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g.setColor(range.color);
-					g.fillRect(transX, (int)(progressRectHeight - dimWidthY - ratio*range.range.max),
-							progressRectWidth - dimWidthX, (int)(ratio*(range.range.max - range.range.min)));
+					g.fillRect(transX, (int)(progressRectHeight - ratio*range.range.max),
+							progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
 				}
 			}
 		}
@@ -139,7 +140,6 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		if(labelModel != null)
 		{
 			g.setFont(labelModel.getFont());
-			
 			switch (labelModel.getPosition())
 			{
 				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
@@ -167,33 +167,50 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		}
 		else
 		{
-			Graphics2D g2 = (Graphics2D) g.create();
-			Rectangle2D progress;
+			
+			Shape clip = null;
 			if(renderingModel.getOrientation() == Orientation.Horizontal)
 			{
-				final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
-				double ratio=(double) (progressRectWidth - transX) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				BufferedImage progressBarImage = new BufferedImage(progressRectWidth, progressRectHeight, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2 = progressBarImage.createGraphics();
+				
+				
+		        final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
+		        clip = new Rectangle2D.Double(0, 0, fillWidth, progressRectHeight);
+				
+				g2.clip(clip);
+				double ratio=(double) (progressRectWidth) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
-					g.setColor(range.color);
-					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
+					g2.setColor(range.color);
+					g2.fillRect((int) (ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
 				}
-				progress = new Rectangle2D.Double(transX + fillWidth, transY, progressRectWidth + transX, progressRectHeight);
-				g2.fill(progress);
+				AffineTransform trans = new AffineTransform();
+				trans.translate(transX, transY);
+				g.drawImage(progressBarImage, trans, null);
+				g2.dispose();
 			}
 			else
 			{
+				BufferedImage progressBarImage = new BufferedImage(progressRectWidth, progressRectHeight, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2 = progressBarImage.createGraphics();
+				
 				final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
+		        clip = new Rectangle2D.Double(0, progressRectHeight - fillHeight + transY, progressRectWidth, fillHeight);
+				
+				g2.clip(clip);
 				double ratio=(double) (progressRectHeight - transY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
-					g.setColor(range.color);
-					g.fillRect(transX, (int)(progressRectHeight - ratio*range.range.max),
-							progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
+					g2.setColor(range.color);
+					g2.fillRect(0, (int)(progressRectHeight - ratio*range.range.max), progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
 				}
-				progress = new Rectangle2D.Double(transX, progressRectHeight - fillHeight + transY, progressRectWidth, fillHeight);
+				AffineTransform trans = new AffineTransform();
+				trans.translate(transX, transY);
+				g.drawImage(progressBarImage, trans, null);
+				g2.dispose();
 			}
-			g2.dispose();
+			
 		}
 	}
 
@@ -344,23 +361,20 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		}
 		int transX = 0;
 		int transY = 0;
-		int dimWidthX = 0;
-		int dimWidthY = 0;
 		if(labelModel != null)
 		{
 			g.setFont(labelModel.getFont());
-			
 			switch (labelModel.getPosition())
 			{
-				case NORTH : transY = g.getFontMetrics().getHeight() + 1; 
-						     if (renderingModel.getOrientation() == Orientation.Vertical) dimWidthY = transY; break;
-				case SOUTH : if (renderingModel.getOrientation() == Orientation.Vertical) dimWidthY = g.getFontMetrics().getHeight() + 1; break;
-				case EAST : if (renderingModel.getOrientation() == Orientation.Horizontal) dimWidthX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
-				case WEST : transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); 
-							if (renderingModel.getOrientation() == Orientation.Horizontal) dimWidthX = transX; break;
+				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
+							 transY = g.getFontMetrics().getHeight() + 1; break;
+				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1; break;
+				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case WEST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel());
+							transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 			}
 		}
-		g.drawRect(transX, transY, progressRectWidth-1 - dimWidthX, progressRectHeight-2 - dimWidthY);
+		g.drawRect(transX, transY, progressRectWidth-1, progressRectHeight-2);
 	}
 
 	public void renderBar(Graphics2D g) {
