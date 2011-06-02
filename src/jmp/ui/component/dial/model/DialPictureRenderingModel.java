@@ -33,6 +33,7 @@ public class DialPictureRenderingModel extends DialRenderingModel {
 		this.setNeedle(needle);
 	}
 	public void setBackground(BufferedImage background) {
+		if(this.background==background) return;
 		this.background = background;
 		this.modelChange();
 	}
@@ -40,8 +41,10 @@ public class DialPictureRenderingModel extends DialRenderingModel {
 		return background;
 	}
 	public void setNeedle(BufferedImage needle) {
+		if(this.needle == needle) return;
 		this.needle = needle;
 		setChanged(true);
+		this.modelChange();
 	}
 	public BufferedImage getNeedle() {
 		return needle;

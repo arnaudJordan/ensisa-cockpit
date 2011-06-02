@@ -39,8 +39,10 @@ public class DialRenderingModel extends DefaultModel{
 	}
 
 	public void setSense(Rotation sense) {
+		if(this.sense == sense) return;
 		this.sense = sense;
 		setChanged(true);
+		this.modelChange();
 	}
 
 	public Rotation getSense() {
@@ -48,8 +50,10 @@ public class DialRenderingModel extends DefaultModel{
 	}
 
 	public void setTicksStartAngle(int ticksStartAngle) {
+		if(this.ticksStartAngle == ticksStartAngle) return;
 		this.ticksStartAngle = ticksStartAngle;
 		setChanged(true);
+		this.modelChange();
 	}
 
 	public int getTicksStartAngle() {
@@ -57,6 +61,7 @@ public class DialRenderingModel extends DefaultModel{
 	}
 
 	public void setChanged(boolean changed) {
+		
 		this.changed = changed;
 	}
 
@@ -65,7 +70,9 @@ public class DialRenderingModel extends DefaultModel{
 	}
 
 	public void setSize(Dimension size) {
+		if(this.size== size) return;
 		this.size = size;
+		this.modelChange();
 	}
 
 	public Dimension getSize() {

@@ -20,14 +20,18 @@ public class DialTrackRenderingModel extends DialRenderingModel {
 		return trackColor;
 	}
 	public void setTrackColor(Color trackColor) {
-		setChanged(true);
+		if(this.trackColor == trackColor) return;
 		this.trackColor = trackColor;
+		setChanged(true);
+		this.modelChange();
 	}
 	public int getTrackSize() {
 		return trackSize;
 	}
 	public void setTrackSize(int trackSize) {
-		setChanged(true);
+		if(this.trackSize == trackSize) return;
 		this.trackSize = trackSize;
+		setChanged(true);
+		this.modelChange();
 	}
 }
