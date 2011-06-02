@@ -18,7 +18,9 @@ public class BarColoredRangeRenderingModel extends BarRenderingModel {
 	}
 
 	public void setColoredRanges(ColoredRanges coloredRanges) {
+		if(this.coloredRanges == coloredRanges) return;
 		this.coloredRanges = coloredRanges;
+		this.modelChange();
 	}
 
 	public ColoredRanges getColoredRanges() {
