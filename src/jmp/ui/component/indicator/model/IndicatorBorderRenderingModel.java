@@ -7,7 +7,7 @@ public class IndicatorBorderRenderingModel extends IndicatorRenderingModel {
 	private static final int BORDER_SIZE = 2;
 	
 	private Color borderColor;
-	private int BorderSize;
+	private int borderSize;
 	
 	public IndicatorBorderRenderingModel()
 	{
@@ -16,7 +16,9 @@ public class IndicatorBorderRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setBorderColor(Color borderColor) {
+		if(this.borderColor == borderColor) return;
 		this.borderColor = borderColor;
+		this.modelChange();
 	}
 
 	public Color getBorderColor() {
@@ -24,11 +26,13 @@ public class IndicatorBorderRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setBorderSize(int borderSize) {
-		BorderSize = borderSize;
+		if(this.borderSize == borderSize) return;
+		this.borderSize = borderSize;
+		this.modelChange();
 	}
 
 	public int getBorderSize() {
-		return BorderSize;
+		return borderSize;
 	}
 
 }

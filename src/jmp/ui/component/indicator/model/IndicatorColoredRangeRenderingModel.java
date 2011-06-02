@@ -22,14 +22,18 @@ public class IndicatorColoredRangeRenderingModel extends IndicatorRenderingModel
 	}
 
 	public void setColoredRanges(ColoredRanges coloredRanges) {
+		if(this.coloredRanges == coloredRanges) return;
 		this.coloredRanges = coloredRanges;
+		this.modelChange();
 	}
 
 	public ColoredRanges getColoredRanges() {
 		return coloredRanges;
 	}
 	public void setSize(Dimension size) {
+		if(this.size == size) return;
 		this.size = size;
+		this.modelChange();
 	}
 
 	public Dimension getSize() {

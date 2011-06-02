@@ -52,7 +52,9 @@ public class IndicatorBlinkRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setImageList(ImageListRanges imageList) {
+		if(this.imageListRanges == imageList) return;
 		this.imageListRanges = imageList;
+		this.modelChange();
 	}
 
 	public ImageListRanges getImageList() {
