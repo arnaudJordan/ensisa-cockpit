@@ -25,7 +25,9 @@ public class BarRenderingModel extends DefaultModel {
 	}
 
 	public void setOrientation(Orientation orientation) {
+		if(this.orientation == orientation) return;
 		this.orientation = orientation;
+		this.modelChange();
 	}
 
 	public Orientation getOrientation() {
@@ -33,7 +35,9 @@ public class BarRenderingModel extends DefaultModel {
 	}
 
 	public void setSize(Dimension size) {
+		if(this.size == size) return;
 		this.size = size;
+		this.modelChange();
 	}
 
 	public Dimension getSize() {

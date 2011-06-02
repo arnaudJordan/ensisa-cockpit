@@ -40,7 +40,9 @@ public class BarLabelRenderingModel extends BarRenderingModel {
 	}
 
 	public void setLabel(String label) {
+		if(this.label == label) return;
 		this.label = label;
+		this.modelChange();
 	}
 
 	public Color getColor() {
@@ -48,7 +50,9 @@ public class BarLabelRenderingModel extends BarRenderingModel {
 	}
 
 	public void setColor(Color color) {
+		if(this.color == color) return;
 		this.color = color;
+		this.modelChange();
 	}
 
 	public Font getFont() {
@@ -56,11 +60,15 @@ public class BarLabelRenderingModel extends BarRenderingModel {
 	}
 
 	public void setFont(Font font) {
+		if(this.font == font) return;
 		this.font = font;
+		this.modelChange();
 	}
 
 	public void setPosition(CardinalPosition position) {
+		if(this.position == position) return;
 		this.position = position;
+		this.modelChange();
 	}
 
 	public CardinalPosition getPosition() {

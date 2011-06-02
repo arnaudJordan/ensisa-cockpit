@@ -31,7 +31,9 @@ public class BarColoredRenderingModel extends BarRenderingModel {
 	 * @param trailColor the trailColor to set
 	 */
 	public void setTrailColor(Color trailColor) {
+		if(this.trailColor == trailColor) return;
 		this.trailColor = trailColor;
+		this.modelChange();
 	}
 
 	/**
@@ -45,6 +47,8 @@ public class BarColoredRenderingModel extends BarRenderingModel {
 	 * @param progressColor the progressColor to set
 	 */
 	public void setProgressColor(Color progressColor) {
+		if(this.progressColor == progressColor) return;
 		this.progressColor = progressColor;
+		this.modelChange();
 	}
 }
