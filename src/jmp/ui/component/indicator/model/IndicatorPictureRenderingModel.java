@@ -33,13 +33,17 @@ public class IndicatorPictureRenderingModel extends IndicatorRenderingModel{
 		return onImage;
 	}
 	public void setOnImage(BufferedImage onImage) {
+		if(this.onImage == onImage) return;
 		this.onImage = onImage;
+		this.modelChange();
 	}
 	public BufferedImage getOffImage() {
 		return offImage;
 	}
 	public void setOffImage(BufferedImage offImage) {
+		if(this.offImage == offImage) return;
 		this.offImage = offImage;
+		this.modelChange();
 	}
 	
 }

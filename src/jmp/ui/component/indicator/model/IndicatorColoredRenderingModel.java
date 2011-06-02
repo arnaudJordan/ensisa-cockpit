@@ -23,7 +23,9 @@ public class IndicatorColoredRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setOffColor(Color offColor) {
+		if(this.offColor == offColor) return;
 		this.offColor = offColor;
+		this.modelChange();
 	}
 
 	public Color getOffColor() {
@@ -31,7 +33,9 @@ public class IndicatorColoredRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setOnColor(Color onColor) {
+		if(this.onColor == onColor) return;
 		this.onColor = onColor;
+		this.modelChange();
 	}
 
 	public Color getOnColor() {
@@ -39,7 +43,9 @@ public class IndicatorColoredRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setSize(Dimension size) {
+		if(this.size == size) return;
 		this.size = size;
+		this.modelChange();
 	}
 
 	public Dimension getSize() {

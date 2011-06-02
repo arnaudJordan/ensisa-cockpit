@@ -104,7 +104,9 @@ public class IndicatorBlinkMultiRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setImageList(List<ImageListRanges> imageList) {
+		if(this.imageListRanges == imageList) return;
 		this.imageListRanges = imageList;
+		this.modelChange();
 	}
 
 	public List<ImageListRanges> getImageList() {

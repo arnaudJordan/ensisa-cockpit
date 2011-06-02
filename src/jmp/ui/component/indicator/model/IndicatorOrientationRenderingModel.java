@@ -12,7 +12,9 @@ public class IndicatorOrientationRenderingModel extends IndicatorRenderingModel 
 		this.setOrientation(orientation);
 	}
 	public void setOrientation(Orientation orientation) {
+		if(this.orientation == orientation) return;
 		this.orientation = orientation;
+		this.modelChange();
 	}
 	public Orientation getOrientation() {
 		return orientation;
