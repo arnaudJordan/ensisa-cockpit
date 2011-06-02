@@ -63,7 +63,9 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMinorGraduationColor(Color minorGraduationColor) {
+		if(this.MinorGraduationColor==minorGraduationColor) return;
 		MinorGraduationColor = minorGraduationColor;
+		this.modelChange();
 	}
 
 	public Color getMajorGraduationColor() {
@@ -71,7 +73,9 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMajorGraduationColor(Color majorGraduationColor) {
+		if(this.MajorGraduationColor == majorGraduationColor) return;
 		MajorGraduationColor = majorGraduationColor;
+		this.modelChange();
 	}
 
 	public Color getLabelColor() {
@@ -79,11 +83,15 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setLabelColor(Color labelColor) {
+		if(this.LabelColor == labelColor) return;
 		LabelColor = labelColor;
+		this.modelChange();
 	}
 
 	public void setLabelFont(Font labelFont) {
+		if(this.LabelFont == labelFont) return;
 		LabelFont = labelFont;
+		this.modelChange();
 	}
 
 	public Font getLabelFont() {
@@ -95,7 +103,9 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setLabelSpace(int labelSpace) {
+		if(this.LabelSpace == labelSpace) return;
 		LabelSpace = labelSpace;
+		this.modelChange();
 	}
 
 	public float getMinorGraduationWidth() {
@@ -103,8 +113,10 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMinorGraduationWidth(float minorGraduationWidth) {
+		if(this.MinorGraduationWidth == minorGraduationWidth) return;
 		MinorGraduationWidth = minorGraduationWidth;
 		setMinorGradutionStroke(new BasicStroke(minorGraduationWidth,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
+		this.modelChange();
 	}
 
 	public float getMajorGraduationWidth() {
@@ -112,40 +124,49 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMajorGraduationWidth(float majorGraduationWidth) {
+		if(this.MajorGraduationWidth == majorGraduationWidth) return;
 		MajorGraduationWidth = majorGraduationWidth;
 		setMajorGradutionStroke(new BasicStroke(majorGraduationWidth,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
+		this.modelChange();
 	}
 
 	public double getMajorGradutionRatio() {
 		return MajorGradutionRatio;
 	}
 
-	public void setMajorGradutionRatio(double majorGradutionRatio) {
-		MajorGradutionRatio = majorGradutionRatio;
+	public void setMajorGradutionRatio(double majorGraduationRatio) {
+		if(this.MajorGradutionRatio == majorGraduationRatio) return;
+		MajorGradutionRatio = majorGraduationRatio;
+		this.modelChange();
 	}
 
 	public double getMinorGradutionRatio() {
 		return MinorGradutionRatio;
 	}
 
-	public void setMinorGradutionRatio(double minorGradutionRatio) {
-		MinorGradutionRatio = minorGradutionRatio;
+	public void setMinorGradutionRatio(double minorGraduationRatio) {
+		if(this.MinorGradutionRatio == minorGraduationRatio) return;
+		MinorGradutionRatio = minorGraduationRatio;
 	}
 
 	public Stroke getMajorGradutionStroke() {
 		return MajorGradutionStroke;
 	}
 
-	public void setMajorGradutionStroke(Stroke majorGradutionStroke) {
-		MajorGradutionStroke = majorGradutionStroke;
+	public void setMajorGradutionStroke(Stroke majorGraduationStroke) {
+		if(this.MajorGradutionStroke == majorGraduationStroke) return;
+		MajorGradutionStroke = majorGraduationStroke;
+		this.modelChange();
 	}
 
 	public Stroke getMinorGradutionStroke() {
 		return MinorGradutionStroke;
 	}
 
-	public void setMinorGradutionStroke(Stroke minorGradutionStroke) {
-		MinorGradutionStroke = minorGradutionStroke;
+	public void setMinorGradutionStroke(Stroke minorGraduationStroke) {
+		if(this.MinorGradutionStroke == minorGraduationStroke) return;
+		MinorGradutionStroke = minorGraduationStroke;
+		this.modelChange();
 	}
 
 	public double getMajorTickSpacing() {
@@ -153,7 +174,9 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMajorTickSpacing(double majorTickSpacing) {
+		if(this.MajorTickSpacing == majorTickSpacing) return;
 		MajorTickSpacing = majorTickSpacing;
+		this.modelChange();
 	}
 
 	public double getMinorTickSpacing() {
@@ -161,7 +184,9 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMinorTickSpacing(double minorTickSpacing) {
+		if(this.MinorTickSpacing == minorTickSpacing) return;
 		MinorTickSpacing = minorTickSpacing;
+		this.modelChange();
 	}
 
 	public double getMinorTickSize() {
@@ -169,7 +194,9 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMinorTickSize(double minorTickSize) {
+		if(this.MinorTickSize == minorTickSize) return;
 		MinorTickSize = minorTickSize;
+		this.modelChange();
 	}
 
 	public double getMajorTickSize() {
@@ -177,7 +204,8 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	}
 
 	public void setMajorTickSize(double majorTickSize) {
+		if(this.MajorTickSize == majorTickSize) return;
 		MajorTickSize = majorTickSize;
+		this.modelChange();
 	}
-
 }
