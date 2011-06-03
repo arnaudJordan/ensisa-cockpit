@@ -6,23 +6,20 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
-import java.awt.RenderingHints;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
-import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorLabelMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorRenderingModel;
 import jmp.ui.model.BooleanModel;
 import jmp.ui.model.BooleanModels;
 import jmp.ui.model.ModelComposit;
@@ -37,21 +34,38 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
+		IndicatorLabelMultiRenderingModel labelsModel = ((IndicatorLabelMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("labels"));
 		BooleanModels valueModel = ((BooleanModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		
 		int multX=0;
 		int multY=0;
+		int transX = 0;
+		int transY = 0;
 		if(valueModel!=null)
 			if(orientationModel!=null && orientationModel.getOrientation()==Orientation.Vertical)
 				multY=1;
 			else
 				multX=1;
 		
+		if(labelsModel != null)
+		{
+			Iterator<IndicatorLabelRenderingModel> it = labelsModel.getIterator();
+			Graphics g2 = this.indicatorView().getGraphics();
+			while(it.hasNext())
+			{
+				IndicatorLabelRenderingModel label = it.next();
+				g2.setFont(label.getFont());
+				if(label.getPosition() == CardinalPosition.WEST)
+				{
+					transX = (transX > g2.getFontMetrics().stringWidth(label.getLabel())) ? transX : g2.getFontMetrics().stringWidth(label.getLabel());
+				}
+			}
+		}
+		
 		if(pictureModel != null)
 		{
 			Iterator<BooleanModel> it = valueModel.getIterator();
-			int transX = 0;
-			int transY = 0;
+			
 			while(it.hasNext())
 			{
 				BooleanModel value = it.next();
@@ -71,8 +85,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 		{
 			Color oldColor = g.getColor();
 			Iterator<BooleanModel> it = valueModel.getIterator();
-			int transX = 0;
-			int transY = 0;
+			int i = 0;
 			while(it.hasNext())
 			{
 				BooleanModel value = it.next();
@@ -93,15 +106,90 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			                new float[] { 0.0f, 1.0f },
 			                new Color[] { new Color(255, 255, 255), colorModel.getOffColor()});
 				}
+				int transYN = 0, transYS = 0;
+				if(labelsModel != null)
+				{
+					IndicatorLabelRenderingModel label = labelsModel.getLabel(i);
+					Graphics g2 = this.indicatorView().getGraphics();
+					g2.setFont(label.getFont());
+					if(label.getPosition() == CardinalPosition.NORTH)
+					{
+						transYN = g2.getFontMetrics().getHeight();
+					}
+					if(label.getPosition() == CardinalPosition.SOUTH)
+					{
+						transYS = g2.getFontMetrics().getHeight();
+					}
+				}
+				transY+=transYN;
 				g.setPaint(p);
 				g.fillOval(transX,transY,(int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight());
+				transY+=transYS;
 				transX+=colorModel.getSize().getWidth() * multX;
 				transY+=colorModel.getSize().getHeight() * multY;
+				i++;
 			}
 			g.setColor(oldColor);
 		}
 	}
 	
+	public void renderLabel(Graphics2D g) {
+		IndicatorLabelMultiRenderingModel labelsModel = ((IndicatorLabelMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("labels"));
+		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
+		IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
+		
+		
+		if(labelsModel == null) return;
+		
+		Dimension dimension = new Dimension(0,0);
+		
+		if(colorModel != null)
+			dimension = new Dimension(colorModel.getSize().width, colorModel.getSize().height);
+		if(pictureModel != null)
+			dimension = new Dimension(pictureModel.getOnImage().getWidth(), pictureModel.getOnImage().getHeight());
+		
+		int transY = 0;
+		
+		int xw=0, xe=0, y=0;
+		Iterator<IndicatorLabelRenderingModel> it = labelsModel.getIterator();
+		while(it.hasNext())
+		{
+			IndicatorLabelRenderingModel label = it.next();
+			g.setFont(label.getFont());
+			if(label.getPosition() == CardinalPosition.NORTH || label.getPosition() == CardinalPosition.SOUTH)
+			{
+				y+=g.getFontMetrics().getHeight();
+			}
+			if(label.getPosition() == CardinalPosition.WEST)
+			{
+				xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel());
+				
+			}
+			else
+			{
+				xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel());
+			}				
+		}
+		int middle = xw + dimension.width/2;
+		
+		it = labelsModel.getIterator();
+		while(it.hasNext())
+		{
+			IndicatorLabelRenderingModel label = it.next();
+			g.setColor(label.getColor());
+			g.setFont(label.getFont());
+			final int strHeight = g.getFontMetrics().getHeight();
+			final int strWidth = g.getFontMetrics().stringWidth(label.getLabel());
+			switch (label.getPosition())
+			{
+				case NORTH : g.drawString(label.getLabel(), middle - strWidth/2, strHeight + transY);transY+=strHeight; break;
+				case SOUTH : g.drawString(label.getLabel(), middle - strWidth/2, transY + dimension.height + strHeight);transY+=strHeight; break;
+				case EAST : g.drawString(label.getLabel(), middle + dimension.width/2, transY + dimension.height/2 + strHeight/2); break;
+				case WEST : g.drawString(label.getLabel(), middle - dimension.width/2 - strWidth, transY + dimension.height/2 + strHeight/2); break;
+			}
+			transY+=dimension.getHeight();
+		}
+	}
 	
 	public Dimension getPreferredSize() {
 		IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
@@ -109,6 +197,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 		IndicatorColoredRangeRenderingModel coloredRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
 		IndicatorBlinkRenderingModel blinkModel = ((IndicatorBlinkRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("blink"));
 		IndicatorOrientationRenderingModel orientationModel = ((IndicatorOrientationRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("orientation"));
+		IndicatorLabelMultiRenderingModel labelsModel = ((IndicatorLabelMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("labels"));
 		BooleanModels valueModel = ((BooleanModels) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		
 		int multX=1;
@@ -132,10 +221,36 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 		
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
 		
+		Graphics g = this.indicatorView().getGraphics();
+		
+		if(labelsModel != null)
+		{
+			
+			int xw=0, xe=0, y=0;
+			Iterator<IndicatorLabelRenderingModel> it = labelsModel.getIterator();
+			while(it.hasNext())
+			{
+				IndicatorLabelRenderingModel label = it.next();
+				g.setFont(label.getFont());
+				if(label.getPosition() == CardinalPosition.NORTH || label.getPosition() == CardinalPosition.SOUTH)
+				{
+					y+=g.getFontMetrics().getHeight();
+				}
+				if(label.getPosition() == CardinalPosition.WEST)
+				{
+					xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel());
+					
+				}
+				if(label.getPosition() == CardinalPosition.EAST)
+				{
+					xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel());
+				}				
+			}
+			dimension = new Dimension((int) (dimension.getWidth() + xe + xw), (int)(dimension.getHeight() + y));
+		}
+		
 		if(labelModel == null) 
 			return dimension;
-		
-		Graphics g = this.indicatorView().getGraphics();
 		g.setFont(labelModel.getFont());
 		
 		if(labelModel.getPosition() == CardinalPosition.NORTH || labelModel.getPosition() == CardinalPosition.SOUTH)
@@ -146,6 +261,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 				Math.max((int)dimension.getHeight(), g.getFontMetrics().getHeight() + 1));
 	}
 	public void renderBorder(Graphics2D g) {
+		IndicatorLabelMultiRenderingModel labelsModel = ((IndicatorLabelMultiRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("labels"));
 			IndicatorBorderRenderingModel borderModel = ((IndicatorBorderRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("border"));
 			IndicatorPictureRenderingModel pictureModel = ((IndicatorPictureRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("picture"));
 			IndicatorColoredRenderingModel colorModel = ((IndicatorColoredRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("color"));
@@ -170,6 +286,33 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 	
 			if(dimension==null || borderModel.getBorderSize()==0) return;
 			
+			int middle = dimension.width/2;
+			int xw=0, xe=0, y=0;
+			if(labelsModel !=null)
+			{
+				
+				Iterator<IndicatorLabelRenderingModel> it = labelsModel.getIterator();
+				while(it.hasNext())
+				{
+					IndicatorLabelRenderingModel label = it.next();
+					g.setFont(label.getFont());
+					if(label.getPosition() == CardinalPosition.NORTH || label.getPosition() == CardinalPosition.SOUTH)
+					{
+						y+=g.getFontMetrics().getHeight();
+					}
+					if(label.getPosition() == CardinalPosition.WEST)
+					{
+						xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel());
+						
+					}
+					else
+					{
+						xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel());
+					}				
+				}
+				middle += xw;
+			}
+			
 			
 			int multX=0;
 			int multY=0;
@@ -181,17 +324,38 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			
 			g.setColor(borderModel.getBorderColor());
 			g.setStroke(new BasicStroke(borderModel.getBorderSize()));
-			int transX=0, transY=0;
+			int transX=xw, transY=0;
 			
 			Color oldColor = g.getColor();
 			g.setColor(borderModel.getBorderColor());
 			Iterator<BooleanModel> it = valueModel.getIterator();
+			int i=0;
 			while(it.hasNext())
 			{
+				
+				int transYN = 0;
+				int transYS = 0;
+				if(labelsModel != null)
+				{
+					IndicatorLabelRenderingModel label = labelsModel.getLabel(i);
+					Graphics g2 = this.indicatorView().getGraphics();
+					g2.setFont(label.getFont());
+					if(label.getPosition() == CardinalPosition.NORTH)
+					{
+						transYN = g2.getFontMetrics().getHeight();
+					}
+					if(label.getPosition() == CardinalPosition.SOUTH)
+					{
+						transYS = g2.getFontMetrics().getHeight();
+					}
+				}
+				transY+=transYN;
 				g.drawOval(transX,transY,(int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight());
+				transY+=transYS;
 				it.next();
 				transX+=colorModel.getSize().getWidth() * multX;
 				transY+=colorModel.getSize().getHeight() * multY;
+				i++;
 			}
 			g.setColor(oldColor);
 	}

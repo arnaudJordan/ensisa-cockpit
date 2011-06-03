@@ -13,10 +13,13 @@ import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorLabelMultiRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorMultiRenderer;
 import jmp.ui.model.BooleanModel;
@@ -122,11 +125,17 @@ public class TestIndicatorPictureMultiComponent extends JFrame
 		list.add(new DefaultBooleanModel());
 		list.add(new DefaultBooleanModel());
 		list.add(new DefaultBooleanModel());
-		list.add(new DefaultBooleanModel());
 		valueModel.setModels(list);
 		model.addModel("value", valueModel);
 		//model.addModel("picture", new IndicatorPictureRenderingModel());
 		model.addModel("color", new IndicatorColoredRenderingModel());
+		
+		List<IndicatorLabelRenderingModel> labels = new ArrayList<IndicatorLabelRenderingModel>();
+		labels.add(new IndicatorLabelRenderingModel("LED 1", CardinalPosition.EAST));
+		labels.add(new IndicatorLabelRenderingModel("LED 2", CardinalPosition.SOUTH));
+		labels.add(new IndicatorLabelRenderingModel("LED3", CardinalPosition.WEST));
+		
+		model.addModel("labels", new IndicatorLabelMultiRenderingModel(labels));
 		model.addModel("border", new IndicatorBorderRenderingModel());
 		model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Vertical));
 		
