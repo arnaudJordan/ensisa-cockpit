@@ -132,13 +132,13 @@ public class TestIndicatorPictureMultiComponent extends JFrame
 		//model.addModel("color", new IndicatorColoredRenderingModel());
 		
 		List<IndicatorLabelRenderingModel> labels = new ArrayList<IndicatorLabelRenderingModel>();
-		labels.add(new IndicatorLabelRenderingModel("LED 1", CardinalPosition.EAST));
+		labels.add(new IndicatorLabelRenderingModel("LED 1", CardinalPosition.WEST));
 		labels.add(new IndicatorLabelRenderingModel("LED 2", CardinalPosition.SOUTH));
 		labels.add(new IndicatorLabelRenderingModel("LED3", CardinalPosition.WEST));
 		
 		model.addModel("labels", new IndicatorLabelMultiRenderingModel(labels));
 		model.addModel("border", new IndicatorBorderRenderingModel());
-		model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Vertical));
+		model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Horizontal));
 		
 		this.indicatorView.setModel(model);
 		this.componentsPane.add(this.indicatorView);
