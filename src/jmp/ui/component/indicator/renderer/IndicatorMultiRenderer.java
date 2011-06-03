@@ -65,7 +65,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 		if(pictureModel != null)
 		{
 			Iterator<BooleanModel> it = valueModel.getIterator();
-			
+			int i=0;
 			while(it.hasNext())
 			{
 				BooleanModel value = it.next();
@@ -74,9 +74,27 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 					stateImage = pictureModel.getOnImage();
 				else
 					stateImage = pictureModel.getOffImage();
+				int transYN = 0, transYS = 0;
+				if(labelsModel != null)
+				{
+					IndicatorLabelRenderingModel label = labelsModel.getLabel(i);
+					Graphics g2 = this.indicatorView().getGraphics();
+					g2.setFont(label.getFont());
+					if(label.getPosition() == CardinalPosition.NORTH)
+					{
+						transYN = g2.getFontMetrics().getHeight();
+					}
+					if(label.getPosition() == CardinalPosition.SOUTH)
+					{
+						transYS = g2.getFontMetrics().getHeight();
+					}
+				}
+				transY+=transYN;
 				g.drawImage(stateImage,transX,transY,null);
+				transY+=transYS;
 				transX+=stateImage.getWidth() * multX;
 				transY+=stateImage.getHeight() * multY;
+				i++;
 			}
 			return;
 		}
@@ -350,11 +368,11 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 					}
 				}
 				transY+=transYN;
-				g.drawOval(transX,transY,(int)colorModel.getSize().getWidth(), (int) colorModel.getSize().getHeight());
+				g.drawOval(transX,transY,dimension.getSize().width, dimension.getSize().height);
 				transY+=transYS;
 				it.next();
-				transX+=colorModel.getSize().getWidth() * multX;
-				transY+=colorModel.getSize().getHeight() * multY;
+				transX+=dimension.getSize().getWidth() * multX;
+				transY+=dimension.getSize().getHeight() * multY;
 				i++;
 			}
 			g.setColor(oldColor);

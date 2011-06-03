@@ -21,6 +21,7 @@ import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorMultiRenderer;
 import jmp.ui.model.BooleanModel;
 import jmp.ui.model.BooleanModels;
@@ -127,8 +128,8 @@ public class TestIndicatorPictureMultiComponent extends JFrame
 		list.add(new DefaultBooleanModel());
 		valueModel.setModels(list);
 		model.addModel("value", valueModel);
-		//model.addModel("picture", new IndicatorPictureRenderingModel());
-		model.addModel("color", new IndicatorColoredRenderingModel());
+		model.addModel("picture", new IndicatorPictureRenderingModel());
+		//model.addModel("color", new IndicatorColoredRenderingModel());
 		
 		List<IndicatorLabelRenderingModel> labels = new ArrayList<IndicatorLabelRenderingModel>();
 		labels.add(new IndicatorLabelRenderingModel("LED 1", CardinalPosition.EAST));
