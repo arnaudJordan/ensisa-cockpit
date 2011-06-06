@@ -27,7 +27,6 @@ public class DialPartialRenderingModel extends DialRenderingModel{
 	}
 
 	public void setEndAngle(Integer endAngle) {
-		if(this.endAngle == endAngle) return;
 		this.endAngle = ((endAngle % 360) + 360) % 360;
 		if(this.startAngle >= this.endAngle) this.endAngle += 360;
 		this.modelChange();
