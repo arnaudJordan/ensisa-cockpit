@@ -58,12 +58,12 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 				if(label.getPosition() == CardinalPosition.WEST)
 				{
 					if(multY>0)
-						transX = (transX > g2.getFontMetrics().stringWidth(label.getLabel())) ? transX : g2.getFontMetrics().stringWidth(label.getLabel());
+						transX = (transX > g2.getFontMetrics().stringWidth(label.getLabel())) ? transX : g2.getFontMetrics().stringWidth(label.getLabel()) + label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.NORTH)
 				{
 					if(multX>0)
-						transY = g2.getFontMetrics().getHeight();
+						transY = g2.getFontMetrics().getHeight() + label.getMargin();
 				}
 			}
 		}
@@ -91,19 +91,19 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 					g2.setFont(label.getFont());
 					if(label.getPosition() == CardinalPosition.NORTH && multY>0)
 					{
-						transYN = g2.getFontMetrics().getHeight();
+						transYN = g2.getFontMetrics().getHeight() + label.getMargin();
 					}
 					if(label.getPosition() == CardinalPosition.SOUTH&& multY>0)
 					{
-						transYS = g2.getFontMetrics().getHeight();
+						transYS = g2.getFontMetrics().getHeight()+ label.getMargin();
 					}
 					if(label.getPosition() == CardinalPosition.WEST && multX>0)
 					{
-						transXW = g2.getFontMetrics().stringWidth(label.getLabel());
+						transXW = g2.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 					}
 					if(label.getPosition() == CardinalPosition.EAST && multX>0)
 					{
-						transXE = g2.getFontMetrics().stringWidth(label.getLabel());
+						transXE = g2.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 					}
 				}
 				transY+=transYN;
@@ -137,19 +137,19 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 					g2.setFont(label.getFont());
 					if(label.getPosition() == CardinalPosition.NORTH && multY>0)
 					{
-						transYN = g2.getFontMetrics().getHeight();
+						transYN = g2.getFontMetrics().getHeight()+ label.getMargin();
 					}
 					if(label.getPosition() == CardinalPosition.SOUTH&& multY>0)
 					{
-						transYS = g2.getFontMetrics().getHeight();
+						transYS = g2.getFontMetrics().getHeight()+ label.getMargin();
 					}
 					if(label.getPosition() == CardinalPosition.WEST && multX>0)
 					{
-						transXW = g2.getFontMetrics().stringWidth(label.getLabel());
+						transXW = g2.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 					}
 					if(label.getPosition() == CardinalPosition.EAST && multX>0)
 					{
-						transXE = g2.getFontMetrics().stringWidth(label.getLabel());
+						transXE = g2.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 					}
 				}
 				transY+=transYN;
@@ -221,22 +221,22 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			if(label.getPosition() == CardinalPosition.NORTH)
 			{
 				if(multX>0)
-					yn = g.getFontMetrics().getHeight();
+					yn = g.getFontMetrics().getHeight()+ label.getMargin();
 			}
 			if(label.getPosition() == CardinalPosition.SOUTH)
 			{
 				if(multX>0)
-					ys = g.getFontMetrics().getHeight();
+					ys = g.getFontMetrics().getHeight()+ label.getMargin();
 			}
 			if(label.getPosition() == CardinalPosition.WEST)
 			{
 				if(multY>0)
-					xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel());
+					xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 			}
 			if(label.getPosition() == CardinalPosition.EAST)
 			{
 				if(multY>0)
-					xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel());
+					xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 			}	
 		}
 		int middle = xw + dimension.width/2;
@@ -252,10 +252,10 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			final int strWidth = g.getFontMetrics().stringWidth(label.getLabel());
 			switch (label.getPosition())
 			{
-			case NORTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX, strHeight + transY);transY+=strHeight* multY; break;
-			case SOUTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX, transY + dimension.height + strHeight+ yn);transY+=strHeight * multY; break;
-			case EAST : g.drawString(label.getLabel(), middle + dimension.width/2 + transX, yn+transY + dimension.height/2 + strHeight/2);transX+=strWidth * multX; break;
-			case WEST : transX+=strWidth * multX; g.drawString(label.getLabel(), middle - dimension.width/2 - strWidth + transX, yn+transY + dimension.height/2 + strHeight/2);break;
+			case NORTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX, strHeight + transY);transY+=(strHeight+ label.getMargin())* multY; break;
+			case SOUTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX, transY + dimension.height + strHeight+ yn);transY+=(strHeight+ label.getMargin()) * multY; break;
+			case EAST : g.drawString(label.getLabel(), middle + dimension.width/2 + transX, yn+transY + dimension.height/2 + strHeight/2);transX+=(strWidth+ label.getMargin()) * multX; break;
+			case WEST : transX+=(strWidth + label.getMargin())* multX; g.drawString(label.getLabel(), middle - dimension.width/2 - strWidth + transX, yn+transY + dimension.height/2 + strHeight/2);break;
 			}
 			transY+=dimension.getHeight()*multY;
 			transX+=dimension.getWidth()*multX;
@@ -320,29 +320,29 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 				g.setFont(label.getFont());
 				if(label.getPosition() == CardinalPosition.NORTH)
 				{
-					yn+=g.getFontMetrics().getHeight() * multY;
+					yn+=(g.getFontMetrics().getHeight()+ label.getMargin()) * multY;
 					if(multX>0)
-						yn = g.getFontMetrics().getHeight();
+						yn = g.getFontMetrics().getHeight()+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.SOUTH)
 				{
-					ys+=g.getFontMetrics().getHeight() * multY;
+					ys+=(g.getFontMetrics().getHeight()+ label.getMargin()) * multY;
 					if(multX>0)
-						ys = g.getFontMetrics().getHeight();
+						ys = g.getFontMetrics().getHeight()+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.WEST)
 				{
 					if(multY>0)
-						xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel());
+						xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 					if(multX>0)
-						xw += g.getFontMetrics().stringWidth(label.getLabel());
+						xw += g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.EAST)
 				{
 					if(multY>0)
-						xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel());
+						xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 					if(multX>0)
-						xe += g.getFontMetrics().stringWidth(label.getLabel());
+						xe += g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 				}				
 			}
 			dimension = new Dimension((int) (dimension.getWidth() + xe + xw), (int)(dimension.getHeight() + yn+ys));
@@ -415,22 +415,22 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 				if(label.getPosition() == CardinalPosition.NORTH)
 				{
 					if(multX>0)
-						yn = g.getFontMetrics().getHeight();
+						yn = g.getFontMetrics().getHeight()+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.SOUTH)
 				{
 					if(multX>0)
-						ys = g.getFontMetrics().getHeight();
+						ys = g.getFontMetrics().getHeight()+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.WEST)
 				{
 					if(multY>0)
-						xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel());
+						xw = (xw > g.getFontMetrics().stringWidth(label.getLabel())) ? xw : g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.EAST)
 				{
 					if(multY>0)
-						xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel());
+						xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 				}				
 			}
 			middle += xw;
@@ -452,19 +452,19 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 				g2.setFont(label.getFont());
 				if(label.getPosition() == CardinalPosition.NORTH && multY>0)
 				{
-					transYN = g2.getFontMetrics().getHeight();
+					transYN = g2.getFontMetrics().getHeight()+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.SOUTH&& multY>0)
 				{
-					transYS = g2.getFontMetrics().getHeight();
+					transYS = g2.getFontMetrics().getHeight()+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.WEST&& multX>0)
 				{
-					transXW = g2.getFontMetrics().stringWidth(label.getLabel());
+					transXW = g2.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 				}
 				if(label.getPosition() == CardinalPosition.EAST && multX>0)
 				{
-					transXE = g2.getFontMetrics().stringWidth(label.getLabel());
+					transXE = g2.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 				}
 			}
 			transY+=transYN;
