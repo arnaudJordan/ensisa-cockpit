@@ -20,6 +20,7 @@ import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRangeRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarLabelRenderingModel;
+import jmp.ui.component.bar.model.BarPictureRenderingModel;
 import jmp.ui.component.bar.model.BarRenderingModel;
 import jmp.ui.component.bar.model.BarTicksRenderingModel;
 import jmp.ui.model.BoundedModel;
@@ -47,8 +48,9 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		BarColoredRenderingModel coloredModel = ((BarColoredRenderingModel) ((ModelComposit) (barView().getModel())).getModel("colored"));
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
 		BarColoredRangeRenderingModel coloredRangeModel = ((BarColoredRangeRenderingModel) ((ModelComposit) (barView().getModel())).getModel("coloredRangeBackground"));
-		
-		if(coloredModel==null) return;
+		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
+
+		if(coloredModel==null && coloredRangeModel==null && pictureModel==null) return;
 		
 		int progressRectWidth = 0;
 		int progressRectHeight = 0;
@@ -78,14 +80,16 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 							transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 			}
 		}
-		if(coloredRangeModel == null)
+		
+		if(coloredRangeModel == null && pictureModel == null)
 		{
 			g.setColor(coloredModel.getTrailColor());
 			g.fillRect(transX, transY, progressRectWidth, progressRectHeight);
 		}
-		else
+		
+		if(renderingModel.getOrientation() == Orientation.Horizontal)
 		{
-			if(renderingModel.getOrientation() == Orientation.Horizontal)
+			if(coloredRangeModel != null)
 			{
 				double ratio=(double) (progressRectWidth) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
@@ -94,7 +98,16 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
 				}
 			}
-			else
+			if(pictureModel != null)
+			{
+				AffineTransform trans = new AffineTransform();
+				trans.translate(transX, transY);
+				g.drawImage(pictureModel.getBackground(), trans, null);
+			}
+		}
+		else
+		{
+			if(coloredRangeModel != null)
 			{
 				double ratio=(double) (progressRectHeight - transY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
@@ -103,6 +116,13 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 					g.fillRect(transX, (int)(progressRectHeight - ratio*range.range.max),
 							progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
 				}
+			}
+			if(pictureModel != null)
+			{
+				AffineTransform trans = new AffineTransform();
+				trans.translate(transX, transY + pictureModel.getBackground().getWidth());
+				trans.rotate(Math.toRadians(-90));
+				g.drawImage(pictureModel.getBackground(), trans, null);
 			}
 		}
 	}
@@ -114,7 +134,8 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
 		BarColoredRangeRenderingModel coloredRangeModel = ((BarColoredRangeRenderingModel) ((ModelComposit) (barView().getModel())).getModel("coloredRangeProgress"));
 		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
-		
+		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
+
 		if(coloredModel==null) return;
 		
 		int progressRectWidth = 0;
@@ -126,13 +147,30 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		
 		if (renderingModel.getOrientation() == Orientation.Horizontal)
 		{
-			progressRectWidth = (int) this.getView().getSize().width;
-			progressRectHeight = (int) renderingModel.getSize().getHeight();
+			if(pictureModel != null)
+			{
+				progressRectWidth = pictureModel.getBackground().getWidth();
+				progressRectHeight = pictureModel.getBackground().getHeight();
+			}
+			else
+			{
+				progressRectWidth = (int) this.getView().getSize().width;
+				progressRectHeight = (int) renderingModel.getSize().getHeight();
+			}
 		}
 		else 
 		{
-			progressRectWidth = (int) renderingModel.getSize().getHeight();
-			progressRectHeight = this.getView().getSize().height;
+			
+			if(pictureModel != null)
+			{
+				progressRectWidth = pictureModel.getBackground().getHeight();
+				progressRectHeight = pictureModel.getBackground().getWidth();
+			}
+			else
+			{
+				progressRectWidth = (int) renderingModel.getSize().getHeight();
+				progressRectHeight = this.getView().getSize().height;
+			}
 		}
 		
 		int transX = 0;
@@ -142,11 +180,11 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			g.setFont(labelModel.getFont());
 			switch (labelModel.getPosition())
 			{
-				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
+				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical && pictureModel == null) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
 							 transY = g.getFontMetrics().getHeight() + 1; break;
-				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1; break;
-				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
-				case WEST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel());
+				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical && pictureModel == null) progressRectHeight -= g.getFontMetrics().getHeight() + 1; break;
+				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal && pictureModel == null) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case WEST : if(renderingModel.getOrientation() == Orientation.Horizontal && pictureModel == null) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel());
 							transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 			}
 		}
@@ -167,15 +205,12 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		}
 		else
 		{
-			
-			Shape clip = null;
+			BufferedImage progressBarImage = new BufferedImage(progressRectWidth, progressRectHeight, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2 = progressBarImage.createGraphics();
+			Shape clip;
 			if(renderingModel.getOrientation() == Orientation.Horizontal)
 			{
-				BufferedImage progressBarImage = new BufferedImage(progressRectWidth, progressRectHeight, BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2 = progressBarImage.createGraphics();
-				
-				
-		        final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
+				final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
 		        clip = new Rectangle2D.Double(0, 0, fillWidth, progressRectHeight);
 				
 				g2.clip(clip);
@@ -185,16 +220,9 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 					g2.setColor(range.color);
 					g2.fillRect((int) (ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
 				}
-				AffineTransform trans = new AffineTransform();
-				trans.translate(transX, transY);
-				g.drawImage(progressBarImage, trans, null);
-				g2.dispose();
 			}
 			else
 			{
-				BufferedImage progressBarImage = new BufferedImage(progressRectWidth, progressRectHeight, BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2 = progressBarImage.createGraphics();
-				
 				final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
 		        clip = new Rectangle2D.Double(0, progressRectHeight - fillHeight + transY, progressRectWidth, fillHeight);
 				
@@ -205,30 +233,43 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 					g2.setColor(range.color);
 					g2.fillRect(0, (int)(progressRectHeight - ratio*range.range.max), progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
 				}
-				AffineTransform trans = new AffineTransform();
-				trans.translate(transX, transY);
-				g.drawImage(progressBarImage, trans, null);
-				g2.dispose();
 			}
-			
+			AffineTransform trans = new AffineTransform();
+			trans.translate(transX, transY);
+			g.drawImage(progressBarImage, trans, null);
+			g2.dispose();
 		}
 	}
 
 	public void renderLabel(Graphics2D g) {
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
-		
+		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
+
 		if(labelModel == null) return;
 			
 		g.setColor(labelModel.getColor());
 		g.setFont(labelModel.getFont());
 		final int strHeight = g.getFontMetrics().getHeight();
 		final int strWidth = g.getFontMetrics().stringWidth(labelModel.getLabel());
+		int height=0;
+		int width=0;
+		if(pictureModel != null)
+		{
+			height = (int)getPreferredSize().getHeight();
+			width = (int)getPreferredSize().getWidth();
+		}
+		else
+		{
+			height = this.getView().getSize().height;
+			width = this.getView().getSize().width;
+		}
+			
 		switch (labelModel.getPosition())
 		{
-			case NORTH : g.drawString(labelModel.getLabel(), this.getView().getSize().width/2 - strWidth/2, strHeight); break;
-			case SOUTH : g.drawString(labelModel.getLabel(), this.getView().getSize().width/2 - strWidth/2, this.getView().getSize().height); break;
-			case EAST : g.drawString(labelModel.getLabel(), this.getView().getSize().width - strWidth, this.getView().getSize().height/2 + strHeight/2); break;
-			case WEST : g.drawString(labelModel.getLabel(), 0, this.getView().getSize().height/2 + strHeight/2); break;
+			case NORTH : g.drawString(labelModel.getLabel(), width/2 - strWidth/2, strHeight); break;
+			case SOUTH : g.drawString(labelModel.getLabel(), width/2 - strWidth/2, height); break;
+			case EAST : g.drawString(labelModel.getLabel(), width - strWidth, height/2 + strHeight/2); break;
+			case WEST : g.drawString(labelModel.getLabel(), 0, height/2 + strHeight/2); break;
 		}
 	}
 
@@ -240,6 +281,7 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		BarTicksRenderingModel ticksModel = ((BarTicksRenderingModel) ((ModelComposit) (barView().getModel())).getModel("ticks"));
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
 		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
+		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
 		BarRenderingModel renderingModel = barView().renderingModel();
 		BoundedModel valueModel = ((BoundedModel) this.barView().valueModel());
 		if(ticksModel==null||valueModel==null) return;
@@ -252,10 +294,29 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		final int majorTickWidth = (int) ticksModel.getMajorGraduationWidth();
 		final int minorTickWidth = (int) ticksModel.getMinorGraduationWidth();
 		int barWidth = 0;
-		if(renderingModel.getOrientation() == Orientation.Horizontal)
-			barWidth = (int) this.getView().getSize().getWidth();
+		if(pictureModel != null)
+		{
+			barWidth = pictureModel.getBackground().getWidth();
+			if(labelModel != null)
+			{
+				g.setFont(labelModel.getFont());
+				if(renderingModel.getOrientation() == Orientation.Horizontal)
+				{
+					if(labelModel.getPosition() == CardinalPosition.EAST || labelModel.getPosition() == CardinalPosition.WEST)
+						barWidth += g.getFontMetrics().stringWidth(labelModel.getLabel());
+				}
+				else
+					if(labelModel.getPosition() == CardinalPosition.NORTH || labelModel.getPosition() == CardinalPosition.SOUTH)
+						barWidth += g.getFontMetrics().getHeight() + 1;
+			}
+		}
 		else
-			barWidth = (int) this.getView().getSize().getHeight();
+		{
+			if(renderingModel.getOrientation() == Orientation.Horizontal)
+				barWidth = (int) this.getView().getSize().getWidth();
+			else
+				barWidth = (int) this.getView().getSize().getHeight();
+		}
 		int lineXStart = 0;
 		int lineXEnd = 0;
 		int lineYStart = 0;
@@ -335,6 +396,7 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
 		BarColoredRenderingModel coloredModel = ((BarColoredRenderingModel) ((ModelComposit) (barView().getModel())).getModel("colored"));
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
+		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
 		
 		if(borderModel == null) return;
 		
@@ -351,13 +413,29 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		int progressRectHeight = 0;
 		if (renderingModel.getOrientation() == Orientation.Horizontal)
 		{
-			progressRectWidth = (int) this.getView().getSize().width;
-			progressRectHeight = (int) renderingModel.getSize().getHeight();
+			if(pictureModel != null)
+			{
+				progressRectWidth = pictureModel.getBackground().getWidth();
+				progressRectHeight = pictureModel.getBackground().getHeight();
+			}
+			else
+			{
+				progressRectWidth = (int) this.getView().getSize().width;
+				progressRectHeight = (int) renderingModel.getSize().getHeight();
+			}
 		}
 		else 
 		{
-			progressRectWidth = (int) renderingModel.getSize().getHeight();
-			progressRectHeight = this.getView().getSize().height;
+			if(pictureModel != null)
+			{
+				progressRectWidth = pictureModel.getBackground().getHeight();
+				progressRectHeight = pictureModel.getBackground().getWidth();
+			}
+			else
+			{
+				progressRectWidth = (int) renderingModel.getSize().getHeight();
+				progressRectHeight = this.getView().getSize().height;
+			}
 		}
 		int transX = 0;
 		int transY = 0;
@@ -366,11 +444,11 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			g.setFont(labelModel.getFont());
 			switch (labelModel.getPosition())
 			{
-				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
+				case NORTH : if(renderingModel.getOrientation() == Orientation.Vertical && pictureModel == null) progressRectHeight -= g.getFontMetrics().getHeight() + 1;
 							 transY = g.getFontMetrics().getHeight() + 1; break;
-				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical) progressRectHeight -= g.getFontMetrics().getHeight() + 1; break;
-				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
-				case WEST : if(renderingModel.getOrientation() == Orientation.Horizontal) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel());
+				case SOUTH : if(renderingModel.getOrientation() == Orientation.Vertical && pictureModel == null) progressRectHeight -= g.getFontMetrics().getHeight() + 1; break;
+				case EAST : if(renderingModel.getOrientation() == Orientation.Horizontal && pictureModel == null) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
+				case WEST : if(renderingModel.getOrientation() == Orientation.Horizontal && pictureModel == null) progressRectWidth -= g.getFontMetrics().stringWidth(labelModel.getLabel());
 							transX = g.getFontMetrics().stringWidth(labelModel.getLabel()); break;
 			}
 		}
@@ -397,11 +475,22 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 	public Dimension getPreferredSize()
 	{
 		BarRenderingModel renderingModel = this.barView().renderingModel();
+		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
 		Dimension dimension = new Dimension(0, 0);
 		if (renderingModel.getOrientation() == Orientation.Horizontal) 
-			dimension = new Dimension((int) renderingModel.getSize().getWidth(), (int) renderingModel.getSize().getHeight());
+		{
+			if(pictureModel != null)
+				dimension = new Dimension(pictureModel.getBackground().getWidth(), pictureModel.getBackground().getHeight());
+			else
+				dimension = new Dimension((int) renderingModel.getSize().getWidth(), (int) renderingModel.getSize().getHeight());
+		}
 		else 
-			dimension = new Dimension((int) renderingModel.getSize().getHeight(), (int) renderingModel.getSize().getWidth());
+		{
+			if(pictureModel != null)
+				dimension = new Dimension(pictureModel.getBackground().getHeight(), pictureModel.getBackground().getWidth());
+			else
+				dimension = new Dimension((int) renderingModel.getSize().getHeight(), (int) renderingModel.getSize().getWidth());
+		}
 		
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
 		

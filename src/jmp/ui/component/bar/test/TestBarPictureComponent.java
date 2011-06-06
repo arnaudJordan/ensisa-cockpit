@@ -17,11 +17,12 @@ import jmp.ui.component.bar.BarView;
 import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarLabelRenderingModel;
+import jmp.ui.component.bar.model.BarPictureRenderingModel;
 import jmp.ui.component.bar.model.BarTicksRenderingModel;
 import jmp.ui.model.ModelComposit;
 
 
-public class TestBarColoredComponent extends JFrame
+public class TestBarPictureComponent extends JFrame
 {
 	private JPanel slidersPane;
 	private JSlider progressSlider;
@@ -29,13 +30,13 @@ public class TestBarColoredComponent extends JFrame
 	private JPanel componentsPane;
 	private BarView barView;
 
-	public TestBarColoredComponent()
+	public TestBarPictureComponent()
 	{
 	}
 
 	public void setup()
 	{
-		setTitle("BarColored");
+		setTitle("BarPicture");
 		this.setupBarColoredComponentsPane();
 		this.setupSlidersPane();
 
@@ -87,9 +88,10 @@ public class TestBarColoredComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.barView = new BarView();
-		this.barView.renderingModel().setOrientation(Orientation.Vertical);
+		//this.barView.renderingModel().setOrientation(Orientation.Vertical);
 		ModelComposit model = (ModelComposit) this.barView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
+		model.addModel("picture", new BarPictureRenderingModel());
 		model.addModel("border", new BarBorderRenderingModel());
 		model.addModel("ticks", new BarTicksRenderingModel());
 		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
@@ -99,7 +101,7 @@ public class TestBarColoredComponent extends JFrame
 	}
 	public static void main(String[] args)
 	{
-		final TestBarColoredComponent app = new TestBarColoredComponent();
+		final TestBarPictureComponent app = new TestBarPictureComponent();
 
 		EventQueue.invokeLater(new Runnable()
 		{
