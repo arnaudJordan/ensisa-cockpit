@@ -256,7 +256,7 @@ public class TestIndicatorBlinkMultiComponent extends JFrame
 			model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Vertical));
 			model.addModel("labels", new IndicatorLabelMultiRenderingModel(labels));
 			model.addModel("blinkMulti", new IndicatorBlinkMultiRenderingModel(imageListRangesList));
-			//model.addModel("border", new IndicatorBorderRenderingModel());
+			model.addModel("border", new IndicatorBorderRenderingModel());
 		} catch (IOException e) {
 			e.printStackTrace();
 			

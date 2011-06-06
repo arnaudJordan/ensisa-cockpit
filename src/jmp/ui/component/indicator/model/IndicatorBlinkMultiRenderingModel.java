@@ -13,14 +13,13 @@ import jmp.ui.utilities.ImageListRange;
 import jmp.ui.utilities.ImageListRanges;
 
 public class IndicatorBlinkMultiRenderingModel extends IndicatorRenderingModel {
-	private final static ImageListRanges DEFAULT_IMAGELIST = new ImageListRanges();
 	private final static Dimension DEFAULT_SIZE = new Dimension(100, 100);
 	
-	private List<ImageListRanges> imageListRanges;
+	private List<ImageListRanges> imageListRangesList;
 	
 	public IndicatorBlinkMultiRenderingModel()
 	{
-		imageListRanges = new ArrayList<ImageListRanges>();
+		imageListRangesList = new ArrayList<ImageListRanges>();
 		BufferedImage image1 = new BufferedImage(DEFAULT_SIZE.width, DEFAULT_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage image2 = new BufferedImage(DEFAULT_SIZE.width, DEFAULT_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		
@@ -92,10 +91,10 @@ public class IndicatorBlinkMultiRenderingModel extends IndicatorRenderingModel {
 		imageList44.addRange(new ImageListRange(25, 75, imageList1));
 		imageList44.addRange(new ImageListRange(75, 100, imageList2));
 		
-		imageListRanges.add(imageList);
-		imageListRanges.add(imageList22);
-		imageListRanges.add(imageList33);
-		imageListRanges.add(imageList44);
+		imageListRangesList.add(imageList);
+		imageListRangesList.add(imageList22);
+		imageListRangesList.add(imageList33);
+		imageListRangesList.add(imageList44);
 	}
 	
 	public IndicatorBlinkMultiRenderingModel(List<ImageListRanges> imageList)
@@ -104,19 +103,19 @@ public class IndicatorBlinkMultiRenderingModel extends IndicatorRenderingModel {
 	}
 
 	public void setImageList(List<ImageListRanges> imageList) {
-		if(this.imageListRanges == imageList) return;
-		this.imageListRanges = imageList;
+		if(this.imageListRangesList == imageList) return;
+		this.imageListRangesList = imageList;
 		this.modelChange();
 	}
 
 	public List<ImageListRanges> getImageList() {
-		return imageListRanges;
+		return imageListRangesList;
 	}
 	public Dimension getSize()
 	{
-		if(imageListRanges.isEmpty())
+		if(imageListRangesList.isEmpty())
 			return  new Dimension(0,0);
-		Iterator<ImageListRange> it = imageListRanges.get(0).getRanges().iterator();
+		Iterator<ImageListRange> it = imageListRangesList.get(0).getRanges().iterator();
 		BufferedImage tmp = it.next().imageList.get(0);
 		return new Dimension(tmp.getWidth(), tmp.getHeight());
 	}
