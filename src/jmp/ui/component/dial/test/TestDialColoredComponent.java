@@ -102,7 +102,8 @@ public class TestDialColoredComponent extends JFrame
 		colorRanges.addRange(new ColoredRange(60, 100, Color.RED));
 		DialColoredRenderingModel colorModel = new DialColoredRenderingModel();
 		colorModel.setColorRanges(colorRanges);
-		colorModel.setMargin(10);
+		//colorModel.setMargin(20);
+		colorModel.setThickness(10);
 		DialPartialRenderingModel partialModel = new DialPartialRenderingModel();
 		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
 		this.dialView.renderingModel().setTicksStartAngle(partialModel.getStartAngle());

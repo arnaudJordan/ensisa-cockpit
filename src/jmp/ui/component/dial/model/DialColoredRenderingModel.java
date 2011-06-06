@@ -8,14 +8,18 @@ import jmp.ui.utilities.ColoredRanges;
 
 
 public class DialColoredRenderingModel extends DialRenderingModel{
-	private static final int MARGIN = 30;
+	private static final int MARGIN = 0;
+	private static final int THICKNESS = 30;
+	
 	private ColoredRanges colorRanges;
 	private Stroke stroke;
 	private int margin;
+	private int thickness;
 	
 	public DialColoredRenderingModel() {
 		super();
 		setMargin(MARGIN);
+		setThickness(THICKNESS);
 	}
 
 	public void setColorRanges(ColoredRanges colorRanges) {
@@ -46,11 +50,21 @@ public class DialColoredRenderingModel extends DialRenderingModel{
 	public void setMargin(int margin) {
 		if(this.margin == margin) return;
 		this.margin = margin;
-		setStroke(new BasicStroke(margin,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
 		this.modelChange();
 	}
 
 	public int getMargin() {
 		return margin;
+	}
+
+	public void setThickness(int thickness) {
+		if(this.thickness == thickness) return;
+		this.thickness = thickness;
+		setStroke(new BasicStroke(thickness,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
+		this.modelChange();
+	}
+
+	public int getThickness() {
+		return thickness;
 	}
 }
