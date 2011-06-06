@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import jmp.ui.mvc.DefaultModel;
+import jmp.ui.mvc.Model;
 
 public class DefaultBooleanModels extends DefaultModel implements BooleanModels {
 	private List<BooleanModel> models;

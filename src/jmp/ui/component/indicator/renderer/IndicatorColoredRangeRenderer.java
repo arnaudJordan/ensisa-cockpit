@@ -20,7 +20,6 @@ public class IndicatorColoredRangeRenderer extends IndicatorDefaultRenderer {
 	public void renderState(Graphics2D g) {
 		BoundedModel valueModel = ((BoundedModel) ((ModelComposit) (indicatorView().getModel())).getModel("value"));
 		IndicatorRenderingModel renderingModel = indicatorView().renderingModel();
-		
 		IndicatorColoredRangeRenderingModel colorRangeModel = ((IndicatorColoredRangeRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("colorRange"));
 		
 		if(colorRangeModel != null && renderingModel!=null)

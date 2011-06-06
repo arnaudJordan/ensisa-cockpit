@@ -6,28 +6,35 @@ import java.awt.Font;
 import jmp.ui.component.CardinalPosition;
 
 public class IndicatorLabelRenderingModel extends IndicatorRenderingModel {
-
+	final static int DEFAULT_LABEL_MARGIN =5;
 	final static String DEFAULT_LABEL = "INDICATOR";
 	final static Color DEFAULT_COLOR = Color.BLACK;
 	final static Font DEFAULT_FONT = new Font("Monospaced", Font.PLAIN, 18);
 	final static CardinalPosition DEFAULT_POSITION = CardinalPosition.NORTH;
 	
 	private String label;
+	private int margin;
 	private Color color;
 	private Font font;
 	private CardinalPosition position;
 
 	public IndicatorLabelRenderingModel() {
 		super();
+		setMargin(DEFAULT_LABEL_MARGIN);
 		setLabel(DEFAULT_LABEL);
 		setFont(DEFAULT_FONT);
 		setColor(DEFAULT_COLOR);
 		setPosition(DEFAULT_POSITION);
+		
 	}
 	
 	public IndicatorLabelRenderingModel(String label) {
 		super();
 		setLabel(label);
+		setMargin(DEFAULT_LABEL_MARGIN);
+		setFont(DEFAULT_FONT);
+		setColor(DEFAULT_COLOR);
+		setPosition(DEFAULT_POSITION);
 	}
 
 	public IndicatorLabelRenderingModel(String label, CardinalPosition position) {
@@ -73,5 +80,15 @@ public class IndicatorLabelRenderingModel extends IndicatorRenderingModel {
 
 	public CardinalPosition getPosition() {
 		return position;
+	}
+
+	public void setMargin(int margin) {
+		if(this.margin == margin) return;
+		this.margin = margin;
+		this.modelChange();
+	}
+
+	public int getMargin() {
+		return this.margin;
 	}	
 }
