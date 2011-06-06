@@ -30,7 +30,6 @@ public class IndicatorBlinkRenderer extends IndicatorDefaultRenderer{
 		
 		if(blinkModel != null && renderingModel!=null)
 		{
-			
 			Dimension dimension = blinkModel.getSize();
 			IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
 			int transX=0, transY=0;

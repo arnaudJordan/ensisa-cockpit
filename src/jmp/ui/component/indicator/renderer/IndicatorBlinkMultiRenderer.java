@@ -58,12 +58,12 @@ public class IndicatorBlinkMultiRenderer extends IndicatorMultiRenderer {
 				if (label.getPosition() == CardinalPosition.WEST)
 				{
 					if (multY > 0)
-						transX = (transX > g2.getFontMetrics().stringWidth(label.getLabel())) ? transX : g2.getFontMetrics().stringWidth(label.getLabel());
+						transX = (transX > g2.getFontMetrics().stringWidth(label.getLabel())) ? transX : g2.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 				}
 				if (label.getPosition() == CardinalPosition.NORTH)
 				{
 					if (multX > 0)
-						transY = g2.getFontMetrics().getHeight();
+						transY = g2.getFontMetrics().getHeight()+ label.getMargin();
 				}
 			}
 		}
@@ -91,21 +91,21 @@ public class IndicatorBlinkMultiRenderer extends IndicatorMultiRenderer {
 					g2.setFont(label.getFont());
 					if (label.getPosition() == CardinalPosition.NORTH
 							&& multY > 0) {
-						transYN = g2.getFontMetrics().getHeight();
+						transYN = g2.getFontMetrics().getHeight()+ label.getMargin();
 					}
 					if (label.getPosition() == CardinalPosition.SOUTH
 							&& multY > 0) {
-						transYS = g2.getFontMetrics().getHeight();
+						transYS = g2.getFontMetrics().getHeight()+ label.getMargin();
 					}
 					if (label.getPosition() == CardinalPosition.WEST
 							&& multX > 0) {
 						transXW = g2.getFontMetrics().stringWidth(
-								label.getLabel());
+								label.getLabel())+ label.getMargin();
 					}
 					if (label.getPosition() == CardinalPosition.EAST
 							&& multX > 0) {
 						transXE = g2.getFontMetrics().stringWidth(
-								label.getLabel());
+								label.getLabel())+ label.getMargin();
 					}
 				}
 				transY += transYN;
