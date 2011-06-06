@@ -137,7 +137,7 @@ public class TestIndicatorPictureMultiComponent extends JFrame
 		labels.add(new IndicatorLabelRenderingModel("LED3", CardinalPosition.WEST));
 		
 		model.addModel("labels", new IndicatorLabelMultiRenderingModel(labels));
-		model.addModel("border", new IndicatorBorderRenderingModel());
+		//model.addModel("border", new IndicatorBorderRenderingModel());
 		model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Horizontal));
 		
 		this.indicatorView.setModel(model);

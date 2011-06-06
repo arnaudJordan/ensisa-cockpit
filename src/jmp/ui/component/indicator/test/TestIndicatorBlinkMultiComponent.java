@@ -17,8 +17,14 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import jmp.ui.component.CardinalPosition;
+import jmp.ui.component.Orientation;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorLabelMultiRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorBlinkMultiRenderer;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.BoundedModels;
@@ -168,7 +174,7 @@ public class TestIndicatorBlinkMultiComponent extends JFrame
 		list.add(new DefaultBoundedModel(0,100,0));
 		list.add(new DefaultBoundedModel(0,100,0));
 		list.add(new DefaultBoundedModel(0,100,0));
-		list.add(new DefaultBoundedModel(0,100,0));
+		//list.add(new DefaultBoundedModel(0,100,0));
 		valueModel.setModels(list);
 		model.addModel("value", valueModel);
 		
@@ -237,13 +243,20 @@ public class TestIndicatorBlinkMultiComponent extends JFrame
 			imageList0 = new ImageList();
 			imageList0.add(image1);
 			
-			imageListRanges = new ImageListRanges();
-			imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
-			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
-			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
-			imageListRangesList.add(imageListRanges);
+//			imageListRanges = new ImageListRanges();
+//			imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
+//			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
+//			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
+//			imageListRangesList.add(imageListRanges);
 			
+			List<IndicatorLabelRenderingModel> labels = new ArrayList<IndicatorLabelRenderingModel>();
+			labels.add(new IndicatorLabelRenderingModel("LED 1", CardinalPosition.WEST));
+			labels.add(new IndicatorLabelRenderingModel("LED 2", CardinalPosition.SOUTH));
+			labels.add(new IndicatorLabelRenderingModel("LED3", CardinalPosition.WEST));
+			model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Vertical));
+			model.addModel("labels", new IndicatorLabelMultiRenderingModel(labels));
 			model.addModel("blinkMulti", new IndicatorBlinkMultiRenderingModel(imageListRangesList));
+			//model.addModel("border", new IndicatorBorderRenderingModel());
 		} catch (IOException e) {
 			e.printStackTrace();
 			
