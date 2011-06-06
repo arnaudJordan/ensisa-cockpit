@@ -128,8 +128,8 @@ public class TestIndicatorPictureMultiComponent extends JFrame
 		list.add(new DefaultBooleanModel());
 		valueModel.setModels(list);
 		model.addModel("value", valueModel);
-		model.addModel("picture", new IndicatorPictureRenderingModel());
-		//model.addModel("color", new IndicatorColoredRenderingModel());
+		//model.addModel("picture", new IndicatorPictureRenderingModel());
+		model.addModel("color", new IndicatorColoredRenderingModel());
 		
 		List<IndicatorLabelRenderingModel> labels = new ArrayList<IndicatorLabelRenderingModel>();
 		labels.add(new IndicatorLabelRenderingModel("LED 1", CardinalPosition.WEST));
@@ -137,7 +137,7 @@ public class TestIndicatorPictureMultiComponent extends JFrame
 		labels.add(new IndicatorLabelRenderingModel("LED3", CardinalPosition.WEST));
 		
 		model.addModel("labels", new IndicatorLabelMultiRenderingModel(labels));
-		//model.addModel("border", new IndicatorBorderRenderingModel());
+		model.addModel("border", new IndicatorBorderRenderingModel());
 		model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Horizontal));
 		
 		this.indicatorView.setModel(model);
