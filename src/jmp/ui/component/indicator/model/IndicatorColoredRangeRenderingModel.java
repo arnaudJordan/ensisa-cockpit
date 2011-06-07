@@ -8,7 +8,7 @@ import jmp.ui.utilities.ColoredRanges;
 
 public class IndicatorColoredRangeRenderingModel extends IndicatorRenderingModel {
 	private final static ColoredRanges DEFAULT_COLORED_RANGES = new ColoredRanges();
-	private final static Dimension DEFAULT_SIZE = new Dimension(100, 100);
+	private final static Dimension DEFAULT_SIZE = new Dimension(200, 200);
 	
 	private ColoredRanges coloredRanges;
 	private Dimension size;
