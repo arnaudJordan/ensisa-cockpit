@@ -26,15 +26,23 @@ import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBlinkRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorColoredRangeRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
+import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorBlinkMultiRenderer;
 import jmp.ui.component.indicator.renderer.IndicatorBlinkRenderer;
+import jmp.ui.component.indicator.renderer.IndicatorColoredRangeRenderer;
 import jmp.ui.component.indicator.renderer.IndicatorDefaultRenderer;
+import jmp.ui.component.indicator.renderer.IndicatorMultiRenderer;
+import jmp.ui.model.BooleanModel;
+import jmp.ui.model.BooleanModels;
 import jmp.ui.model.BoundedModel;
 import jmp.ui.model.BoundedModels;
+import jmp.ui.model.DefaultBooleanModel;
+import jmp.ui.model.DefaultBooleanModels;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultBoundedModels;
 import jmp.ui.model.ModelComposit;
@@ -50,6 +58,9 @@ public class TestIndicator extends JFrame{
 	private JPanel blinkPane;
 	private JPanel blinkMultiPane;
 	private JPanel coloredPane;
+	private JPanel colorRangePane;
+	private JPanel picturePane;
+	private JPanel pictureMultiPane;
 	
 	public TestIndicator()
 	{
@@ -61,6 +72,9 @@ public class TestIndicator extends JFrame{
 		this.setupIndicatorBlinkComponentPane();
 		this.setupIndicatorBlinkMultiComponentPane();
 		this.setupIndicatorColoredComponentPane();
+		this.setupIndicatorColoredRangeComponentPane();
+		this.setupIndicatorPictureMultiComponentPane();
+		this.setupIndicatorPictureComponentPane();
 		this.setupTabbedPane();
 	
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -74,6 +88,33 @@ public class TestIndicator extends JFrame{
 		this.pack();
 		this.setVisible(true);
 	}
+	
+	private void setupIndicatorPictureComponentPane()
+	{
+		this.picturePane = new JPanel();
+		this.picturePane.setLayout(new BoxLayout(this.picturePane, BoxLayout.X_AXIS));
+		
+		final IndicatorView indicatorView = new IndicatorView();
+		indicatorView.setRenderer(new IndicatorDefaultRenderer(indicatorView));
+		ModelComposit model = (ModelComposit) indicatorView.getModel();
+		model.addModel("color", new IndicatorColoredRenderingModel());
+		model.addModel("picture", new IndicatorPictureRenderingModel());
+		model.addModel("label", new IndicatorLabelRenderingModel("LED", CardinalPosition.NORTH));
+
+		indicatorView.setModel(model);
+		this.picturePane.add(indicatorView);
+		
+		final JCheckBox checkBox = new JCheckBox();
+		checkBox.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent changeEvent)
+			{
+				indicatorView.valueModel().setState(checkBox.isSelected());
+			}
+		});
+		
+		this.picturePane.add(checkBox);
+	}
 	private void setupTabbedPane()
 	{
 		this.tabbedPane = new JTabbedPane();
@@ -81,8 +122,109 @@ public class TestIndicator extends JFrame{
 		this.tabbedPane.addTab("Blink", this.blinkPane);
 		this.tabbedPane.addTab("BlinkMulti", this.blinkMultiPane);
 		this.tabbedPane.addTab("Colored", this.coloredPane);
+		this.tabbedPane.addTab("ColoredRange", this.colorRangePane);
+		this.tabbedPane.addTab("PictureMulti", this.pictureMultiPane);
+		this.tabbedPane.addTab("Picture", this.picturePane);
 	}
-	
+	private void setupIndicatorPictureMultiComponentPane()
+	{
+		this.pictureMultiPane = new JPanel();
+		this.pictureMultiPane.setLayout(new BoxLayout(this.pictureMultiPane, BoxLayout.X_AXIS));
+		
+		final IndicatorView indicatorView = new IndicatorView();
+		indicatorView.setRenderer(new IndicatorMultiRenderer(indicatorView));
+		ModelComposit model = (ModelComposit) indicatorView.getModel();
+		DefaultBooleanModels valueModel = new DefaultBooleanModels();
+		List<BooleanModel> list = new ArrayList<BooleanModel>();
+		list.add(new DefaultBooleanModel());
+		list.add(new DefaultBooleanModel());
+		list.add(new DefaultBooleanModel());
+		valueModel.setModels(list);
+		model.addModel("value", valueModel);
+		//model.addModel("picture", new IndicatorPictureRenderingModel());
+		model.addModel("color", new IndicatorColoredRenderingModel());
+		
+		List<IndicatorLabelRenderingModel> labels = new ArrayList<IndicatorLabelRenderingModel>();
+		labels.add(new IndicatorLabelRenderingModel("LED 1", CardinalPosition.WEST));
+		labels.add(new IndicatorLabelRenderingModel("LED 2", CardinalPosition.SOUTH));
+		labels.add(new IndicatorLabelRenderingModel("LED 3", CardinalPosition.WEST));
+		
+		model.addModel("labels", new IndicatorLabelMultiRenderingModel(labels));
+		model.addModel("border", new IndicatorBorderRenderingModel());
+		model.addModel("orientation", new IndicatorOrientationRenderingModel(Orientation.Horizontal));
+		
+		indicatorView.setModel(model);
+		this.pictureMultiPane.add(indicatorView);
+		
+		final JCheckBox checkBox1 = new JCheckBox();
+		checkBox1.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent changeEvent)
+			{
+				((BooleanModels) ((ModelComposit) indicatorView.getModel()).getModel("value")).setState(0, checkBox1.isSelected());
+			}
+		});
+		
+		this.pictureMultiPane.add(checkBox1);
+		final JCheckBox checkBox2 = new JCheckBox();
+		checkBox2.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent changeEvent)
+			{
+				((BooleanModels) ((ModelComposit) indicatorView.getModel()).getModel("value")).setState(1, checkBox2.isSelected());
+			}
+		});
+		
+		this.pictureMultiPane.add(checkBox2);
+		final JCheckBox checkBox3 = new JCheckBox();
+		checkBox3.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent changeEvent)
+			{
+				((BooleanModels) ((ModelComposit) indicatorView.getModel()).getModel("value")).setState(2, checkBox3.isSelected());
+			}
+		});
+		
+		this.pictureMultiPane.add(checkBox3);
+		
+	}
+	private void setupIndicatorColoredRangeComponentPane()
+	{
+		this.colorRangePane = new JPanel();
+		this.colorRangePane.setLayout(new BoxLayout(this.colorRangePane, BoxLayout.X_AXIS));
+		final IndicatorView coloredRangeView = new IndicatorView();
+		coloredRangeView.setRenderer(new IndicatorColoredRangeRenderer(coloredRangeView));
+		ModelComposit model = (ModelComposit) coloredRangeView.getModel();
+		model.addModel("colorRange", new IndicatorColoredRangeRenderingModel());
+		model.addModel("value", new DefaultBoundedModel(0,100,0));
+		model.addModel("border", new IndicatorBorderRenderingModel());
+		model.addModel("label", new IndicatorLabelRenderingModel("LED", CardinalPosition.EAST));
+
+		coloredRangeView.setModel(model);
+		this.colorRangePane.add(coloredRangeView);
+		
+		final JSlider progressSlider = new JSlider(JSlider.VERTICAL,0,100,0);
+		progressSlider.setMajorTickSpacing(50);
+		progressSlider.setMinorTickSpacing(10);
+		progressSlider.setPaintTicks(true);
+		progressSlider.setPaintLabels(true);
+		progressSlider.setPaintTrack(true);
+		progressSlider.setPaintTicks(true);
+		progressSlider.addChangeListener(new ChangeListener()
+		{
+			public void stateChanged(ChangeEvent changeEvent)
+			{
+				Object source = changeEvent.getSource();
+				JSlider s = (JSlider) source;
+				if (!s.getValueIsAdjusting());
+				{
+					((BoundedModel) ((ModelComposit) coloredRangeView.getModel()).getModel("value")).setValue(progressSlider.getValue());
+				}
+			}
+		});
+		
+		this.colorRangePane.add(progressSlider);
+	}
 	private void setupIndicatorBlinkMultiComponentPane()
 	{
 		this.blinkMultiPane = new JPanel();
