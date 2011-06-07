@@ -350,10 +350,10 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			{
 				g2.setColor(range.color);
 				if(renderingModel.getSense() == Rotation.Clockwise)
-					g2.drawArc(coloredModel.getThickness()/2 + coloredModel.getMargin()/2, coloredModel.getThickness()/2 + coloredModel.getMargin()/2, background.getWidth() - coloredModel.getThickness() - coloredModel.getMargin(), background.getHeight() - coloredModel.getThickness() - coloredModel.getMargin(),
+					g2.drawArc(coloredModel.getThickness()/2 + coloredModel.getMargin(), coloredModel.getThickness()/2 + coloredModel.getMargin(), background.getWidth() - coloredModel.getThickness() - coloredModel.getMargin()*2, background.getHeight() - coloredModel.getThickness() - coloredModel.getMargin()*2,
 						-((int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle()),-((int) ((range.range.max - range.range.min)*AngleRatio)));
 				else
-					g2.drawArc(coloredModel.getThickness()/2 + coloredModel.getMargin()/2, coloredModel.getThickness()/2 + coloredModel.getMargin()/2, background.getWidth() - coloredModel.getThickness() - coloredModel.getMargin(), background.getHeight() - coloredModel.getThickness() - coloredModel.getMargin(),
+					g2.drawArc(coloredModel.getThickness()/2 + coloredModel.getMargin(), coloredModel.getThickness()/2 + coloredModel.getMargin(), background.getWidth() - coloredModel.getThickness() - coloredModel.getMargin()*2, background.getHeight() - coloredModel.getThickness() - coloredModel.getMargin()*2,
 						(int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle(),(int) ((range.range.max - range.range.min)*AngleRatio));
 			}
 			g2.dispose();
