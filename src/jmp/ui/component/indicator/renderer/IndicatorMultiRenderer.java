@@ -252,10 +252,10 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			final int strWidth = g.getFontMetrics().stringWidth(label.getLabel());
 			switch (label.getPosition())
 			{
-			case NORTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX, strHeight + transY);transY+=(strHeight+ label.getMargin())* multY; break;
-			case SOUTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX, transY + dimension.height + strHeight+ yn);transY+=(strHeight+ label.getMargin()) * multY; break;
-			case EAST : g.drawString(label.getLabel(), middle + dimension.width/2 + transX, yn+transY + dimension.height/2 + strHeight/2);transX+=(strWidth+ label.getMargin()) * multX; break;
-			case WEST : transX+=(strWidth + label.getMargin())* multX; g.drawString(label.getLabel(), middle - dimension.width/2 - strWidth + transX, yn+transY + dimension.height/2 + strHeight/2);break;
+			case NORTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX , strHeight + transY - label.getMargin()/2);transY+=(strHeight+ label.getMargin())* multY; break;
+			case SOUTH : g.drawString(label.getLabel(), middle - strWidth/2 + transX, transY + dimension.height + strHeight+ yn + label.getMargin()/2);transY+=(strHeight+ label.getMargin()) * multY; break;
+			case EAST : g.drawString(label.getLabel(), middle + dimension.width/2 + transX + label.getMargin()/2, yn+transY + dimension.height/2 + strHeight/2);transX+=(strWidth+ label.getMargin()) * multX; break;
+			case WEST : transX+=(strWidth + label.getMargin())* multX; g.drawString(label.getLabel(), middle - dimension.width/2 - strWidth + transX - label.getMargin()/2, yn+transY + dimension.height/2 + strHeight/2);break;
 			}
 			transY+=dimension.getHeight()*multY;
 			transX+=dimension.getWidth()*multX;
