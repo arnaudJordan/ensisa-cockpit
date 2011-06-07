@@ -63,10 +63,10 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		final int minorTickSpacing = (int) ticksModel.getMinorTickSpacing();
 		final int majorTickSize = (int) ticksModel.getMajorTickSize();
 		final int minorTickSize = (int) ticksModel.getMinorTickSize();
-		final int majorLineXStart = (int) (background.getWidth() - majorTickSize);
-		final int majorLineXEnd = (int) (background.getWidth()-ticksModel.getMajorGraduationWidth());
-		final int minorLineXStart = (int) (background.getWidth() - minorTickSize);
-		final int minorLineXEnd = (int) (background.getWidth()-ticksModel.getMinorGraduationWidth());
+		final int majorLineXStart = (int) (background.getWidth() - majorTickSize - ticksModel.getMargin());
+		final int majorLineXEnd = (int) (background.getWidth() - ticksModel.getMajorGraduationWidth() - ticksModel.getMargin());
+		final int minorLineXStart = (int) (background.getWidth() - minorTickSize - ticksModel.getMargin());
+		final int minorLineXEnd = (int) (background.getWidth() - ticksModel.getMinorGraduationWidth() - ticksModel.getMargin());
 		double nbValues = (double)(valueModel.getMaximum()-valueModel.getMinimum())/(double)minorTickSpacing;
 		double minorTickAngleSpacing = 360 / nbValues;
 		
@@ -169,11 +169,11 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			
 			Point textCorner;
 			if(renderingModel.getSense() == Rotation.Clockwise)
-				textCorner = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))),
-						(int)((background.getHeight()/2- majorTickSize) * Math.sin(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle()))));
+				textCorner = new Point((int)((background.getHeight()/2- majorTickSize - ticksModel.getMargin()) * Math.cos(Math.toRadians(i*majorTickAngleSpacing - renderingModel.getTicksStartAngle()))),
+						(int)((background.getHeight()/2- majorTickSize - ticksModel.getMargin()) * Math.sin(Math.toRadians(i*majorTickAngleSpacing- renderingModel.getTicksStartAngle()))));
 			else
-				textCorner = new Point((int)((background.getHeight()/2- majorTickSize) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))),
-						(int)((background.getHeight()/2- majorTickSize) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))));
+				textCorner = new Point((int)((background.getHeight()/2- majorTickSize - ticksModel.getMargin()) * Math.cos(-Math.toRadians(i*majorTickAngleSpacing + renderingModel.getTicksStartAngle()))),
+						(int)((background.getHeight()/2- majorTickSize - ticksModel.getMargin()) * Math.sin(-Math.toRadians(i*majorTickAngleSpacing+ renderingModel.getTicksStartAngle()))));
 			
 			AffineTransform trans2 = new AffineTransform();
 			Rectangle2D cadre = g2.getFontMetrics().getStringBounds(vString, g2).getBounds2D();

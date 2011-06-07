@@ -10,10 +10,10 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	private static final Color MAJOR_GRADUATION_COLOR = Color.RED;
 	private static final Color LABEL_COLOR = Color.BLACK;
 	final static Font LABEL_FONT = new Font("Monospaced", Font.PLAIN, 18);
-	
-	private static final double MAJOR_GRADUTION_RATIO = 0.25;
 	private static final int LABEL_SPACE = 10;
+	private static final int MARGIN = 0;
 	
+	private static final double MAJOR_GRADUTION_RATIO = 0.25;	
 
 	private static final double MINOR_GRADUTION_RATIO = MAJOR_GRADUTION_RATIO * 1.5;
 	private static final float MINOR_GRADUTION_WIDTH = 2f;
@@ -30,6 +30,7 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	private Color LabelColor;
 	private Font LabelFont;
 	private int LabelSpace;
+	private int Margin;
 	private float MinorGraduationWidth;
 	private float MajorGraduationWidth;
 	private double MajorGradutionRatio;
@@ -48,6 +49,7 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 		this.setLabelColor(LABEL_COLOR);
 		this.setLabelFont(LABEL_FONT);
 		this.setLabelSpace(LABEL_SPACE);
+		this.setMargin(MARGIN);
 		this.setMinorGraduationWidth(MINOR_GRADUTION_WIDTH);
 		this.setMajorGraduationWidth(MAJOR_GRADUTION_WIDTH);
 		this.setMajorGradutionRatio(MAJOR_GRADUTION_RATIO);
@@ -206,6 +208,16 @@ public class DialTicksRenderingModel extends DialRenderingModel {
 	public void setMajorTickSize(double majorTickSize) {
 		if(this.MajorTickSize == majorTickSize) return;
 		MajorTickSize = majorTickSize;
+		this.modelChange();
+	}
+
+	public int getMargin() {
+		return Margin;
+	}
+	
+	public void setMargin(int margin) {
+		if(this.Margin == margin) return;
+		this.Margin = margin;
 		this.modelChange();
 	}
 }
