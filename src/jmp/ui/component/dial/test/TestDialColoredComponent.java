@@ -97,26 +97,32 @@ public class TestDialColoredComponent extends JFrame
 		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
 		
 		ColoredRanges colorRanges = new ColoredRanges();
-		colorRanges.addRange(new ColoredRange(0, 30, Color.PINK));
-		colorRanges.addRange(new ColoredRange(30, 60, Color.GREEN));
-		colorRanges.addRange(new ColoredRange(60, 100, Color.RED));
+		colorRanges.addRange(new ColoredRange(0, 40, Color.GREEN));
+		colorRanges.addRange(new ColoredRange(40, 80, Color.YELLOW));
+		colorRanges.addRange(new ColoredRange(80, 100, Color.RED));
 		DialColoredRenderingModel colorModel = new DialColoredRenderingModel();
 		colorModel.setColorRanges(colorRanges);
 		//colorModel.setMargin(20);
-		colorModel.setThickness(10);
+		colorModel.setThickness(15);
 		DialPartialRenderingModel partialModel = new DialPartialRenderingModel();
 		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
 		this.dialView.renderingModel().setTicksStartAngle(partialModel.getStartAngle());
 		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel();
 		DialLabelRenderingModel dialLabelRenderingModel = new DialLabelRenderingModel();
 		dialLabelRenderingModel.setPosition(new Point(dialPictureRenderingModel.getBackground().getHeight()/6, dialPictureRenderingModel.getBackground().getHeight()/6));
-		model.addModel("partial", partialModel);
+		//model.addModel("partial", partialModel);
 		model.addModel("colored", colorModel);
 		model.addModel("picture", dialPictureRenderingModel);
-		model.addModel("border", new DialBorderRenderingModel());
+		//model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		model.addModel("label", dialLabelRenderingModel);
-		model.addModel("ticks", new DialTicksRenderingModel());
+		DialTicksRenderingModel dialTicksRenderingModel = new DialTicksRenderingModel();
+		dialTicksRenderingModel.setMajorGraduationColor(Color.WHITE);
+		dialTicksRenderingModel.setMinorGraduationColor(Color.WHITE);
+		dialTicksRenderingModel.setLabelColor(Color.WHITE);
+		dialTicksRenderingModel.setMajorTickSize(25);
+		
+		model.addModel("ticks", dialTicksRenderingModel);
 		
 		this.dialView.setModel(model);
 		this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));

@@ -1,7 +1,10 @@
 package jmp.ui.component.dial.test;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.WindowEvent;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -94,15 +97,17 @@ public class TestDialPartialComponent extends JFrame
 		this.dialView.renderingModel().setSense(Rotation.Anticlockwise);
 		DialPartialRenderingModel partialModel = new DialPartialRenderingModel();
 		this.dialView.renderingModel().setTicksStartAngle(partialModel.getStartAngle());
-		DialTicksRenderingModel ticksModel = new DialTicksRenderingModel();
-		ticksModel.setMinorTickSpacing(10);
-		ticksModel.setMajorTickSpacing(30);
+		DialTicksRenderingModel dialTicksRenderingModel = new DialTicksRenderingModel();
+		dialTicksRenderingModel.setMajorGraduationColor(Color.WHITE);
+		dialTicksRenderingModel.setMinorGraduationColor(Color.WHITE);
+		dialTicksRenderingModel.setLabelColor(Color.WHITE);
+		dialTicksRenderingModel.setMajorTickSize(25);
 		model.addModel("partial", partialModel);
 		model.addModel("picture", new DialPictureRenderingModel());
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel());
-		model.addModel("ticks", ticksModel);
-		model.addModel("track", new DialTrackRenderingModel());
+		model.addModel("ticks", dialTicksRenderingModel);
+		//model.addModel("track", new DialTrackRenderingModel());
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		this.dialView.setModel(model);
 		
