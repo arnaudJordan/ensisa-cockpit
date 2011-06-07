@@ -20,6 +20,7 @@ import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRangeRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarLabelRenderingModel;
+import jmp.ui.component.bar.model.BarNeedleRenderingModel;
 import jmp.ui.component.bar.model.BarPictureRenderingModel;
 import jmp.ui.component.bar.model.BarRenderingModel;
 import jmp.ui.component.bar.model.BarTicksRenderingModel;
@@ -81,15 +82,15 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			}
 		}
 		
-		if(coloredRangeModel == null && pictureModel == null)
+		if(coloredModel != null && coloredRangeModel == null && pictureModel == null)
 		{
 			g.setColor(coloredModel.getTrailColor());
 			g.fillRect(transX, transY, progressRectWidth, progressRectHeight);
 		}
 		
-		if(renderingModel.getOrientation() == Orientation.Horizontal)
+		if(coloredRangeModel != null)
 		{
-			if(coloredRangeModel != null)
+			if(renderingModel.getOrientation() == Orientation.Horizontal)
 			{
 				double ratio=(double) (progressRectWidth) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
@@ -98,16 +99,7 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 					g.fillRect((int) (transX + ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
 				}
 			}
-			if(pictureModel != null)
-			{
-				AffineTransform trans = new AffineTransform();
-				trans.translate(transX, transY);
-				g.drawImage(pictureModel.getBackground(), trans, null);
-			}
-		}
-		else
-		{
-			if(coloredRangeModel != null)
+			else
 			{
 				double ratio=(double) (progressRectHeight - transY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
@@ -117,13 +109,17 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 							progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
 				}
 			}
-			if(pictureModel != null)
+		}
+		if(pictureModel != null)
+		{
+			AffineTransform trans = new AffineTransform();
+			trans.translate(transX, transY);
+			if(renderingModel.getOrientation() == Orientation.Vertical)
 			{
-				AffineTransform trans = new AffineTransform();
-				trans.translate(transX, transY + pictureModel.getBackground().getWidth());
+				trans.translate(0, progressRectHeight);
 				trans.rotate(Math.toRadians(-90));
-				g.drawImage(pictureModel.getBackground(), trans, null);
 			}
+			g.drawImage(pictureModel.getBackground(), trans, null);
 		}
 	}
 	
@@ -135,8 +131,9 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		BarColoredRangeRenderingModel coloredRangeModel = ((BarColoredRangeRenderingModel) ((ModelComposit) (barView().getModel())).getModel("coloredRangeProgress"));
 		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
 		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
+		BarNeedleRenderingModel needleModel = ((BarNeedleRenderingModel) ((ModelComposit) (barView().getModel())).getModel("needle"));
 
-		if(coloredModel==null) return;
+		if(coloredModel==null && needleModel==null) return;
 		
 		int progressRectWidth = 0;
 		int progressRectHeight = 0;
@@ -189,7 +186,7 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			}
 		}
 		
-		if(coloredRangeModel == null)
+		if(coloredModel != null && coloredRangeModel == null && needleModel == null)
 		{
 			g.setColor(coloredModel.getProgressColor());
 	        if (renderingModel.getOrientation() == Orientation.Horizontal)
@@ -202,8 +199,24 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 	                final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
 	                g.fillRect(transX, progressRectHeight - fillHeight + transY, progressRectWidth, fillHeight);
 	        }
+		}		
+		if(needleModel != null)
+		{
+			AffineTransform trans = new AffineTransform();
+			if (renderingModel.getOrientation() == Orientation.Horizontal)
+		    {
+				final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
+				trans.translate(transX + fillWidth, transY);
+		    }
+			else
+			{
+				final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
+				trans.translate(transX, transY  - fillHeight + progressRectHeight);
+				trans.rotate(Math.toRadians(-90));
+			}
+			g.drawImage(needleModel.getNeedle(),trans,null);
 		}
-		else
+		if(coloredRangeModel != null)
 		{
 			BufferedImage progressBarImage = new BufferedImage(progressRectWidth, progressRectHeight, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2 = progressBarImage.createGraphics();

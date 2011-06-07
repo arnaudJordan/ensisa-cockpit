@@ -15,8 +15,10 @@ import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
 import jmp.ui.component.bar.model.BarBorderRenderingModel;
+import jmp.ui.component.bar.model.BarColoredRangeRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarLabelRenderingModel;
+import jmp.ui.component.bar.model.BarNeedleRenderingModel;
 import jmp.ui.component.bar.model.BarPictureRenderingModel;
 import jmp.ui.component.bar.model.BarTicksRenderingModel;
 import jmp.ui.model.ModelComposit;
@@ -88,12 +90,15 @@ public class TestBarPictureComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.barView = new BarView();
-		//this.barView.renderingModel().setOrientation(Orientation.Vertical);
+		this.barView.renderingModel().setOrientation(Orientation.Vertical);
 		ModelComposit model = (ModelComposit) this.barView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
-		model.addModel("picture", new BarPictureRenderingModel());
+		//model.addModel("picture", new BarPictureRenderingModel());
+		model.addModel("needle", new BarNeedleRenderingModel());
 		model.addModel("border", new BarBorderRenderingModel());
 		model.addModel("ticks", new BarTicksRenderingModel());
+		model.addModel("coloredRangeBackground", new BarColoredRangeRenderingModel());
+		//model.addModel("coloredRangeProgress", new BarColoredRangeRenderingModel());
 		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
 		this.componentsPane.add(this.barView);
 
