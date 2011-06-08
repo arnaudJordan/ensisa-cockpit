@@ -42,7 +42,7 @@ public class TestDialColoredComponent extends JFrame
 	public void setup()
 	{
 		setTitle("DialColored");
-		this.setupDialPartialComponentPane();
+		this.setupDialColoredComponentPane();
 		this.setupSlidersPane();
 
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -86,7 +86,7 @@ public class TestDialColoredComponent extends JFrame
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupDialPartialComponentPane()
+	private void setupDialColoredComponentPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
