@@ -306,10 +306,10 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 			dimension = new Dimension(nbX * blinkMultiModel.getSize().width, nbY * blinkMultiModel.getSize().height);
 
 		IndicatorLabelRenderingModel labelModel = ((IndicatorLabelRenderingModel) ((ModelComposit) (indicatorView().getModel())).getModel("label"));
-
-		//Graphics g = this.indicatorView().getGraphics();
+		
 		BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = image.getGraphics();
+		Graphics g = image.getGraphics();
+		
 
 		if(labelsModel != null)
 		{
