@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -15,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -89,7 +90,7 @@ public class TestCockpit extends JFrame{
 	public void setup()
 	{
 		setTitle("Cockpit");
-		setSize(800, 600);
+		setSize(1024, 768);
 		setPreferredSize(getSize());
 		this.getContentPane().setLayout(null);
 		this.setupCompassComponentPane();
@@ -117,37 +118,7 @@ public class TestCockpit extends JFrame{
 	private void setupSlidersPane()
 	{
 		JPanel sliderPane = new JPanel();
-		sliderPane.setPreferredSize(new Dimension(800,200));
-		final JSlider progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
-		progressSlider.setMajorTickSpacing(50);
-		progressSlider.setMinorTickSpacing(10);
-		progressSlider.setPaintTicks(true);
-		progressSlider.setPaintLabels(true);
-		progressSlider.setPaintTrack(true);
-		progressSlider.setPaintTicks(true);
-		progressSlider.addChangeListener(new ChangeListener()
-		{
-			public void stateChanged(ChangeEvent changeEvent)
-			{
-				Object source = changeEvent.getSource();
-				JSlider s = (JSlider) source;
-				if (!s.getValueIsAdjusting());
-				{
-					barView.valueModel().setValue(progressSlider.getValue());
-					barVertical1View.valueModel().setValue(progressSlider.getValue());
-					barVertical2View.valueModel().setValue(progressSlider.getValue());
-					compass.valueModel().setValue(progressSlider.getValue());
-					horizon.setPitch(progressSlider.getValue());
-					dialView.valueModel().setValue(progressSlider.getValue());
-					dialPartialView.valueModel().setValue(progressSlider.getValue());
-					((BoundedModels) ((ModelComposit) indicatorView.getModel()).getModel("value")).setValue(0, progressSlider.getValue());
-					((BoundedModels) ((ModelComposit) indicatorView.getModel()).getModel("value")).setValue(1, progressSlider.getValue());
-					((DefaultBoundedModel)((ModelComposit) ((ModelComposit) dialView.getModel()).getModel("composit")).getModel("value")).setValue(progressSlider.getValue());
-				}
-			}
-		});
-		sliderPane.add(progressSlider);
-		
+		sliderPane.setPreferredSize(new Dimension(1000,600));
 		final JSlider compassSlider = new JSlider(JSlider.HORIZONTAL,0,360,0);
 		compassSlider.setToolTipText("Compass");
 		compassSlider.setMajorTickSpacing(90);
@@ -169,7 +140,7 @@ public class TestCockpit extends JFrame{
 			}
 		});
 		
-		sliderPane.add(new JLabel("Compass"));
+		compassSlider.setBorder(BorderFactory.createTitledBorder("Compass"));
 		sliderPane.add(compassSlider);
 		
 		final JSlider pitchSlider = new JSlider(JSlider.HORIZONTAL,-180,180,0);
@@ -194,7 +165,7 @@ public class TestCockpit extends JFrame{
 			}
 		});
 		
-		sliderPane.add(new JLabel("Pitch"));
+		pitchSlider.setBorder(BorderFactory.createTitledBorder("Pitch"));
 		sliderPane.add(pitchSlider);
 		
 		final JSlider rollSlider = new JSlider(JSlider.HORIZONTAL,-100,100,0);
@@ -219,7 +190,7 @@ public class TestCockpit extends JFrame{
 			}
 		});
 		
-		sliderPane.add(new JLabel("Roll"));
+		rollSlider.setBorder(BorderFactory.createTitledBorder("Roll"));
 		sliderPane.add(rollSlider);
 		
 		final JSlider speedSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
@@ -244,7 +215,7 @@ public class TestCockpit extends JFrame{
 			}
 		});
 		
-		sliderPane.add(new JLabel("Speed"));
+		speedSlider.setBorder(BorderFactory.createTitledBorder("Speed"));
 		sliderPane.add(speedSlider);
 		
 		final JSlider batterySlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
@@ -269,13 +240,13 @@ public class TestCockpit extends JFrame{
 			}
 		});
 		
-		sliderPane.add(new JLabel("Battery"));
+		batterySlider.setBorder(BorderFactory.createTitledBorder("Battery"));
 		sliderPane.add(batterySlider);
 		
-		final JSlider altitudeSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		final JSlider altitudeSlider = new JSlider(JSlider.HORIZONTAL,0,15,0);
 		altitudeSlider.setToolTipText("Altitude");
-		altitudeSlider.setMajorTickSpacing(25);
-		altitudeSlider.setMinorTickSpacing(10);
+		altitudeSlider.setMajorTickSpacing(5);
+		altitudeSlider.setMinorTickSpacing(1);
 		altitudeSlider.setPaintTicks(true);
 		altitudeSlider.setPaintLabels(true);
 		altitudeSlider.setPaintTrack(true);
@@ -293,19 +264,19 @@ public class TestCockpit extends JFrame{
 			}
 		});
 		
-		sliderPane.add(new JLabel("Altitude"));
+		altitudeSlider.setBorder(BorderFactory.createTitledBorder("Altitude"));
 		sliderPane.add(altitudeSlider);
 		this.getContentPane().add(sliderPane);
 		
-		final JSlider temperatureSlider1 = new JSlider(JSlider.HORIZONTAL,0,100,0);
-		temperatureSlider1.setToolTipText("Temperature");
-		temperatureSlider1.setMajorTickSpacing(25);
-		temperatureSlider1.setMinorTickSpacing(10);
-		temperatureSlider1.setPaintTicks(true);
-		temperatureSlider1.setPaintLabels(true);
-		temperatureSlider1.setPaintTrack(true);
-		temperatureSlider1.setPaintTicks(true);
-		temperatureSlider1.addChangeListener(new ChangeListener()
+		final JSlider trimSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		trimSlider.setToolTipText("Trim");
+		trimSlider.setMajorTickSpacing(25);
+		trimSlider.setMinorTickSpacing(10);
+		trimSlider.setPaintTicks(true);
+		trimSlider.setPaintLabels(true);
+		trimSlider.setPaintTrack(true);
+		trimSlider.setPaintTicks(true);
+		trimSlider.addChangeListener(new ChangeListener()
 		{
 			public void stateChanged(ChangeEvent changeEvent)
 			{
@@ -313,15 +284,15 @@ public class TestCockpit extends JFrame{
 				JSlider s = (JSlider) source;
 				if (!s.getValueIsAdjusting());
 				{
-					barVertical2View.valueModel().setValue(temperatureSlider1.getValue());
+					barVertical2View.valueModel().setValue(trimSlider.getValue());
 				}
 			}
 		});
 		
-		sliderPane.add(new JLabel("Temperature"));
-		sliderPane.add(temperatureSlider1);
+		trimSlider.setBorder(BorderFactory.createTitledBorder("Trim"));
+		sliderPane.add(trimSlider);
 		this.getContentPane().add(sliderPane);
-		sliderPane.setBounds(0, 450, sliderPane.getPreferredSize().width, sliderPane.getPreferredSize().height);
+		sliderPane.setBounds(0, 550, sliderPane.getPreferredSize().width, sliderPane.getPreferredSize().height);
 	}
 	private void setupIndicatorBlinkComponentPane()
 	{
@@ -402,7 +373,7 @@ public class TestCockpit extends JFrame{
 		indicatorView.setModel(model);
 		blinkMultiPane.add(indicatorView);
 		this.getContentPane().add(blinkMultiPane);
-		blinkMultiPane.setBounds(500, 180, 60, 200);
+		blinkMultiPane.setBounds(550, 180, this.indicatorView.getPreferredSize().width, this.indicatorView.getPreferredSize().height);
 	}
 	private void setupDialPictureComponentPane()
 	{
@@ -431,32 +402,7 @@ public class TestCockpit extends JFrame{
 		compositModel.addModel("value", new DefaultBoundedModel(-100,100,0));
 		
 		model.addModel("composit", compositModel);
-		
-		
-		
-		
-		
-		
-		
-		/*this.dialView.setRenderer(new DialDefaultRenderer(this.dialView));
-		DefaultModelComposit model = (DefaultModelComposit) this.dialView.getModel();
-		DialPictureRenderingModel dialPictureRenderingModel = new DialPictureRenderingModel("pictures/dial/background-mini.png", "pictures/dial/needle-mini.png");
-		this.dialView.renderingModel().setSense(Rotation.Clockwise);
-		this.dialView.renderingModel().setTicksStartAngle(90);
-		DialLabelRenderingModel dialLabelRenderingModel = new DialLabelRenderingModel();
-		dialLabelRenderingModel.setPosition(new Point(0, -dialPictureRenderingModel.getBackground().getHeight()/6));
-		dialLabelRenderingModel.setColor(Color.WHITE);
-		dialLabelRenderingModel.setFont(new Font("Monospaced", Font.PLAIN, 18));
-		DialTicksRenderingModel dialTicksRenderingModel = new DialTicksRenderingModel();
-		dialTicksRenderingModel.setMajorGraduationColor(Color.BLACK);
-		dialTicksRenderingModel.setMinorGraduationColor(Color.BLACK);
-		dialTicksRenderingModel.setLabelColor(Color.WHITE);
-		dialTicksRenderingModel.setMajorTickSize(25);
-		model.addModel("picture", dialPictureRenderingModel);
-		model.addModel("value", new DefaultBoundedModel(0,100,0));
-		model.addModel("border", new DialBorderRenderingModel(3));
-		model.addModel("label", dialLabelRenderingModel);
-*/
+
 		this.dialView.setModel(model);
 		componentsPane.add(this.dialView);
 		this.getContentPane().add(componentsPane);
@@ -497,12 +443,13 @@ public class TestCockpit extends JFrame{
 		componentsPane.add(this.barView);
 
 		this.getContentPane().add(componentsPane);
-		componentsPane.setBounds(480, 405, 200, 50);
+		componentsPane.setBounds(530, 390, this.barView.getPreferredSize().width, this.barView.getPreferredSize().height);
 	}
 	private void setupBarPictureVerticalComponentsPane()
 	{
 		JPanel componentsPane = new JPanel();
-		componentsPane.setLayout(new BoxLayout(componentsPane, BoxLayout.X_AXIS));
+		
+		componentsPane.setLayout(new BorderLayout());
 		
 		this.barVertical1View = new BarView();
 		ModelComposit model = (ModelComposit) this.barVertical1View.getModel();
@@ -510,18 +457,29 @@ public class TestCockpit extends JFrame{
 		model.addModel("picture", new BarPictureRenderingModel("pictures/bar/default_background-mini.png"));
 		model.addModel("needle", new BarNeedleRenderingModel("pictures/bar/default_needle-mini.png"));
 		model.addModel("label", new BarLabelRenderingModel("Altitude", CardinalPosition.SOUTH));
-		model.addModel("value", new DefaultBoundedModel(0, 100, 0));
-		componentsPane.add(this.barVertical1View);
+		BarTicksRenderingModel ticks = new BarTicksRenderingModel();
+		ticks.setMajorGraduationColor(Color.BLACK);
+		ticks.setMinorGraduationColor(Color.GRAY);
+		ticks.setMajorTickSize(20);
+		ticks.setMinorTickSize(10);
+		ticks.setMajorTickSpacing(5);
+		ticks.setMinorTickSpacing(1);
+		model.addModel("ticks", ticks);
+		model.addModel("value", new DefaultBoundedModel(0, 15, 0));
+		this.barVertical1View.setModel(model);
+		componentsPane.add(this.barVertical1View, BorderLayout.WEST);
 		
-//		this.barVertical2View = new BarView();
-//		model = (ModelComposit) this.barVertical2View.getModel();
-//		this.barVertical2View.renderingModel().setOrientation(Orientation.Vertical);
-//		model.addModel("picture", new BarPictureRenderingModel("pictures/bar/default_background-mini.png"));
-//		model.addModel("needle", new BarNeedleRenderingModel("pictures/bar/default_needle-mini.png"));
-//		//model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
-//		componentsPane.add(this.barVertical2View);
+		componentsPane.setPreferredSize(new Dimension(160,this.barVertical1View.getPreferredSize().height));
+		
+		this.barVertical2View = new BarView();
+		model = (ModelComposit) this.barVertical2View.getModel();
+		this.barVertical2View.renderingModel().setOrientation(Orientation.Vertical);
+		model.addModel("picture", new BarPictureRenderingModel("pictures/bar/default_background-mini.png"));
+		model.addModel("needle", new BarNeedleRenderingModel("pictures/bar/default_needle-mini.png"));
+		model.addModel("label", new BarLabelRenderingModel("Trim", CardinalPosition.SOUTH));
+		componentsPane.add(this.barVertical2View, BorderLayout.EAST);
 		this.getContentPane().add(componentsPane);
-		componentsPane.setBounds(380, 230, 80, 220);
+		componentsPane.setBounds(350, 230, componentsPane.getPreferredSize().width, componentsPane.getPreferredSize().height);
 	}
 	private void setupDialPartialComponentPane()
 	{
