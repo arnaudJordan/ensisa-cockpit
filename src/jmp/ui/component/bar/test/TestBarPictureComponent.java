@@ -39,7 +39,7 @@ public class TestBarPictureComponent extends JFrame
 	public void setup()
 	{
 		setTitle("BarPicture");
-		this.setupBarColoredComponentsPane();
+		this.setupBarPictureComponentsPane();
 		this.setupSlidersPane();
 
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -84,7 +84,7 @@ public class TestBarPictureComponent extends JFrame
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupBarColoredComponentsPane()
+	private void setupBarPictureComponentsPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
