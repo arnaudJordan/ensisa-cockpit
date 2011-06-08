@@ -650,8 +650,9 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		int labelSpace = 0;
 		if(ticksModel != null)
 		{
+			//Graphics g = this.barView().getGraphics();
 			BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-			Graphics g = image.getGraphics();
+            Graphics g = image.getGraphics();
 			g.setFont(ticksModel.getLabelFont());
 			if(renderingModel.getOrientation() == Orientation.Horizontal)
 				labelSpace = ticksModel.getLabelSpace() + g.getFontMetrics().getHeight() + 1;
@@ -679,7 +680,9 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		
 		if(labelModel != null) 
 		{
-			Graphics g = this.barView().getGraphics();
+			//Graphics g = this.barView().getGraphics();
+			BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+            Graphics g = image.getGraphics();
 			g.setFont(labelModel.getFont());
 			
 			if(labelModel.getPosition() == CardinalPosition.NORTH || labelModel.getPosition() == CardinalPosition.SOUTH)

@@ -411,7 +411,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		DialPictureRenderingModel pictureModel = ((DialPictureRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("picture"));
 		DialPartialRenderingModel partialModel = ((DialPartialRenderingModel) ((ModelComposit) (dialView().getModel())).getModel("partial"));
 		DialRenderingModel renderingModel = this.dialView().renderingModel();
-		
+
 		if(pictureModel != null)
 		{
 			BufferedImage background = pictureModel.getBackground();
