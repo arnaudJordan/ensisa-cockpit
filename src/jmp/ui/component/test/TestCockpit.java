@@ -42,6 +42,7 @@ import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.aircraft.Horizon;
 import jmp.ui.component.dial.aircraft.drone.Compass;
 import jmp.ui.component.dial.model.DialBorderRenderingModel;
+import jmp.ui.component.dial.model.DialColoredRenderingModel;
 import jmp.ui.component.dial.model.DialCompositRenderingModel;
 import jmp.ui.component.dial.model.DialLabelRenderingModel;
 import jmp.ui.component.dial.model.DialPartialRenderingModel;
@@ -63,6 +64,8 @@ import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultBoundedModels;
 import jmp.ui.model.DefaultModelComposit;
 import jmp.ui.model.ModelComposit;
+import jmp.ui.utilities.ColoredRange;
+import jmp.ui.utilities.ColoredRanges;
 import jmp.ui.utilities.ImageList;
 import jmp.ui.utilities.ImageListRange;
 import jmp.ui.utilities.ImageListRanges;
@@ -325,9 +328,9 @@ public class TestCockpit extends JFrame{
 			imageList0.add(image1);
 			
 			ImageListRanges imageListRanges = new ImageListRanges();
-			imageListRanges.addRange(new ImageListRange(0, 25, imageList0));
-			imageListRanges.addRange(new ImageListRange(25, 75, imageList1));
-			imageListRanges.addRange(new ImageListRange(75, 100, imageList2));
+			imageListRanges.addRange(new ImageListRange(0, 40, imageList0));
+			imageListRanges.addRange(new ImageListRange(40, 80, imageList1));
+			imageListRanges.addRange(new ImageListRange(80, 100, imageList2));
 			
 			List<ImageListRanges> imageListRangesList=new ArrayList<ImageListRanges>();
 			imageListRangesList.add(imageListRanges);
@@ -415,7 +418,6 @@ public class TestCockpit extends JFrame{
 		
 		this.compass = new Compass();
 		componentsPane.add(this.compass);
-		componentsPane.add(new JSeparator(SwingConstants.VERTICAL));
 		this.getContentPane().add(componentsPane);
 		componentsPane.setBounds(80, 100, this.compass.getPreferredSize().width, this.compass.getPreferredSize().height);
 	}
@@ -484,24 +486,42 @@ public class TestCockpit extends JFrame{
 	private void setupDialPartialComponentPane()
 	{
 		JPanel componentsPane = new JPanel();
-		componentsPane.setLayout(new BoxLayout(componentsPane, BoxLayout.X_AXIS));
+		//componentsPane.setLayout(new BoxLayout(componentsPane, BoxLayout.X_AXIS));
 				
 		this.dialPartialView = new DialView();
 		
 		DefaultModelComposit model = (DefaultModelComposit) this.dialPartialView.getModel();
 		this.dialPartialView.setRenderer(new DialDefaultRenderer(this.dialPartialView));
 		this.dialPartialView.renderingModel().setSense(Rotation.Clockwise);
-		DialPartialRenderingModel partialModel = new DialPartialRenderingModel(0,-135);
+		DialPartialRenderingModel partialModel = new DialPartialRenderingModel(0,225);
 		this.dialPartialView.renderingModel().setTicksStartAngle(partialModel.getEndAngle());
 		DialTicksRenderingModel dialTicksRenderingModel = new DialTicksRenderingModel();
 		dialTicksRenderingModel.setMajorGraduationColor(Color.WHITE);
 		dialTicksRenderingModel.setMinorGraduationColor(Color.WHITE);
 		dialTicksRenderingModel.setLabelColor(Color.WHITE);
 		dialTicksRenderingModel.setMajorTickSize(25);
+		ColoredRanges colorRanges = new ColoredRanges();
+		colorRanges.addRange(new ColoredRange(0, 40, Color.GREEN));
+		colorRanges.addRange(new ColoredRange(40, 80, Color.YELLOW));
+		colorRanges.addRange(new ColoredRange(80, 100, Color.RED));
+		DialColoredRenderingModel colorModel = new DialColoredRenderingModel();
+		colorModel.setColorRanges(colorRanges);
+		colorModel.setThickness(10);
+		DialTicksRenderingModel ticksModel = new DialTicksRenderingModel();
+		ticksModel.setMajorGraduationColor(Color.WHITE);
+		ticksModel.setMinorGraduationColor(Color.WHITE);
+		ticksModel.setMajorTickSize(20);
+		ticksModel.setMinorTickSize(10);
+		ticksModel.setMinorTickSpacing(10);
+		ticksModel.setLabelColor(Color.WHITE);
+		ticksModel.setLabelFont(new Font("Monospaced", Font.PLAIN, 12));
+		ticksModel.setLabelSpace(3);
+		model.addModel("colored", colorModel);
 		model.addModel("partial", partialModel);
 		model.addModel("picture", new DialPictureRenderingModel("pictures/dial/background-mini.png", "pictures/dial/needle-mini.png"));
 		model.addModel("border", new DialBorderRenderingModel());
-		model.addModel("label", new DialLabelRenderingModel("Speed", new Point(0, -30)));
+		model.addModel("label", new DialLabelRenderingModel("Speed", new Point(0, -20)));
+		model.addModel("ticks", ticksModel);
 		model.addModel("value", new DefaultBoundedModel(0,100,0));
 		this.dialPartialView.setModel(model);
 		

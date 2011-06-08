@@ -73,6 +73,7 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 		if(partialModel != null)
 			minorTickAngleSpacing = (double)(partialModel.getEndAngle()-partialModel.getStartAngle()) / (double)nbValues;
 		AffineTransform oldTrans = g.getTransform();
+		oldTrans.setToIdentity();
 		
 		Graphics2D g2 = background.createGraphics();
 		g2.setRenderingHints(g.getRenderingHints());
@@ -345,13 +346,13 @@ public class DialDefaultRenderer extends DefaultRenderer implements DialRenderer
 			Graphics2D g2 = background.createGraphics();
 			g2.setRenderingHints(g.getRenderingHints());
 			g2.setStroke(coloredModel.getStroke());
-
+			
 			for(ColoredRange range : coloredModel.getColorRanges().getRanges())
 			{
 				g2.setColor(range.color);
 				if(renderingModel.getSense() == Rotation.Clockwise)
 					g2.drawArc(coloredModel.getThickness()/2 + coloredModel.getMargin(), coloredModel.getThickness()/2 + coloredModel.getMargin(), background.getWidth() - coloredModel.getThickness() - coloredModel.getMargin()*2, background.getHeight() - coloredModel.getThickness() - coloredModel.getMargin()*2,
-						-((int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle()),-((int) ((range.range.max - range.range.min)*AngleRatio)));
+						-((int) (range.range.min * AngleRatio) - renderingModel.getTicksStartAngle()),-((int) ((range.range.max - range.range.min)*AngleRatio)));
 				else
 					g2.drawArc(coloredModel.getThickness()/2 + coloredModel.getMargin(), coloredModel.getThickness()/2 + coloredModel.getMargin(), background.getWidth() - coloredModel.getThickness() - coloredModel.getMargin()*2, background.getHeight() - coloredModel.getThickness() - coloredModel.getMargin()*2,
 						(int) (range.range.min * AngleRatio) + renderingModel.getTicksStartAngle(),(int) ((range.range.max - range.range.min)*AngleRatio));
