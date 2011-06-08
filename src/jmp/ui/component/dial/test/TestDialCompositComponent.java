@@ -39,7 +39,7 @@ public class TestDialCompositComponent extends JFrame
 	public void setup()
 	{
 		setTitle("DialComposit");
-		this.setupDialPartialComponentPane();
+		this.setupCompositComponentPane();
 		this.setupSlidersPane();
 
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -107,7 +107,7 @@ public class TestDialCompositComponent extends JFrame
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupDialPartialComponentPane()
+	private void setupCompositComponentPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));

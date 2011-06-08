@@ -28,7 +28,7 @@ public class TestCompassComponent extends JFrame
 	public void setup()
 	{
 		this.setTitle("Compass");
-		this.setupDialPictureComponentPane();
+		this.setupCompassComponentPane();
 		this.setupSlidersPane();
 		this.addWindowListener(new java.awt.event.WindowAdapter()
 		{
@@ -73,7 +73,7 @@ public class TestCompassComponent extends JFrame
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupDialPictureComponentPane()
+	private void setupCompassComponentPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
