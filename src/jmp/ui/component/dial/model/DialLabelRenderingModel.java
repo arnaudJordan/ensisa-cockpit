@@ -28,6 +28,11 @@ public class DialLabelRenderingModel extends DialRenderingModel {
 		setLabel(label);
 	}
 
+	public DialLabelRenderingModel(String label, Point position) {
+		setLabel(label);
+		setPosition(position);
+	}
+
 	public String getLabel() {
 		return label;
 	}

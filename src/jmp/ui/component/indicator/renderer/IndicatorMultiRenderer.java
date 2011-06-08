@@ -343,7 +343,7 @@ public class IndicatorMultiRenderer extends IndicatorDefaultRenderer {
 						xe = (xe > g.getFontMetrics().stringWidth(label.getLabel())) ? xe : g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
 					if(multX>0)
 						xe += g.getFontMetrics().stringWidth(label.getLabel())+ label.getMargin();
-				}				
+				}
 			}
 			dimension = new Dimension((int) (dimension.getWidth() + xe + xw), (int)(dimension.getHeight() + yn+ys));
 		}

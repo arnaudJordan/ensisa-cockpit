@@ -40,6 +40,10 @@ public class IndicatorLabelRenderingModel extends IndicatorRenderingModel {
 	public IndicatorLabelRenderingModel(String label, CardinalPosition position) {
 		this(label);
 		setPosition(position);
+		setLabel(label);
+		setMargin(DEFAULT_LABEL_MARGIN);
+		setFont(DEFAULT_FONT);
+		setColor(DEFAULT_COLOR);
 	}
 
 	public String getLabel() {

@@ -87,10 +87,10 @@ public class TestBarColoredComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.barView = new BarView();
-		this.barView.renderingModel().setOrientation(Orientation.Vertical);
+		//this.barView.renderingModel().setOrientation(Orientation.Vertical);
 		ModelComposit model = (ModelComposit) this.barView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
-		model.addModel("border", new BarBorderRenderingModel());
+		//model.addModel("border", new BarBorderRenderingModel());
 		model.addModel("ticks", new BarTicksRenderingModel());
 		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
 		this.componentsPane.add(this.barView);
