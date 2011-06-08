@@ -11,7 +11,7 @@ import jmp.ui.mvc.View;
 
 public class BarView extends View
 {
-	protected final static String VALUE_MODEL = "values";
+	protected final static String VALUE_MODEL = "value";
 	protected final static String RENDERING_MODEL = "rendering";
 	
 	public BarView()
