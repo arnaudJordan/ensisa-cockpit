@@ -513,13 +513,13 @@ public class TestCockpit extends JFrame{
 		model.addModel("value", new DefaultBoundedModel(0, 100, 0));
 		componentsPane.add(this.barVertical1View);
 		
-		this.barVertical2View = new BarView();
-		model = (ModelComposit) this.barVertical2View.getModel();
-		this.barVertical2View.renderingModel().setOrientation(Orientation.Vertical);
-		model.addModel("picture", new BarPictureRenderingModel("pictures/bar/default_background-mini.png"));
-		model.addModel("needle", new BarNeedleRenderingModel("pictures/bar/default_needle-mini.png"));
-		//model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
-		componentsPane.add(this.barVertical2View);
+//		this.barVertical2View = new BarView();
+//		model = (ModelComposit) this.barVertical2View.getModel();
+//		this.barVertical2View.renderingModel().setOrientation(Orientation.Vertical);
+//		model.addModel("picture", new BarPictureRenderingModel("pictures/bar/default_background-mini.png"));
+//		model.addModel("needle", new BarNeedleRenderingModel("pictures/bar/default_needle-mini.png"));
+//		//model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
+//		componentsPane.add(this.barVertical2View);
 		this.getContentPane().add(componentsPane);
 		componentsPane.setBounds(380, 230, 80, 220);
 	}
