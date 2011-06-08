@@ -1,26 +1,14 @@
 package jmp.ui.component.bar.renderer;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.text.AttributedCharacterIterator;
-import java.util.Iterator;
-import java.util.Set;
-
 import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
@@ -650,7 +638,6 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		int labelSpace = 0;
 		if(ticksModel != null)
 		{
-			//Graphics g = this.barView().getGraphics();
 			BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
             Graphics g = image.getGraphics();
 			g.setFont(ticksModel.getLabelFont());
@@ -680,7 +667,6 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		
 		if(labelModel != null) 
 		{
-			//Graphics g = this.barView().getGraphics();
 			BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
             Graphics g = image.getGraphics();
 			g.setFont(labelModel.getFont());

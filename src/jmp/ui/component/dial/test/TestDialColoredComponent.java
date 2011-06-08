@@ -14,7 +14,6 @@ import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.Rotation;
 import jmp.ui.component.dial.DialView;
-import jmp.ui.component.dial.model.DialBorderRenderingModel;
 import jmp.ui.component.dial.model.DialColoredRenderingModel;
 import jmp.ui.component.dial.model.DialLabelRenderingModel;
 import jmp.ui.component.dial.model.DialPartialRenderingModel;

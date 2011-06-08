@@ -12,7 +12,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import jmp.ui.component.CardinalPosition;
-import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
 import jmp.ui.component.bar.model.BarBorderRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
