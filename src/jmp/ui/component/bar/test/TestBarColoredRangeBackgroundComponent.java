@@ -39,7 +39,7 @@ public class TestBarColoredRangeBackgroundComponent extends JFrame
 	public void setup()
 	{
 		setTitle("BarColoredRange");
-		this.setupBarColoredRangeComponentsPane();
+		this.setupBarColoredRangeBackgroundComponentsPane();
 		this.setupSlidersPane();
 
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -84,7 +84,7 @@ public class TestBarColoredRangeBackgroundComponent extends JFrame
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupBarColoredRangeComponentsPane()
+	private void setupBarColoredRangeBackgroundComponentsPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
