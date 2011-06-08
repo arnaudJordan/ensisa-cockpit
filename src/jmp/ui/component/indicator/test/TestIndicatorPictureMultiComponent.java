@@ -21,7 +21,6 @@ import jmp.ui.component.indicator.model.IndicatorColoredRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorPictureRenderingModel;
 import jmp.ui.component.indicator.renderer.IndicatorMultiRenderer;
 import jmp.ui.model.BooleanModel;
 import jmp.ui.model.BooleanModels;

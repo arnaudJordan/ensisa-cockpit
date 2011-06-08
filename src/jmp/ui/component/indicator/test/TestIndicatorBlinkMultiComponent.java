@@ -21,7 +21,6 @@ import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.indicator.IndicatorView;
 import jmp.ui.component.indicator.model.IndicatorBlinkMultiRenderingModel;
-import jmp.ui.component.indicator.model.IndicatorBorderRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelMultiRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorLabelRenderingModel;
 import jmp.ui.component.indicator.model.IndicatorOrientationRenderingModel;
