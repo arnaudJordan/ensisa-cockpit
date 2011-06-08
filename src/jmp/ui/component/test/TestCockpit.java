@@ -196,7 +196,7 @@ public class TestCockpit extends JFrame{
 		rollSlider.setBorder(BorderFactory.createTitledBorder("Roll"));
 		sliderPane.add(rollSlider);
 		
-		final JSlider speedSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		final JSlider speedSlider = new JSlider(JSlider.HORIZONTAL,0,50,0);
 		speedSlider.setToolTipText("Speed");
 		speedSlider.setMajorTickSpacing(50);
 		speedSlider.setMinorTickSpacing(10);
@@ -501,9 +501,9 @@ public class TestCockpit extends JFrame{
 		dialTicksRenderingModel.setLabelColor(Color.WHITE);
 		dialTicksRenderingModel.setMajorTickSize(25);
 		ColoredRanges colorRanges = new ColoredRanges();
-		colorRanges.addRange(new ColoredRange(0, 40, Color.GREEN));
-		colorRanges.addRange(new ColoredRange(40, 80, Color.YELLOW));
-		colorRanges.addRange(new ColoredRange(80, 100, Color.RED));
+		colorRanges.addRange(new ColoredRange(0, 20, Color.GREEN));
+		colorRanges.addRange(new ColoredRange(20, 40, Color.YELLOW));
+		colorRanges.addRange(new ColoredRange(40, 50, Color.RED));
 		DialColoredRenderingModel colorModel = new DialColoredRenderingModel();
 		colorModel.setColorRanges(colorRanges);
 		colorModel.setThickness(10);
@@ -512,7 +512,8 @@ public class TestCockpit extends JFrame{
 		ticksModel.setMinorGraduationColor(Color.WHITE);
 		ticksModel.setMajorTickSize(20);
 		ticksModel.setMinorTickSize(10);
-		ticksModel.setMinorTickSpacing(10);
+		ticksModel.setMajorTickSpacing(10);
+		ticksModel.setMinorTickSpacing(2);
 		ticksModel.setLabelColor(Color.WHITE);
 		ticksModel.setLabelFont(new Font("Monospaced", Font.PLAIN, 12));
 		ticksModel.setLabelSpace(3);
@@ -522,7 +523,7 @@ public class TestCockpit extends JFrame{
 		model.addModel("border", new DialBorderRenderingModel());
 		model.addModel("label", new DialLabelRenderingModel("Speed", new Point(0, -20)));
 		model.addModel("ticks", ticksModel);
-		model.addModel("value", new DefaultBoundedModel(0,100,0));
+		model.addModel("value", new DefaultBoundedModel(0,50,0));
 		this.dialPartialView.setModel(model);
 		
 		componentsPane.add(this.dialPartialView);
