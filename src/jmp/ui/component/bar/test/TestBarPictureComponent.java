@@ -21,6 +21,7 @@ import jmp.ui.component.bar.model.BarLabelRenderingModel;
 import jmp.ui.component.bar.model.BarNeedleRenderingModel;
 import jmp.ui.component.bar.model.BarPictureRenderingModel;
 import jmp.ui.component.bar.model.BarTicksRenderingModel;
+import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.ModelComposit;
 
 
@@ -60,7 +61,7 @@ public class TestBarPictureComponent extends JFrame
 		this.slidersPane.setLayout(new BoxLayout(this.slidersPane, BoxLayout.Y_AXIS));
 		
 
-		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,100,0);
+		this.progressSlider = new JSlider(JSlider.HORIZONTAL,0,50,0);
 		this.progressSlider.setMajorTickSpacing(50);
 		this.progressSlider.setMinorTickSpacing(10);
 		this.progressSlider.setPaintTicks(true);
@@ -90,16 +91,19 @@ public class TestBarPictureComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.barView = new BarView();
-		//this.barView.renderingModel().setOrientation(Orientation.Vertical);
+		this.barView.renderingModel().setOrientation(Orientation.Vertical);
 		ModelComposit model = (ModelComposit) this.barView.getModel();
-		//model.addModel("colored", new BarColoredRenderingModel());
+		model.addModel("colored", new BarColoredRenderingModel());
 		model.addModel("picture", new BarPictureRenderingModel());
 		model.addModel("needle", new BarNeedleRenderingModel());
-		//model.addModel("border", new BarBorderRenderingModel());
-		//model.addModel("ticks", new BarTicksRenderingModel());
+		model.addModel("border", new BarBorderRenderingModel());
+		model.addModel("ticks", new BarTicksRenderingModel());
 		//model.addModel("coloredRangeBackground", new BarColoredRangeRenderingModel());
 		//model.addModel("coloredRangeProgress", new BarColoredRangeRenderingModel());
-		//model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
+		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
+		model.addModel("value", new DefaultBoundedModel(0, 100, 0));
+		this.barView.setModel(model);
+		
 		this.componentsPane.add(this.barView);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
