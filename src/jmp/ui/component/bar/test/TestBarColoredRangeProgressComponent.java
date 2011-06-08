@@ -24,7 +24,7 @@ import jmp.ui.component.bar.model.BarTicksRenderingModel;
 import jmp.ui.model.ModelComposit;
 
 
-public class TestBarColoredRangeComponent extends JFrame
+public class TestBarColoredRangeProgressComponent extends JFrame
 {
 	private JPanel slidersPane;
 	private JSlider progressSlider;
@@ -32,7 +32,7 @@ public class TestBarColoredRangeComponent extends JFrame
 	private JPanel componentsPane;
 	private BarView barView;
 
-	public TestBarColoredRangeComponent()
+	public TestBarColoredRangeProgressComponent()
 	{
 	}
 
@@ -90,13 +90,12 @@ public class TestBarColoredRangeComponent extends JFrame
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
 		
 		this.barView = new BarView();
-		this.barView.renderingModel().setOrientation(Orientation.Vertical);
+		//this.barView.renderingModel().setOrientation(Orientation.Vertical);
 		ModelComposit model = (ModelComposit) this.barView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
 		//model.addModel("border", new BarBorderRenderingModel());
 		model.addModel("ticks", new BarTicksRenderingModel());
 		//model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.WEST));
-		//model.addModel("coloredRangeBackground", new BarColoredRangeRenderingModel());
 		model.addModel("coloredRangeProgress", new BarColoredRangeRenderingModel());
 		this.componentsPane.add(this.barView);
 
@@ -104,7 +103,7 @@ public class TestBarColoredRangeComponent extends JFrame
 	}
 	public static void main(String[] args)
 	{
-		final TestBarColoredRangeComponent app = new TestBarColoredRangeComponent();
+		final TestBarColoredRangeProgressComponent app = new TestBarColoredRangeProgressComponent();
 
 		EventQueue.invokeLater(new Runnable()
 		{

@@ -15,13 +15,16 @@ import jmp.ui.component.CardinalPosition;
 import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
 import jmp.ui.component.bar.model.BarBorderRenderingModel;
+import jmp.ui.component.bar.model.BarColoredRangeRenderingModel;
 import jmp.ui.component.bar.model.BarColoredRenderingModel;
 import jmp.ui.component.bar.model.BarLabelRenderingModel;
+import jmp.ui.component.bar.model.BarNeedleRenderingModel;
+import jmp.ui.component.bar.model.BarPictureRenderingModel;
 import jmp.ui.component.bar.model.BarTicksRenderingModel;
 import jmp.ui.model.ModelComposit;
 
 
-public class TestBarColoredComponent extends JFrame
+public class TestBarColoredRangeBackgroundComponent extends JFrame
 {
 	private JPanel slidersPane;
 	private JSlider progressSlider;
@@ -29,14 +32,14 @@ public class TestBarColoredComponent extends JFrame
 	private JPanel componentsPane;
 	private BarView barView;
 
-	public TestBarColoredComponent()
+	public TestBarColoredRangeBackgroundComponent()
 	{
 	}
 
 	public void setup()
 	{
-		setTitle("BarColored");
-		this.setupBarColoredComponentsPane();
+		setTitle("BarColoredRange");
+		this.setupBarColoredRangeComponentsPane();
 		this.setupSlidersPane();
 
 		this.addWindowListener(new java.awt.event.WindowAdapter()
@@ -81,7 +84,7 @@ public class TestBarColoredComponent extends JFrame
 		this.getContentPane().add(this.slidersPane, BorderLayout.PAGE_END);
 	}
 
-	private void setupBarColoredComponentsPane()
+	private void setupBarColoredRangeComponentsPane()
 	{
 		this.componentsPane = new JPanel();
 		this.componentsPane.setLayout(new BoxLayout(this.componentsPane, BoxLayout.X_AXIS));
@@ -90,16 +93,17 @@ public class TestBarColoredComponent extends JFrame
 		//this.barView.renderingModel().setOrientation(Orientation.Vertical);
 		ModelComposit model = (ModelComposit) this.barView.getModel();
 		model.addModel("colored", new BarColoredRenderingModel());
-		model.addModel("border", new BarBorderRenderingModel());
+		//model.addModel("border", new BarBorderRenderingModel());
 		model.addModel("ticks", new BarTicksRenderingModel());
-		model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.NORTH));
+		//model.addModel("label", new BarLabelRenderingModel("BAR", CardinalPosition.WEST));
+		model.addModel("coloredRangeBackground", new BarColoredRangeRenderingModel());
 		this.componentsPane.add(this.barView);
 
 		this.getContentPane().add(this.componentsPane, BorderLayout.CENTER);
 	}
 	public static void main(String[] args)
 	{
-		final TestBarColoredComponent app = new TestBarColoredComponent();
+		final TestBarColoredRangeBackgroundComponent app = new TestBarColoredRangeBackgroundComponent();
 
 		EventQueue.invokeLater(new Runnable()
 		{
