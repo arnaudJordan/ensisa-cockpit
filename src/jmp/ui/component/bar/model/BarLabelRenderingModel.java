@@ -33,6 +33,8 @@ public class BarLabelRenderingModel extends BarRenderingModel {
 	public BarLabelRenderingModel(String label, CardinalPosition position) {
 		this(label);
 		setPosition(position);
+		setFont(DEFAULT_FONT);
+		setColor(DEFAULT_COLOR);
 	}
 
 	public String getLabel() {

@@ -12,9 +12,9 @@ public class BarColoredRangeRenderingModel extends BarRenderingModel {
 	
 	public BarColoredRangeRenderingModel() {
 		setColoredRanges(DEFAULT_COLORED_RANGES);
-		coloredRanges.addRange(new ColoredRange(0, 30, Color.PINK));
-		coloredRanges.addRange(new ColoredRange(30, 60, Color.GREEN));
-		coloredRanges.addRange(new ColoredRange(60, 100, Color.RED));
+		coloredRanges.addRange(new ColoredRange(0, 30, Color.GREEN));
+		coloredRanges.addRange(new ColoredRange(30, 70, Color.YELLOW));
+		coloredRanges.addRange(new ColoredRange(70, 100, Color.RED));
 	}
 
 	public void setColoredRanges(ColoredRanges coloredRanges) {

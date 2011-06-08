@@ -101,11 +101,11 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			}
 			else
 			{
-				double ratio=(double) (progressRectHeight - transY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectHeight) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g.setColor(range.color);
-					g.fillRect(transX, (int)(progressRectHeight - ratio*range.range.max),
+					g.fillRect(transX, transY + (int)(progressRectHeight - ratio*range.range.max),
 							progressRectWidth, (int)(ratio*(range.range.max - range.range.min)));
 				}
 			}
@@ -129,18 +129,13 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		BarColoredRenderingModel coloredModel = ((BarColoredRenderingModel) ((ModelComposit) (barView().getModel())).getModel("colored"));
 		BarLabelRenderingModel labelModel = ((BarLabelRenderingModel) ((ModelComposit) (barView().getModel())).getModel("label"));
 		BarColoredRangeRenderingModel coloredRangeModel = ((BarColoredRangeRenderingModel) ((ModelComposit) (barView().getModel())).getModel("coloredRangeProgress"));
-		BarBorderRenderingModel borderModel = ((BarBorderRenderingModel) ((ModelComposit) (barView().getModel())).getModel("border"));
 		BarPictureRenderingModel pictureModel = ((BarPictureRenderingModel) ((ModelComposit) (barView().getModel())).getModel("picture"));
 		BarNeedleRenderingModel needleModel = ((BarNeedleRenderingModel) ((ModelComposit) (barView().getModel())).getModel("needle"));
 
-		if(coloredModel==null && needleModel==null) return;
+		if(coloredModel==null && needleModel==null && coloredRangeModel==null) return;
 		
 		int progressRectWidth = 0;
 		int progressRectHeight = 0;
-		
-		//int borderSize = 0;
-		//if(borderModel != null)
-		//	borderSize = borderModel.getBorderSize();
 		
 		if (renderingModel.getOrientation() == Orientation.Horizontal)
 		{
@@ -206,15 +201,13 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			if (renderingModel.getOrientation() == Orientation.Horizontal)
 		    {
 				final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
-				trans.translate(transX + fillWidth, transY);
+				trans.translate(transX + fillWidth - needleModel.getNeedle().getWidth()/2, transY);
 		    }
 			else
 			{
 				final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
-				trans.translate(transX, transY  - fillHeight + progressRectHeight);
+				trans.translate(transX, transY - fillHeight + progressRectHeight + needleModel.getNeedle().getWidth()/2);
 				trans.rotate(Math.toRadians(-90));
-				System.out.println(fillHeight);
-				System.out.println(progressRectHeight);
 			}
 			g.drawImage(needleModel.getNeedle(),trans,null);
 		}
@@ -227,22 +220,21 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			{
 				final int fillWidth = valueModel.getValue()*progressRectWidth/(valueModel.getMaximum()-valueModel.getMinimum());
 		        clip = new Rectangle2D.Double(0, 0, fillWidth, progressRectHeight);
-				
 				g2.clip(clip);
 				double ratio=(double) (progressRectWidth) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g2.setColor(range.color);
-					g2.fillRect((int) (ratio*range.range.min), transY, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
+					g2.fillRect((int) (ratio*range.range.min), 0, (int) (ratio*(range.range.max - range.range.min)), progressRectHeight);
 				}
 			}
 			else
 			{
 				final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
-		        clip = new Rectangle2D.Double(0, progressRectHeight - fillHeight + transY, progressRectWidth, fillHeight);
+		        clip = new Rectangle2D.Double(0, progressRectHeight - fillHeight, progressRectWidth, fillHeight);
 				
 				g2.clip(clip);
-				double ratio=(double) (progressRectHeight - transY) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
+				double ratio=(double) (progressRectHeight) / (double) (valueModel.getMaximum()-valueModel.getMinimum());
 				for(ColoredRange range : coloredRangeModel.getColoredRanges().getRanges())
 				{
 					g2.setColor(range.color);
@@ -471,11 +463,16 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 	}
 
 	public void renderBar(Graphics2D g) {
+		BarNeedleRenderingModel needleModel = ((BarNeedleRenderingModel) ((ModelComposit) (barView().getModel())).getModel("needle"));
+		
 		renderBackground(g);
-		renderProgress(g);
+		if(needleModel == null)
+			renderProgress(g);
 		renderBorder(g);
 		renderLabel(g);
 		renderTicks(g);
+		if(needleModel != null)
+			renderProgress(g);
 	}
 
 	protected BarView barView()

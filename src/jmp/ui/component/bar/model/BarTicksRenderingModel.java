@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.awt.Stroke;
 
 public class BarTicksRenderingModel extends BarRenderingModel {
-	private static final Color MINOR_GRADUATION_COLOR = Color.PINK;
+	private static final Color MINOR_GRADUATION_COLOR = Color.BLACK;
 	private static final Color MAJOR_GRADUATION_COLOR = Color.RED;
 	private static final Color LABEL_COLOR = Color.BLACK;
 	final static Font LABEL_FONT = new Font("Monospaced", Font.PLAIN, 18);
