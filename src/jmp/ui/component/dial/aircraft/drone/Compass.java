@@ -3,7 +3,7 @@ package jmp.ui.component.dial.aircraft.drone;
 import jmp.ui.component.dial.DialView;
 import jmp.ui.component.dial.model.DialPictureRenderingModel;
 import jmp.ui.component.dial.model.DialRenderingModel;
-import jmp.ui.component.dial.renderer.DialPictureRenderer;
+import jmp.ui.component.dial.renderer.DialDefaultRenderer;
 import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.DefaultModelComposit;
 import jmp.ui.mvc.Model;
@@ -15,7 +15,7 @@ public class Compass extends DialView{
 	
 	public Compass() {
 		super(setupModel());
-		setRenderer(new DialPictureRenderer(this));
+		setRenderer(new DialDefaultRenderer(this));
 	}
 	
 	protected static Model setupModel() 
