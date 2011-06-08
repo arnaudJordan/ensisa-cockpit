@@ -11,17 +11,9 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import jmp.ui.component.CardinalPosition;
-import jmp.ui.component.Orientation;
 import jmp.ui.component.bar.BarView;
-import jmp.ui.component.bar.model.BarBorderRenderingModel;
-import jmp.ui.component.bar.model.BarColoredRangeRenderingModel;
-import jmp.ui.component.bar.model.BarColoredRenderingModel;
-import jmp.ui.component.bar.model.BarLabelRenderingModel;
 import jmp.ui.component.bar.model.BarNeedleRenderingModel;
 import jmp.ui.component.bar.model.BarPictureRenderingModel;
-import jmp.ui.component.bar.model.BarTicksRenderingModel;
-import jmp.ui.model.DefaultBoundedModel;
 import jmp.ui.model.ModelComposit;
 
 
