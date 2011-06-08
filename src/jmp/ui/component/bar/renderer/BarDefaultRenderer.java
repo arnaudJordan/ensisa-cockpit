@@ -213,6 +213,8 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 				final int fillHeight = valueModel.getValue()*progressRectHeight/(valueModel.getMaximum()-valueModel.getMinimum());
 				trans.translate(transX, transY  - fillHeight + progressRectHeight);
 				trans.rotate(Math.toRadians(-90));
+				System.out.println(fillHeight);
+				System.out.println(progressRectHeight);
 			}
 			g.drawImage(needleModel.getNeedle(),trans,null);
 		}
