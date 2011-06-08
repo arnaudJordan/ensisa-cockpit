@@ -353,7 +353,13 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		int labelXStart = 0;
 		int labelYStart = 0;
 		
-		labelYStart = ticksModel.getLabelSpace() + barHeight;
+		if(renderingModel.getOrientation() == Orientation.Horizontal)
+			labelYStart = ticksModel.getLabelSpace() + barHeight;
+		else
+		{
+			labelXStart = barHeight + ticksModel.getLabelSpace();
+			labelYStart = barWidth;
+		}
 		if(labelModel != null)
 		{
 			g.setFont(labelModel.getFont());
@@ -369,8 +375,6 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 			}
 			else
 			{
-				labelXStart = barHeight + ticksModel.getLabelSpace();
-				labelYStart = barWidth;
 				switch (labelModel.getPosition())
 				{
 				case NORTH : barWidth -= g.getFontMetrics().getHeight() + 1; break;
@@ -390,20 +394,30 @@ public class BarDefaultRenderer  extends DefaultRenderer implements BarRenderer 
 		{
 			labelYStart += g.getFontMetrics().getHeight() + 1;
 			majorTickSpacing = (barWidth - labelXStart) / nbValues;
-			for(int i = 0; i < nbValues+1; i++)
+			g.drawString("0", labelXStart, labelYStart);		
+			for(int i = 1; i < nbValues; i++)
 			{
 				final String vString = String.valueOf((int)(i*ticksModel.getMajorTickSpacing()));
-				g.drawString(vString, (int) (i*majorTickSpacing) + labelXStart - g.getFontMetrics().stringWidth(vString)/2, labelYStart);		
+				int margin = g.getFontMetrics().stringWidth(vString)/2;
+				if(i == 0)
+					margin = 0;
+				else if(i == nbValues)
+					margin = g.getFontMetrics().stringWidth(vString);
+				g.drawString(vString, (int) (i*majorTickSpacing) + labelXStart - margin, labelYStart);		
 			}
+			final String vString = String.valueOf((int)(nbValues*ticksModel.getMajorTickSpacing()));
+			g.drawString(vString, (int) (nbValues*majorTickSpacing) + labelXStart - g.getFontMetrics().stringWidth(vString), labelYStart);		
 		}
 		else
 		{
 			majorTickSpacing = barWidth / nbValues;
-			for(int i = 0; i < nbValues+1; i++)
+			g.drawString("0", labelXStart, labelYStart);	
+			for(int i = 1; i < nbValues; i++)
 			{
 				final String vString = String.valueOf((int)(i*ticksModel.getMajorTickSpacing()));
 				g.drawString(vString, labelXStart, (int) (-i*majorTickSpacing) + labelYStart + (g.getFontMetrics().getHeight() + 1)/4);			
 			}
+			g.drawString(String.valueOf((int)(nbValues*ticksModel.getMajorTickSpacing())), labelXStart, (int) (-nbValues*majorTickSpacing) + labelYStart + (g.getFontMetrics().getHeight() + 1)/2);	
 		}
 	}
 
